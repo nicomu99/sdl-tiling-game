@@ -13,6 +13,7 @@ int main() {
 
         while(running) {
             controller.handleInput();
+            controller.renderScreen();
         }
     } catch (std::runtime_error& e) {
         std::cerr << "Error: " << e.what() << std::endl;

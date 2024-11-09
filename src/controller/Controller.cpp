@@ -16,3 +16,7 @@ void Controller::handleInput() {
     }
 }
 
+void Controller::renderScreen() {
+    view.render(model);
+}
+

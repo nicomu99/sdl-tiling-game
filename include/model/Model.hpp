@@ -4,11 +4,15 @@
 
 #ifndef MODEL_HPP
 #define MODEL_HPP
+#include "Grid.hpp"
 
 class Model {
-    int x = 1;
+    Grid grid;
 public:
     Model();
+
+    Grid& getGrid();
+    const Grid& getGrid() const;
 };
 
 #endif //MODEL_HPP

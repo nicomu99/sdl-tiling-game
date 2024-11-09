@@ -20,6 +20,8 @@ add_executable(tiling_game src/main.cpp
         include/view/View.hpp
         src/view/View.cpp
         include/model/Model.hpp
-        src/model/Model.cpp)
+        src/model/Model.cpp
+        include/model/Grid.hpp
+        src/model/Grid.cpp)
 
 target_link_libraries(tiling_game SDL2::SDL2)
