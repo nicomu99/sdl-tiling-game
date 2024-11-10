@@ -8,7 +8,8 @@
 
 #include "Constants.hpp"
 
-constexpr float PLAYER_SPEED = 10.0f;
+constexpr float PLAYER_SPEED = 500.0f;
+Uint32 lastTime = SDL_GetTicks();
 
 Player::Player(): x_position(40.0f), y_position(40.0f), move_direction(NONE),
                   target_x_position(40 / Constants::TILE_SIZE), target_y_position(40 / Constants::TILE_SIZE),
@@ -29,11 +30,11 @@ std::pair<float, float> Player::getPosition() {
     return {x_position, y_position};
 }
 
-const std::pair<float, float> Player::getPreviousPosition() const {
+const std::pair<int, int> Player::getTargetPosition() const {
     return {target_x_position, target_y_position};
 }
 
-std::pair<float, float> Player::getPreviousPosition() {
+std::pair<int, int> Player::getTargetPosition() {
     return {target_x_position, target_y_position};
 }
 
@@ -49,16 +50,12 @@ void Player::move(Direction direction, Grid grid) {
     move_direction = direction;
 
     auto [dx, dy] = toPair(direction);
-    int target_pos_x = target_x_position + dx;
-    int target_pos_y = target_y_position + dy;
+    int target_pos_x = target_x_position + dx * 10;
+    int target_pos_y = target_y_position + dy * 10;
 
-    if(grid.getTile(target_x_position, target_y_position) == TileType::Walkable) {
-        std::cout << "Walkable" << std::endl;
-    } else {
-        std::cout << "NonWalkable" << std::endl;
-    }
-
-    if (grid.getTile(target_pos_x, target_pos_y) == TileType::Walkable) {
+    if (grid.getTile(target_pos_x, target_pos_y) == TileType::Walkable &&
+        target_x_position * Constants::TILE_SIZE == x_position &&
+        target_y_position * Constants::TILE_SIZE == y_position) {
         target_x_position = target_pos_x;
         target_y_position = target_pos_y;
     }
@@ -68,11 +65,16 @@ void Player::finishMove() {
     float target_pos_x = target_x_position * Constants::TILE_SIZE;
     float target_pos_y = target_y_position * Constants::TILE_SIZE;
 
+    Uint32 currentTime = SDL_GetTicks();
+    float deltaTime = (currentTime - lastTime) / 1000.0f; // Convert from ms to seconds
+    lastTime = currentTime;
+    float adjustedSpeed = PLAYER_SPEED *  deltaTime;
+
     // Move smoothly towards target position
-    if (x_position < target_pos_x) x_position = std::min(x_position + PLAYER_SPEED, target_pos_x);
-    if (x_position > target_pos_x) x_position = std::max(x_position - PLAYER_SPEED, target_pos_x);
-    if (y_position < target_pos_y) y_position = std::min(y_position + PLAYER_SPEED, target_pos_y);
-    if (y_position > target_pos_y) y_position = std::max(y_position - PLAYER_SPEED, target_pos_y);
+    if (x_position < target_pos_x) x_position = std::min(x_position + adjustedSpeed, target_pos_x);
+    if (x_position > target_pos_x) x_position = std::max(x_position - adjustedSpeed, target_pos_x);
+    if (y_position < target_pos_y) y_position = std::min(y_position + adjustedSpeed, target_pos_y);
+    if (y_position > target_pos_y) y_position = std::max(y_position - adjustedSpeed, target_pos_y);
 }
 
 // Converts a direction to a coordinate pair

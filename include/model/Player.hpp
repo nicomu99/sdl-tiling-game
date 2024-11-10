@@ -25,8 +25,8 @@ public:
 
     const std::pair<float, float> getPosition() const;
     std::pair<float, float> getPosition();
-    const std::pair<float, float> getPreviousPosition() const;
-    std::pair<float, float> getPreviousPosition();
+    const std::pair<int, int> getTargetPosition() const;
+    std::pair<int, int> getTargetPosition();
     Direction getDirection();
     const Direction getDirection() const;
 
