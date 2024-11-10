@@ -14,6 +14,9 @@ int main() {
         while(running) {
             controller.handleInput();
             controller.renderScreen();
+            controller.updateModel();
+
+            SDL_Delay(16);
         }
     } catch (std::runtime_error& e) {
         std::cerr << "Error: " << e.what() << std::endl;

@@ -18,6 +18,9 @@ public:
 
     const std::vector<std::vector<TileType>>& getTileMap() const;
     std::vector<std::vector<TileType>>& getTileMap();
+
+    const TileType getTile(int x_position, int y_position) const;
+    TileType getTile(int x_position, int y_position);
 };
 
 #endif //GRID_HPP

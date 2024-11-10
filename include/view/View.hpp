@@ -15,6 +15,8 @@ public:
     View(SDLManager&);
 
     void render(const Model& model);
+
+    void renderPlayer(const Player &player);
 };
 
 #endif //VIEW_HPP

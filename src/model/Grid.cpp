@@ -9,9 +9,9 @@ Grid::Grid() {
     for(int row = 0; row < Constants::ROW_COUNT; row++) {
         for(int col = 0; col < Constants::COL_COUNT; col++) {
             if (row == 0 || col == 0 || row == Constants::ROW_COUNT - 1 || col == Constants::COL_COUNT - 1) {
-                tile_map[row][col] = TileType::Walkable;
-            } else {
                 tile_map[row][col] = TileType::NonWalkable;
+            } else {
+                tile_map[row][col] = TileType::Walkable;
             }
         }
     }
@@ -25,4 +25,13 @@ const std::vector<std::vector<TileType>> & Grid::getTileMap() const {
 
 std::vector<std::vector<TileType>>& Grid::getTileMap() {
     return tile_map;
+}
+
+const TileType Grid::getTile(int x_position, int y_position) const {
+    return tile_map[y_position][x_position];
+}
+
+
+TileType Grid::getTile(int x_position, int y_position) {
+    return tile_map[y_position][x_position];
 }
