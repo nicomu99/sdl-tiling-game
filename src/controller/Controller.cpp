@@ -6,14 +6,36 @@
 #include "Model.hpp"
 #include <unordered_map>
 
-#include "Constants.hpp"
-
 // Create the map outside the switch (it could be a static member if reused often)
-std::unordered_map<SDL_Keycode, Player::Direction> keyDirectionMap = {
-    {SDLK_w, Player::Direction::UP},
-    {SDLK_a, Player::Direction::LEFT},
-    {SDLK_s, Player::Direction::DOWN},
-    {SDLK_d, Player::Direction::RIGHT}
+std::unordered_map<SDL_Keycode, Player::Direction> key_direction_map = {
+    {SDL_SCANCODE_W, Player::Direction::UP},
+    {SDL_SCANCODE_A, Player::Direction::LEFT},
+    {SDL_SCANCODE_S, Player::Direction::DOWN},
+    {SDL_SCANCODE_D, Player::Direction::RIGHT}
+};
+
+// Custom hash function for diagonal_key_direction_map
+struct pair_hash {
+    // For any pair containing types T1 and T2 that have a hash function
+    template <class T1, class T2>
+
+    // A callable function overload of the operator ()
+    // Allows pair_hash to be called like a function
+    // Returns an unsigned integer size_t
+    std::size_t operator()(const std::pair<T1, T2>& p) const {
+        // Hash both elements of the pair
+        auto h1 = std::hash<T1>{}(p.first);
+        auto h2 = std::hash<T2>{}(p.second);
+        // Combine the two hash values
+        return h1 ^ (h2 << 1); // Shift h2 to the left by 1 bit and perform XOR
+    }
+};
+
+std::unordered_map<std::pair<SDL_Scancode, SDL_Scancode>, Player::Direction, pair_hash> diagonal_key_direction_map = {
+    {{SDL_SCANCODE_W, SDL_SCANCODE_A}, Player::Direction::LEFTUP},
+    {{SDL_SCANCODE_W, SDL_SCANCODE_D}, Player::Direction::RIGHTUP},
+    {{SDL_SCANCODE_S, SDL_SCANCODE_A}, Player::Direction::LEFTDOWN},
+    {{SDL_SCANCODE_S, SDL_SCANCODE_D}, Player::Direction::RIGHTDOWN}
 };
 
 Controller::Controller(Model &model, SDLManager &sdl_manager, bool &running): model(model), view(sdl_manager),
@@ -35,18 +57,18 @@ void Controller::handleInput() {
 
     // Get the current state of the keyboard
     const Uint8* keystates = SDL_GetKeyboardState(NULL);
+    for (const auto& [key_pair, direction]: diagonal_key_direction_map) {
+        if(keystates[key_pair.first] && keystates[key_pair.second]) {
+            model.movePlayer(direction);
+            return;
+        }
+    }
 
-    if (keystates[SDL_SCANCODE_W]) {
-        model.movePlayer(Player::Direction::UP);
-    }
-    if (keystates[SDL_SCANCODE_S]) {
-        model.movePlayer(Player::Direction::DOWN);
-    }
-    if (keystates[SDL_SCANCODE_A]) {
-        model.movePlayer(Player::Direction::LEFT);
-    }
-    if (keystates[SDL_SCANCODE_D]) {
-        model.movePlayer(Player::Direction::RIGHT);
+    for (const auto& [key, direction] : key_direction_map) {
+        if (keystates[key]) {
+            model.movePlayer(direction);
+            return;
+        }
     }
 }
 

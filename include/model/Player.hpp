@@ -16,7 +16,11 @@ public:
         DOWN,
         LEFT,
         RIGHT,
-        NONE
+        NONE,
+        LEFTUP,
+        RIGHTUP,
+        LEFTDOWN,
+        RIGHTDOWN
     };
 
     Player();

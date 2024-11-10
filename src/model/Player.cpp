@@ -8,7 +8,7 @@
 
 #include "Constants.hpp"
 
-constexpr float PLAYER_SPEED = 500.0f;
+constexpr float PLAYER_SPEED = 300.0f;
 Uint32 lastTime = SDL_GetTicks();
 
 Player::Player(): x_position(40.0f), y_position(40.0f), move_direction(NONE),
@@ -50,14 +50,19 @@ void Player::move(Direction direction, Grid grid) {
     move_direction = direction;
 
     auto [dx, dy] = toPair(direction);
-    int target_pos_x = target_x_position + dx * 10;
-    int target_pos_y = target_y_position + dy * 10;
+    //int target_pos_x = target_x_position + dx;
+    //int target_pos_y = target_y_position + dy;
 
-    if (grid.getTile(target_pos_x, target_pos_y) == TileType::Walkable &&
-        target_x_position * Constants::TILE_SIZE == x_position &&
-        target_y_position * Constants::TILE_SIZE == y_position) {
-        target_x_position = target_pos_x;
-        target_y_position = target_pos_y;
+    for (int i = 10; i > 0; i--) {
+        int target_pos_x = target_x_position + dx * i;
+        int target_pos_y = target_y_position + dy * i;
+        if (grid.getTile(target_pos_x, target_pos_y) == TileType::Walkable &&
+            target_x_position * Constants::TILE_SIZE == x_position &&
+            target_y_position * Constants::TILE_SIZE == y_position) {
+            target_x_position = target_pos_x;
+            target_y_position = target_pos_y;
+            return;
+        }
     }
 }
 
@@ -68,7 +73,7 @@ void Player::finishMove() {
     Uint32 currentTime = SDL_GetTicks();
     float deltaTime = (currentTime - lastTime) / 1000.0f; // Convert from ms to seconds
     lastTime = currentTime;
-    float adjustedSpeed = PLAYER_SPEED *  deltaTime;
+    float adjustedSpeed = PLAYER_SPEED * deltaTime;
 
     // Move smoothly towards target position
     if (x_position < target_pos_x) x_position = std::min(x_position + adjustedSpeed, target_pos_x);
@@ -88,6 +93,14 @@ std::pair<int, int> Player::toPair(Direction dir) {
             return {-1, 0};
         case RIGHT:
             return {1, 0};
+        case LEFTUP:
+            return {-1, -1};
+        case RIGHTUP:
+            return {1, -1};
+        case LEFTDOWN:
+            return {-1, 1};
+        case RIGHTDOWN:
+            return {1, 1};
         default:
             return {0, 0};
     }

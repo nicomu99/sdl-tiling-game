@@ -8,7 +8,7 @@
 namespace Constants {
     constexpr int SCREEN_HEIGHT = 960;
     constexpr int SCREEN_WIDTH = 1280;
-    constexpr int TILE_SIZE = 5;
+    constexpr int TILE_SIZE = 10;
     constexpr int ROW_COUNT = SCREEN_HEIGHT / TILE_SIZE;
     constexpr int COL_COUNT = SCREEN_WIDTH / TILE_SIZE;
 }
