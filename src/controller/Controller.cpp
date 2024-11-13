@@ -40,21 +40,16 @@ Controller::Controller(Model &model, SDLManager &sdl_manager, bool &running): mo
                                                                               running(running) {
 }
 
-void Controller::handleInput() {
+void Controller::handleInput() const {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT) {
             running = false;
-        } /*else if (event.type == SDL_KEYDOWN) {
-            auto it = keyDirectionMap.find(event.key.keysym.sym);
-            if (it != keyDirectionMap.end()) {
-                model.movePlayer(it->second);
-            }
-        }*/
+        }
     }
 
     // Get the current state of the keyboard
-    const Uint8 *keystates = SDL_GetKeyboardState(NULL);
+    const Uint8 *keystates = SDL_GetKeyboardState(nullptr);
     for (const auto &[key_pair, direction]: diagonal_key_direction_map) {
         if (keystates[key_pair.first] && keystates[key_pair.second]) {
             model.movePlayer();
@@ -77,7 +72,7 @@ void Controller::handleInput() {
     }
 }
 
-void Controller::updateModel() {
+void Controller::updateModel() const {
     model.finishMovingPlayer();
 }
 

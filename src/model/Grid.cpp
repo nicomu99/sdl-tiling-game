@@ -2,9 +2,6 @@
 // Created by nico on 11/9/24.
 //
 #include "Grid.hpp"
-
-#include <iostream>
-
 #include "Constants.hpp"
 
 Grid::Grid() {
@@ -26,18 +23,7 @@ const std::vector<std::vector<TileType>> & Grid::getTileMap() const {
     return tile_map;
 }
 
-std::vector<std::vector<TileType>>& Grid::getTileMap() {
-    return tile_map;
-}
-
-const TileType Grid::getTile(int x_position, int y_position) const {
-    if(x_position >= tile_map[0].size() || y_position >= tile_map.size())
-        return TileType::NonWalkable;
-    return tile_map[y_position][x_position];
-}
-
-
-TileType Grid::getTile(int x_position, int y_position) {
+TileType Grid::getTile(int x_position, int y_position) const {
     if(x_position >= tile_map[0].size() || y_position >= tile_map.size())
         return TileType::NonWalkable;
     return tile_map[y_position][x_position];

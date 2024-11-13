@@ -12,15 +12,10 @@
 class View {
     SDL_Renderer* renderer;
 public:
-    View(SDLManager&);
+    View(const SDLManager&);
 
-    void render(const Model& model);
-
-    void renderLine(int x1, int x2, int y1, int y2);
-
-    void drawLine(int x1, int y1, int x2, int y2);
-
-    void renderPlayer(const Player &player);
+    void render(const Model& model) const;
+    void renderPlayer(const Player &player) const;
 };
 
 #endif //VIEW_HPP

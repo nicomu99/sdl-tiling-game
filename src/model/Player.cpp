@@ -6,10 +6,9 @@
 #include <iostream>
 #include <SDL_timer.h>
 
-#include "Constants.hpp"
-
 constexpr float PLAYER_SPEED = 1500.0f;
 constexpr int ROTATION_SPEED = 5;
+constexpr float MOVE_RADIUS = 50.0f;
 Uint32 lastTime = SDL_GetTicks();
 
 Player::Player(): x_position(150.0f), y_position(150.0f),
@@ -17,43 +16,31 @@ Player::Player(): x_position(150.0f), y_position(150.0f),
                   player_rotation(0), render(false) {
 }
 
-const std::pair<float, float> Player::getPosition() const {
+std::pair<float, float> Player::getPosition() const {
     return {x_position, y_position};
 }
 
-std::pair<float, float> Player::getPosition() {
-    return {x_position, y_position};
-}
-
-const std::pair<float, float> Player::getTargetPosition() const {
+std::pair<float, float> Player::getTargetPosition() const {
     return {target_x_position, target_y_position};
 }
 
-std::pair<float, float> Player::getTargetPosition() {
-    return {target_x_position, target_y_position};
-}
-
-const int Player::getRotationAngle() const {
+int Player::getRotationAngle() const {
     return player_rotation;
 }
 
-void Player::move(Grid grid) {
-
-    const float radius = 50.0f;
-    const float radians = player_rotation * M_PI / 180;
-    target_x_position += (radius * cos(radians) / 10);
-    target_y_position += (radius * sin(radians) / 10);
+void Player::move(const Grid& grid) {
+    const float radians = static_cast<float>(player_rotation * M_PI) / 180;
+    target_x_position += (MOVE_RADIUS * cos(radians) / 10);
+    target_y_position += (MOVE_RADIUS * sin(radians) / 10);
 }
 
 void Player::finishMove() {
-    /*float target_pos_x = target_x_position * Constants::TILE_SIZE;
-    float target_pos_y = target_y_position * Constants::TILE_SIZE;*/
 
     float target_pos_x = x_position + (target_x_position - x_position);
     float target_pos_y = y_position + (target_y_position - y_position);
 
     Uint32 currentTime = SDL_GetTicks();
-    float deltaTime = (currentTime - lastTime) / 1000.0f; // Convert from ms to seconds
+    float deltaTime = static_cast<float>(currentTime - lastTime) / 1000.0f; // Convert from ms to seconds
     lastTime = currentTime;
     float adjustedSpeed = PLAYER_SPEED * deltaTime;
 

@@ -15,8 +15,8 @@ class Controller {
 public:
     Controller(Model&, SDLManager&, bool&);
 
-    void handleInput();
-    void updateModel();
+    void handleInput() const;
+    void updateModel() const;
     void renderScreen();
 };
 

@@ -5,16 +5,8 @@
 
 Model::Model(): grid(Grid()), player(Player()) { }
 
-Grid& Model::getGrid() {
-    return grid;
-}
-
 const Grid& Model::getGrid() const {
     return grid;
-}
-
-Player& Model::getPlayer() {
-    return player;
 }
 
 const Player& Model::getPlayer() const {

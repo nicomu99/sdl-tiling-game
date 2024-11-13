@@ -8,9 +8,9 @@
 
 #include "Constants.hpp"
 
-View::View(SDLManager& sdl_manager): renderer(sdl_manager.getRenderer()) { }
+View::View(const SDLManager& sdl_manager): renderer(sdl_manager.getRenderer()) { }
 
-void View::render(const Model& model) {
+void View::render(const Model& model) const{
 
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
     const std::vector<std::vector<TileType>>& grid = model.getGrid().getTileMap();
@@ -32,48 +32,8 @@ void View::render(const Model& model) {
     SDL_RenderPresent(renderer);
 }
 
-std::pair<int, int> calculateCorner(int center_x, int center_y, float x, float y, float angle) {
-    return {
-        center_x + (x * cos(angle) - y * sin(angle)),
-        center_y + (x * sin(angle) + y * cos(angle))
-    };
-}
 
-float getPointOnLine(float slope, float d, int x) {
-    return static_cast<float>(x)*slope + d;
-}
-
-void View::drawLine(int x1, int y1, int x2, int y2) {
-    if(x2 != x1) {
-        float slope = (static_cast<float>(y2) - static_cast<float>(y1))/(static_cast<float>(x2) - static_cast<float>(x1));
-        int d = y1 - slope * x1;
-        for (int i = x1; i < x2; i++) {
-            float y = getPointOnLine(slope, d, i);
-            int rounded_y = static_cast<int>(std::round(y));
-            SDL_RenderDrawPoint(renderer, i, rounded_y);
-        }
-    } else {
-        int lower_y = y1;
-        int upper_y = y2;
-        if (y1 > y2) {
-            lower_y = y2;
-            upper_y = y1;
-        }
-        for (int i = lower_y; i <= upper_y; i++) {
-            SDL_RenderDrawPoint(renderer, x1, i);
-        }
-    }
-
-}
-
-// Helper function to interpolate between two points (x1, y1) and (x2, y2) for a given y
-int interpolateX(int x1, int y1, int x2, int y2, int y) {
-    if (y2 == y1) return x1; // Prevent division by zero
-    return x1 + (x2 - x1) * (y - y1) / (y2 - y1);
-}
-
-
-void View::renderPlayer(const Player& player) {
+void View::renderPlayer(const Player& player) const {
     auto [current_x, current_y] = player.getPosition();
 
     // Rectangle center point
@@ -138,7 +98,7 @@ void View::renderPlayer(const Player& player) {
             // Find x while iterating over y
             if (y >= std::min(y0, y1) && y < std::max(y0, y1)) {
                 // Calculate the intersection point
-                // (y - y0) / cast(y1 - y0) -> calcualte the relative position of y between y0 and y1 in percent
+                // (y - y0) / cast(y1 - y0) -> calculate the relative position of y between y0 and y1 in percent
                 // Then by multiplying with x1 - x0 we check how far along we are on the vertical axis
                 double x = edge.x0 + (edge.x1 - edge.x0) * (y - y0) / static_cast<double>(y1 - y0);
                 intersections.push_back(static_cast<int>(x));

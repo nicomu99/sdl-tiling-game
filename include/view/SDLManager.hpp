@@ -13,7 +13,7 @@ public:
     SDLManager();
     ~SDLManager();
 
-    SDL_Renderer* getRenderer() const;
+    [[nodiscard]] SDL_Renderer* getRenderer() const;
 };
 
 #endif //SDLMANAGER_HPP

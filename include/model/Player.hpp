@@ -20,13 +20,11 @@ public:
 
     Player();
 
-    const std::pair<float, float> getPosition() const;
-    std::pair<float, float> getPosition();
-    const std::pair<float, float> getTargetPosition() const;
-    std::pair<float, float> getTargetPosition();
-    const int getRotationAngle() const;
+    [[nodiscard]] std::pair<float, float> getPosition() const;
+    [[nodiscard]] std::pair<float, float> getTargetPosition() const;
+    [[nodiscard]] int getRotationAngle() const;
 
-    void move(Grid);
+    void move(const Grid&);
     void move2(Rotation direction);
 
     void finishMove();

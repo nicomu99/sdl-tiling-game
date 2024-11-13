@@ -14,16 +14,12 @@ class Model {
 public:
     Model();
 
-    Grid& getGrid();
-    const Grid& getGrid() const;
+    [[nodiscard]] const Grid& getGrid() const;
 
-    Player &getPlayer();
-    const Player &getPlayer() const;
+    [[nodiscard]] const Player& getPlayer() const;
 
     void movePlayer();
-
     void finishMovingPlayer();
-
     void rotatePlayer(Player::Rotation rotation);
 };
 
