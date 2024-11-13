@@ -4,6 +4,7 @@
 
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
+#include <string>
 #include <utility>
 
 #include "Grid.hpp"
@@ -11,42 +12,34 @@
 
 class Player {
 public:
-    enum Direction {
-        UP,
-        DOWN,
-        LEFT,
+    enum Rotation {
         RIGHT,
-        NONE,
-        LEFTUP,
-        RIGHTUP,
-        LEFTDOWN,
-        RIGHTDOWN
+        LEFT,
+        NONE
     };
 
     Player();
 
-    Player(int x_position, int y_position);
-
     const std::pair<float, float> getPosition() const;
     std::pair<float, float> getPosition();
-    const std::pair<int, int> getTargetPosition() const;
-    std::pair<int, int> getTargetPosition();
-    Direction getDirection();
-    const Direction getDirection() const;
+    const std::pair<float, float> getTargetPosition() const;
+    std::pair<float, float> getTargetPosition();
+    const int getRotationAngle() const;
 
-    void move(Direction, Grid);
-    void move2(Direction direction);
+    void move(Grid);
+    void move2(Rotation direction);
 
     void finishMove();
+    void rotatePlayer(Rotation rotation);
 
-    static std::pair<int, int> toPair(Direction dir);
+    static std::string to_string(Rotation rotation);
+
 private:
     float x_position;
     float y_position;
-    int target_x_position;
-    int target_y_position;
+    float target_x_position;
+    float target_y_position;
+    int player_rotation;
     bool render;
-
-    Direction move_direction;
 };
 #endif //PLAYER_HPP

@@ -4,8 +4,6 @@
 
 #ifndef MODEL_HPP
 #define MODEL_HPP
-#include <SDL_keycode.h>
-#include <bits/unordered_map.h>
 
 #include "Grid.hpp"
 #include "Player.hpp"
@@ -22,9 +20,11 @@ public:
     Player &getPlayer();
     const Player &getPlayer() const;
 
-    void movePlayer(Player::Direction direction);
+    void movePlayer();
 
     void finishMovingPlayer();
+
+    void rotatePlayer(Player::Rotation rotation);
 };
 
 #endif //MODEL_HPP

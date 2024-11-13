@@ -82,7 +82,7 @@ void View::renderPlayer(const Player& player) {
     double half_length = Constants::TILE_SIZE / 2.0f;
 
     // Rotation angle in degrees and radians
-    double degrees = 45;
+    double degrees = player.getRotationAngle();
     double radians = degrees * M_PI / 180.0;
     double cos_a = cos(radians);
     double sin_a = sin(radians);
