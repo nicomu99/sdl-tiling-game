@@ -16,6 +16,10 @@ public:
 
     void render(const Model& model);
 
+    void renderLine(int x1, int x2, int y1, int y2);
+
+    void drawLine(int x1, int y1, int x2, int y2);
+
     void renderPlayer(const Player &player);
 };
 
