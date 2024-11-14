@@ -12,10 +12,15 @@ class Controller {
     Model& model;
     View view;
     bool& running;
+    SDLManager& sdl_manager;
+    float display_dpi;
+
 public:
     Controller(Model&, SDLManager&, bool&);
 
-    void handleInput() const;
+    void handleDisplayEvent(const SDL_DisplayEvent & display);
+
+    void handleInput();
     void updateModel() const;
     void renderScreen();
 };

@@ -12,8 +12,6 @@ include_directories(${PROJECT_SOURCE_DIR}/include
         ${PROJECT_SOURCE_DIR}/include/controller)
 
 add_executable(tiling_game src/main.cpp
-        include/view/SDLManager.hpp
-        src/view/SDLManager.cpp
         include/Constants.hpp
         include/controller/Controller.hpp
         src/controller/Controller.cpp
@@ -24,6 +22,8 @@ add_executable(tiling_game src/main.cpp
         include/model/Grid.hpp
         src/model/Grid.cpp
         include/model/Player.hpp
-        src/model/Player.cpp)
+        src/model/Player.cpp
+        include/controller/SDLManager.hpp
+        src/controller/SDLManager.cpp)
 
 target_link_libraries(tiling_game SDL2::SDL2)

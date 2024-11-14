@@ -35,3 +35,18 @@ SDLManager::~SDLManager() {
 SDL_Renderer* SDLManager::getRenderer() const {
     return renderer;
 }
+
+SDL_Window* SDLManager::getWindow() const {
+    return window;
+}
+
+float SDLManager::getDisplayDpi() const {
+    float dpi;
+    int display_index = SDL_GetWindowDisplayIndex(window);
+    if (SDL_GetDisplayDPI(display_index, &dpi, nullptr, nullptr) != 0) {
+        printf("SDL_GetDisplayDPI failed: %s\n", SDL_GetError());
+        dpi = 96.0f; // Fallback DPI
+    }
+
+    return dpi;
+}

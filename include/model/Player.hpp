@@ -4,6 +4,7 @@
 
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
+#include <SDL_video.h>
 #include <string>
 #include <utility>
 
@@ -24,10 +25,9 @@ public:
     [[nodiscard]] std::pair<float, float> getTargetPosition() const;
     [[nodiscard]] int getRotationAngle() const;
 
-    void move(const Grid&);
-    void move2(Rotation direction);
+    void move(const Grid&, float);
 
-    void finishMove();
+    void finishMove(float);
     void rotatePlayer(Rotation rotation);
 
     static std::string to_string(Rotation rotation);

@@ -2,6 +2,9 @@
 // Created by nico on 11/9/24.
 //
 #include "Controller.hpp"
+
+#include <iostream>
+
 #include "SDLManager.hpp"
 #include "Model.hpp"
 #include <unordered_map>
@@ -36,15 +39,24 @@ std::unordered_map<std::pair<SDL_Scancode, SDL_Scancode>, Player::Rotation, pair
     {{SDL_SCANCODE_S, SDL_SCANCODE_D}, Player::Rotation::RIGHT}
 };
 
-Controller::Controller(Model &model, SDLManager &sdl_manager, bool &running): model(model), view(sdl_manager),
-                                                                              running(running) {
+Controller::Controller(Model &model, SDLManager &sdl_manager, bool &running): model(model), view(sdl_manager), running(running),
+                                                                              sdl_manager(sdl_manager), display_dpi(sdl_manager.getDisplayDpi()) {
 }
 
-void Controller::handleInput() const {
+void Controller::handleDisplayEvent(const SDL_DisplayEvent &display) {
+    if(display.event == SDL_WINDOWEVENT_MOVED) {
+        display_dpi = sdl_manager.getDisplayDpi();
+    }
+}
+
+void Controller::handleInput() {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT) {
             running = false;
+        } else if (event.type == SDL_WINDOWEVENT) {
+            handleDisplayEvent(event.display);
+            break;
         }
     }
 
@@ -52,7 +64,7 @@ void Controller::handleInput() const {
     const Uint8 *keystates = SDL_GetKeyboardState(nullptr);
     for (const auto &[key_pair, direction]: diagonal_key_direction_map) {
         if (keystates[key_pair.first] && keystates[key_pair.second]) {
-            model.movePlayer();
+            model.movePlayer(display_dpi);
             model.rotatePlayer(direction);
             return;
         }
@@ -60,7 +72,7 @@ void Controller::handleInput() const {
 
     for(SDL_Scancode keys[] = {SDL_SCANCODE_W, SDL_SCANCODE_S}; const auto& key: keys) {
         if(keystates[key]) {
-            model.movePlayer();
+            model.movePlayer(display_dpi);
         }
     }
 
@@ -73,7 +85,7 @@ void Controller::handleInput() const {
 }
 
 void Controller::updateModel() const {
-    model.finishMovingPlayer();
+    model.finishMovingPlayer(display_dpi);
 }
 
 void Controller::renderScreen() {

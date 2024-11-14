@@ -3,6 +3,8 @@
 //
 #include "Model.hpp"
 
+#include "SDLManager.hpp"
+
 Model::Model(): grid(Grid()), player(Player()) { }
 
 const Grid& Model::getGrid() const {
@@ -13,12 +15,12 @@ const Player& Model::getPlayer() const {
     return player;
 }
 
-void Model::movePlayer() {
-    player.move(grid);
+void Model::movePlayer(float dpi) {
+    player.move(grid, dpi);
 }
 
-void Model::finishMovingPlayer() {
-    player.finishMove();
+void Model::finishMovingPlayer(float dpi) {
+    player.finishMove(dpi);
 }
 
 void Model::rotatePlayer(Player::Rotation rotation) {

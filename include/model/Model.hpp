@@ -5,8 +5,11 @@
 #ifndef MODEL_HPP
 #define MODEL_HPP
 
+#include <SDL_video.h>
+
 #include "Grid.hpp"
 #include "Player.hpp"
+#include "SDLManager.hpp"
 
 class Model {
     Grid grid;
@@ -18,8 +21,8 @@ public:
 
     [[nodiscard]] const Player& getPlayer() const;
 
-    void movePlayer();
-    void finishMovingPlayer();
+    void movePlayer(float);
+    void finishMovingPlayer(float);
     void rotatePlayer(Player::Rotation rotation);
 };
 

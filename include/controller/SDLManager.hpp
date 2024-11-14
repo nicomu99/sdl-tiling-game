@@ -14,6 +14,8 @@ public:
     ~SDLManager();
 
     [[nodiscard]] SDL_Renderer* getRenderer() const;
+    [[nodiscard]] SDL_Window *getWindow() const;
+    [[nodiscard]] float getDisplayDpi() const;
 };
 
 #endif //SDLMANAGER_HPP
