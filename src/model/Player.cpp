@@ -9,7 +9,6 @@
 constexpr float SCREEN_CROSSING_TIME = 5.0f;
 float pixels_per_second = 1920.0f / 5.0f; // 384 pixels per second
 constexpr int ROTATION_SPEED = 5;
-Uint32 last_time = SDL_GetTicks();
 
 Player::Player(): x_position(150.0f), y_position(150.0f),
                   target_x_position(150), target_y_position(150),
@@ -28,26 +27,26 @@ int Player::getRotationAngle() const {
     return player_rotation;
 }
 
-void Player::move(const Grid& grid, float dpi) {
+std::pair<float, float> Player::getDeltaPosition(float dpi) {
     // 140 is the dpi rate of the laptop monitor
     float MOVE_INCREMENT = SCREEN_CROSSING_TIME * (140 / dpi); // Pixels per input event
 
     const float radians = static_cast<float>(player_rotation * M_PI) / 180.0f;
-    float delta_x = MOVE_INCREMENT * cos(radians);
-    float delta_y = MOVE_INCREMENT * sin(radians);
+    return {
+        MOVE_INCREMENT * cos(radians),
+        MOVE_INCREMENT * sin(radians)
+    };
+}
 
+void Player::move(const Grid &grid, float dpi) {
+    auto [delta_x, delta_y] = getDeltaPosition(dpi);
     target_x_position += delta_x;
     target_y_position += delta_y;
 }
 
 void Player::finishMove(float dpi) {
-    // Get delta time
-    Uint32 current_time = SDL_GetTicks();
-    float delta_time = static_cast<float>(current_time - last_time) / 1000.0f; // Convert ms to seconds
-    last_time = current_time;
-
     // Calculate movement in pixels
-    float pixels_to_move = pixels_per_second * delta_time * (140 / dpi);
+    float pixels_to_move = pixels_per_second * (140 / dpi);
 
     // Calculate the distance to the target position
     float dx = target_x_position - x_position;
@@ -78,9 +77,9 @@ void Player::rotatePlayer(Rotation rotation) {
             break;
     }
 
-    if(player_rotation > 360) {
+    if (player_rotation > 360) {
         player_rotation -= 360;
-    } else if(player_rotation < 0) {
+    } else if (player_rotation < 0) {
         player_rotation = player_rotation + 360;
     }
 }

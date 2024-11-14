@@ -25,6 +25,8 @@ public:
     [[nodiscard]] std::pair<float, float> getTargetPosition() const;
     [[nodiscard]] int getRotationAngle() const;
 
+    std::pair<float, float> getDeltaPosition(float dpi);
+
     void move(const Grid&, float);
 
     void finishMove(float);
