@@ -13,7 +13,8 @@ class Controller {
     View view;
     bool& running;
     SDLManager& sdl_manager;
-    float display_dpi;
+    float coordinate_scaling;
+    float dpi_scaling;
 
 public:
     Controller(Model&, SDLManager&, bool&);
@@ -22,7 +23,7 @@ public:
 
     void handleInput();
     void updateModel() const;
-    void renderScreen();
+    void renderScreen() const;
 };
 
 #endif //CONTROLLER_HPP

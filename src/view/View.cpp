@@ -10,7 +10,7 @@
 
 View::View(const SDLManager& sdl_manager): renderer(sdl_manager.getRenderer()) { }
 
-void View::render(const Model& model) const{
+void View::render(const Model& model, float coordinate_scaling) const{
 
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
     const std::vector<std::vector<TileType>>& grid = model.getGrid().getTileMap();
@@ -27,14 +27,16 @@ void View::render(const Model& model) const{
         }
     }
 
-    renderPlayer(model.getPlayer());
+    renderPlayer(model.getPlayer(), coordinate_scaling);
 
     SDL_RenderPresent(renderer);
 }
 
 
-void View::renderPlayer(const Player& player) const {
+void View::renderPlayer(const Player& player, float coordinate_scaling) const {
     auto [current_x, current_y] = player.getPosition();
+    current_x = current_x * coordinate_scaling;
+    current_y = current_y * coordinate_scaling;
 
     // Rectangle center point
     double rect_center_x = current_x + Constants::TILE_SIZE / 2.0f;

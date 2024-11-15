@@ -11,6 +11,9 @@ namespace Constants {
     constexpr int TILE_SIZE = 20;
     constexpr int ROW_COUNT = SCREEN_HEIGHT / TILE_SIZE;
     constexpr int COL_COUNT = SCREEN_WIDTH / TILE_SIZE;
+    constexpr int VIRTUAL_WIDTH = 800;
+    constexpr int VIRTUAL_HEIGHT = 600;
+    constexpr float REFERENCE_DPI = 96.0f;
 }
 
 #endif //CONSTANTS_HPP

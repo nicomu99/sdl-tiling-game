@@ -21,7 +21,7 @@ public:
 
     [[nodiscard]] const Player& getPlayer() const;
 
-    void movePlayer(float);
+    void movePlayer(float, float);
     void finishMovingPlayer(float);
     void rotatePlayer(Player::Rotation rotation);
 };

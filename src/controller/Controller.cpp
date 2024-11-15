@@ -9,6 +9,8 @@
 #include "Model.hpp"
 #include <unordered_map>
 
+#include "Constants.hpp"
+
 // Create the map outside the switch (it could be a static member if reused often)
 std::unordered_map<SDL_Keycode, Player::Rotation> rotation_map = {
     {SDL_SCANCODE_D, Player::Rotation::RIGHT},
@@ -39,13 +41,17 @@ std::unordered_map<std::pair<SDL_Scancode, SDL_Scancode>, Player::Rotation, pair
     {{SDL_SCANCODE_S, SDL_SCANCODE_D}, Player::Rotation::RIGHT}
 };
 
-Controller::Controller(Model &model, SDLManager &sdl_manager, bool &running): model(model), view(sdl_manager), running(running),
-                                                                              sdl_manager(sdl_manager), display_dpi(sdl_manager.getDisplayDpi()) {
-}
+Controller::Controller(Model &model, SDLManager &sdl_manager,
+                       bool &running): model(model), view(sdl_manager), running(running),
+                                       sdl_manager(sdl_manager),
+                                       coordinate_scaling(sdl_manager.getCoordinateScaling()),
+                                       dpi_scaling(sdl_manager.getDpiScaling()) { }
 
 void Controller::handleDisplayEvent(const SDL_DisplayEvent &display) {
-    if(display.event == SDL_WINDOWEVENT_MOVED) {
-        display_dpi = sdl_manager.getDisplayDpi();
+    if (display.event == SDL_WINDOWEVENT_MOVED) {
+        auto [width, height] = sdl_manager.getScreenDimensions();
+        coordinate_scaling = sdl_manager.getCoordinateScaling();
+        dpi_scaling = sdl_manager.getDpiScaling();
     }
 }
 
@@ -64,15 +70,15 @@ void Controller::handleInput() {
     const Uint8 *keystates = SDL_GetKeyboardState(nullptr);
     for (const auto &[key_pair, direction]: diagonal_key_direction_map) {
         if (keystates[key_pair.first] && keystates[key_pair.second]) {
-            model.movePlayer(display_dpi);
+            model.movePlayer(coordinate_scaling, dpi_scaling);
             model.rotatePlayer(direction);
             return;
         }
     }
 
-    for(SDL_Scancode keys[] = {SDL_SCANCODE_W, SDL_SCANCODE_S}; const auto& key: keys) {
-        if(keystates[key]) {
-            model.movePlayer(display_dpi);
+    for (SDL_Scancode keys[] = {SDL_SCANCODE_W, SDL_SCANCODE_S}; const auto &key: keys) {
+        if (keystates[key]) {
+            model.movePlayer(coordinate_scaling, dpi_scaling);
         }
     }
 
@@ -85,9 +91,9 @@ void Controller::handleInput() {
 }
 
 void Controller::updateModel() const {
-    model.finishMovingPlayer(display_dpi);
+    model.finishMovingPlayer(coordinate_scaling);
 }
 
-void Controller::renderScreen() {
-    view.render(model);
+void Controller::renderScreen() const {
+    view.render(model, coordinate_scaling);
 }

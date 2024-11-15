@@ -14,8 +14,8 @@ class View {
 public:
     View(const SDLManager&);
 
-    void render(const Model& model) const;
-    void renderPlayer(const Player &player) const;
+    void render(const Model&, float) const;
+    void renderPlayer(const Player &player, float) const;
 };
 
 #endif //VIEW_HPP

@@ -27,7 +27,7 @@ public:
 
     std::pair<float, float> getDeltaPosition(float dpi);
 
-    void move(const Grid&, float);
+    void move(const Grid&, float, float);
 
     void finishMove(float);
     void rotatePlayer(Rotation rotation);

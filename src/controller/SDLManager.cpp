@@ -32,21 +32,53 @@ SDLManager::~SDLManager() {
     SDL_Quit();
 }
 
-SDL_Renderer* SDLManager::getRenderer() const {
+SDL_Renderer *SDLManager::getRenderer() const {
     return renderer;
 }
 
-SDL_Window* SDLManager::getWindow() const {
+SDL_Window *SDLManager::getWindow() const {
     return window;
 }
 
-float SDLManager::getDisplayDpi() const {
-    float dpi;
+float SDLManager::getCoordinateScaling() const {
+    return std::min(static_cast<float>(getScreenWidth()) / Constants::VIRTUAL_WIDTH,
+                    static_cast<float>(getScreenHeight()) / Constants::VIRTUAL_HEIGHT);
+}
+
+float SDLManager::getDpiScaling() const {
+    return Constants::REFERENCE_DPI / getDpi();
+}
+
+std::pair<int, int> SDLManager::getScreenDimensions() const {
+    int screen_width, screen_height;
+    SDL_GetWindowSize(window, &screen_width, &screen_height);
+
+    return {screen_width, screen_height};
+}
+
+int SDLManager::getScreenWidth() const {
+    int screen_width;
+    SDL_GetWindowSize(window, &screen_width, nullptr);
+    return screen_width;
+}
+
+int SDLManager::getScreenHeight() const {
+    int screen_height;
+    SDL_GetWindowSize(window, &screen_height, nullptr);
+    return screen_height;
+}
+
+float SDLManager::getDpi() const {
     int display_index = SDL_GetWindowDisplayIndex(window);
-    if (SDL_GetDisplayDPI(display_index, &dpi, nullptr, nullptr) != 0) {
-        printf("SDL_GetDisplayDPI failed: %s\n", SDL_GetError());
-        dpi = 96.0f; // Fallback DPI
+    if (display_index < 0) {
+        SDL_Log("Could not retrieve display number: %s", SDL_GetError());
+        display_index = 0;
     }
 
+    float dpi;
+    if (SDL_GetDisplayDPI(display_index, &dpi, nullptr, nullptr) != 0) {
+        SDL_Log("Could not get DPI for display: %s", SDL_GetError());
+        dpi = Constants::REFERENCE_DPI; // Standard dpi value
+    }
     return dpi;
 }

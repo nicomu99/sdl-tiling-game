@@ -6,8 +6,7 @@
 #include <iostream>
 #include <SDL_timer.h>
 
-constexpr float SCREEN_CROSSING_TIME = 5.0f;
-float pixels_per_second = 1920.0f / 5.0f; // 384 pixels per second
+constexpr float SPEED = 10.0f;
 constexpr int ROTATION_SPEED = 5;
 
 Player::Player(): x_position(150.0f), y_position(150.0f),
@@ -27,9 +26,8 @@ int Player::getRotationAngle() const {
     return player_rotation;
 }
 
-std::pair<float, float> Player::getDeltaPosition(float dpi) {
-    // 140 is the dpi rate of the laptop monitor
-    float MOVE_INCREMENT = SCREEN_CROSSING_TIME * (140 / dpi); // Pixels per input event
+std::pair<float, float> Player::getDeltaPosition(float dpi_scaling) {
+    float MOVE_INCREMENT = SPEED * dpi_scaling; // Pixels per input event
 
     const float radians = static_cast<float>(player_rotation * M_PI) / 180.0f;
     return {
@@ -38,15 +36,15 @@ std::pair<float, float> Player::getDeltaPosition(float dpi) {
     };
 }
 
-void Player::move(const Grid &grid, float dpi) {
-    auto [delta_x, delta_y] = getDeltaPosition(dpi);
-    target_x_position += delta_x;
-    target_y_position += delta_y;
+void Player::move(const Grid &grid, float coordinate_scaling, float dpi_scaling) {
+    auto [delta_x, delta_y] = getDeltaPosition(dpi_scaling);
+    x_position += delta_x;
+    y_position += delta_y;
 }
 
-void Player::finishMove(float dpi) {
+void Player::finishMove(float coordinate_scaling) {
     // Calculate movement in pixels
-    float pixels_to_move = pixels_per_second * (140 / dpi);
+    float pixels_to_move = SPEED * coordinate_scaling;
 
     // Calculate the distance to the target position
     float dx = target_x_position - x_position;
