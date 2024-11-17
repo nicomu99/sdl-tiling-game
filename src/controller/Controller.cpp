@@ -76,12 +76,14 @@ void Controller::handleInput() {
         }
     }
 
+    // Move forward
     for (SDL_Scancode keys[] = {SDL_SCANCODE_W, SDL_SCANCODE_S}; const auto &key: keys) {
         if (keystates[key]) {
             model.movePlayer(coordinate_scaling, dpi_scaling);
         }
     }
 
+    // A rotates the player to the left, D to the right
     for (const auto &[key, direction]: rotation_map) {
         if (keystates[key]) {
             model.rotatePlayer(direction);
@@ -90,9 +92,7 @@ void Controller::handleInput() {
     }
 }
 
-void Controller::updateModel() const {
-    model.finishMovingPlayer(coordinate_scaling);
-}
+void Controller::updateModel() const { }
 
 void Controller::renderScreen() const {
     view.render(model, coordinate_scaling);

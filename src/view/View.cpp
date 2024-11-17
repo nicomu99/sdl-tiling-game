@@ -10,66 +10,35 @@
 
 View::View(const SDLManager& sdl_manager): renderer(sdl_manager.getRenderer()) { }
 
-void View::render(const Model& model, float coordinate_scaling) const{
+void View::render(const Model& model, float coordinate_scaling) const {
+    renderTileMap(model.getGrid());
+    renderPlayer(model.getPlayer(), coordinate_scaling);
+    SDL_RenderPresent(renderer);
+}
 
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-    const std::vector<std::vector<TileType>>& grid = model.getGrid().getTileMap();
-    for(int i = 0; i < grid.size(); i++) {
-        for(int j = 0; j < grid[i].size(); j++) {
-            if(grid[i][j] == TileType::Walkable) {
+void View::renderTileMap(const Grid& grid) const {
+    const std::vector<std::vector<Tile>>& tile_map = grid.getTileMap();
+    for(const auto & i : tile_map) {
+        for(const auto& tile : i) {
+            if(tile.getTileType() == TileType::Walkable) {
                 SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
             } else {
                 SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
             }
 
-            SDL_Rect render_rect = {Constants::TILE_SIZE * j, Constants::TILE_SIZE * i, Constants::TILE_SIZE, Constants::TILE_SIZE};
+            SDL_Rect render_rect = {static_cast<int>(tile.getLeft()), static_cast<int>(tile.getTop()), Constants::TILE_SIZE, Constants::TILE_SIZE};
             SDL_RenderFillRect(renderer, &render_rect);
         }
     }
-
-    renderPlayer(model.getPlayer(), coordinate_scaling);
-
-    SDL_RenderPresent(renderer);
 }
 
-
 void View::renderPlayer(const Player& player, float coordinate_scaling) const {
-    auto [current_x, current_y] = player.getPosition();
-    current_x = current_x * coordinate_scaling;
-    current_y = current_y * coordinate_scaling;
-
-    // Rectangle center point
-    double rect_center_x = current_x + Constants::TILE_SIZE / 2.0f;
-    double rect_center_y = current_y + Constants::TILE_SIZE / 2.0f;
-    double half_length = Constants::TILE_SIZE / 2.0f;
-
-    // Rotation angle in degrees and radians
-    double degrees = player.getRotationAngle();
-    double radians = degrees * M_PI / 180.0;
-    double cos_a = cos(radians);
-    double sin_a = sin(radians);
-
-    // Calculate the four corners of the rotated rectangle
-    double x_offsets[4] = {-half_length, half_length, half_length, -half_length};
-    double y_offsets[4] = {-half_length, -half_length, half_length, half_length};
-
-    std::vector<int> x_points(4);
-    std::vector<int> y_points(4);
-    for (int i = 0; i < 4; ++i) {
-        double dx = x_offsets[i];
-        double dy = y_offsets[i];
-
-        // Rotate point around the center
-        double x_rot = dx * cos_a - dy * sin_a;
-        double y_rot = dx * sin_a + dy * cos_a;
-
-        x_points[i] = static_cast<int>(rect_center_x + x_rot);
-        y_points[i] = static_cast<int>(rect_center_y + y_rot);
-    }
+    std::vector<int> x_points = player.getXPoints();
+    std::vector<int> y_points = player.getYPoints();
 
     // Find min and max Y to define the scanline range
-    int min_y = *std::ranges::min_element(y_points);
-    int max_y = static_cast<int>(std::ceil(*std::ranges::max_element(y_points)));
+    int min_y = static_cast<int>(player.getTop());
+    int max_y = static_cast<int>(player.getBottom());
 
     // List of edges pairs of indices in x_points and y_points
     struct Edge {

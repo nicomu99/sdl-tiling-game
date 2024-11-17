@@ -9,27 +9,12 @@
 constexpr float SPEED = 10.0f;
 constexpr int ROTATION_SPEED = 5;
 
-Player::Player(): x_position(150.0f), y_position(150.0f),
-                  target_x_position(150), target_y_position(150),
-                  player_rotation(0), render(false) {
-}
+Player::Player(): Rectangle(150.0f, 150.0f) { }
 
-std::pair<float, float> Player::getPosition() const {
-    return {x_position, y_position};
-}
+std::pair<float, float> Player::getDeltaPosition(float dpi_scaling) const {
+    const float MOVE_INCREMENT = SPEED * dpi_scaling; // Pixels per input event
 
-std::pair<float, float> Player::getTargetPosition() const {
-    return {target_x_position, target_y_position};
-}
-
-int Player::getRotationAngle() const {
-    return player_rotation;
-}
-
-std::pair<float, float> Player::getDeltaPosition(float dpi_scaling) {
-    float MOVE_INCREMENT = SPEED * dpi_scaling; // Pixels per input event
-
-    const float radians = static_cast<float>(player_rotation * M_PI) / 180.0f;
+    const float radians = static_cast<float>(rotation * M_PI) / 180.0f;
     return {
         MOVE_INCREMENT * cos(radians),
         MOVE_INCREMENT * sin(radians)
@@ -38,48 +23,68 @@ std::pair<float, float> Player::getDeltaPosition(float dpi_scaling) {
 
 void Player::move(const Grid &grid, float coordinate_scaling, float dpi_scaling) {
     auto [delta_x, delta_y] = getDeltaPosition(dpi_scaling);
-    x_position += delta_x;
-    y_position += delta_y;
-}
+    bool collision = false;
 
-void Player::finishMove(float coordinate_scaling) {
-    // Calculate movement in pixels
-    float pixels_to_move = SPEED * coordinate_scaling;
+    for(int i = 10; i > 0; i--) {
+        const float t = static_cast<float>(i) * 0.1f;
 
-    // Calculate the distance to the target position
-    float dx = target_x_position - x_position;
-    float dy = target_y_position - y_position;
-    float distance_to_target = sqrt(dx * dx + dy * dy);
+        x += t * delta_x;
+        y += t * delta_y;
+        x_points = calculateXPoints();
+        y_points = calculateYPoints();
 
-    // If the distance is less than or equal to the movement, snap to target
-    if (distance_to_target <= pixels_to_move) {
-        x_position = target_x_position;
-        y_position = target_y_position;
-    } else {
-        // Move towards the target position
-        float ratio = pixels_to_move / distance_to_target;
-        x_position += dx * ratio;
-        y_position += dy * ratio;
+        int min_x = Grid::toTileCoordinate(this->getLeft());
+        int min_y = Grid::toTileCoordinate(this->getTop());
+        int max_x = Grid::toTileCoordinate(this->getRight());
+        int max_y = Grid::toTileCoordinate(this->getBottom());
+
+        std::cout << "Max y: " << max_y << std::endl;
+
+        for(int i = min_x; i <= max_x; i++) {
+            for(int j = min_y; j <= max_y; j++) {
+                std::cout << i << " " << j << std::endl;
+                const Tile& target_tile = grid.getTile(i, j);
+                std::cout << Tile::to_string(target_tile.getTileType()) << std::endl;
+                if(target_tile.isNonWalkable()) {
+                    collision = true;
+                    break;
+                }
+            }
+            if (collision) break;
+        }
+
+        if(!collision) {
+            break;
+        }
+
+        x -= t * delta_x;
+        y -= t * delta_y;
+        x_points = calculateXPoints();
+        y_points = calculateYPoints();
+        collision = false;
     }
 }
 
-void Player::rotatePlayer(Rotation rotation) {
-    switch (rotation) {
+void Player::rotatePlayer(Rotation rotation_type) {
+    switch (rotation_type) {
         case RIGHT:
-            player_rotation += ROTATION_SPEED;
+            rotation += ROTATION_SPEED;
             break;
         case LEFT:
-            player_rotation -= ROTATION_SPEED;
+            rotation -= ROTATION_SPEED;
             break;
         default:
             break;
     }
 
-    if (player_rotation > 360) {
-        player_rotation -= 360;
-    } else if (player_rotation < 0) {
-        player_rotation = player_rotation + 360;
+    if (rotation > 360) {
+        rotation -= 360;
+    } else if (rotation < 0) {
+        rotation += 360;
     }
+
+    x_points = calculateXPoints();
+    y_points = calculateYPoints();
 }
 
 std::string Player::to_string(Rotation rotation) {

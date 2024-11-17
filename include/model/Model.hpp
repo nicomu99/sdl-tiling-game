@@ -17,12 +17,11 @@ class Model {
 public:
     Model();
 
-    [[nodiscard]] const Grid& getGrid() const;
+    const Grid& getGrid() const;
 
     [[nodiscard]] const Player& getPlayer() const;
 
     void movePlayer(float, float);
-    void finishMovingPlayer(float);
     void rotatePlayer(Player::Rotation rotation);
 };
 

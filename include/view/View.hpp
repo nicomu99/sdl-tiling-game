@@ -15,6 +15,7 @@ public:
     View(const SDLManager&);
 
     void render(const Model&, float) const;
+    void renderTileMap(const Grid &grid) const;
     void renderPlayer(const Player &player, float) const;
 };
 

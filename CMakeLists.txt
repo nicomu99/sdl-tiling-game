@@ -24,6 +24,10 @@ add_executable(tiling_game src/main.cpp
         include/model/Player.hpp
         src/model/Player.cpp
         include/controller/SDLManager.hpp
-        src/controller/SDLManager.cpp)
+        src/controller/SDLManager.cpp
+        include/model/Rectangle.hpp
+        src/model/Rectangle.cpp
+        include/model/Tile.hpp
+        src/model/Tile.cpp)
 
 target_link_libraries(tiling_game SDL2::SDL2)

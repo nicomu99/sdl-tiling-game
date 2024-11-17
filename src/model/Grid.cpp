@@ -2,16 +2,23 @@
 // Created by nico on 11/9/24.
 //
 #include "Grid.hpp"
+
+#include <iostream>
+
 #include "Constants.hpp"
+#include "Tile.hpp"
 
 Grid::Grid() {
-    std::vector tile_map(Constants::ROW_COUNT, std::vector<TileType>(Constants::COL_COUNT));
+    constexpr auto cast_tile_size = static_cast<float>(Constants::TILE_SIZE);
+    std::vector tile_map(Constants::ROW_COUNT, std::vector<Tile>(Constants::COL_COUNT));
     for(int row = 0; row < Constants::ROW_COUNT; row++) {
         for(int col = 0; col < Constants::COL_COUNT; col++) {
+            const auto x = static_cast<float>(col) * cast_tile_size + cast_tile_size / 2.0f;
+            const auto y = static_cast<float>(row) * cast_tile_size + cast_tile_size / 2.0f;
             if (row == 0 || col == 0 || row == Constants::ROW_COUNT - 1 || col == Constants::COL_COUNT - 1) {
-                tile_map[row][col] = TileType::NonWalkable;
+                tile_map[row][col] = Tile(x, y, TileType::NonWalkable);
             } else {
-                tile_map[row][col] = TileType::Walkable;
+                tile_map[row][col] = Tile(x, y, TileType::Walkable);
             }
         }
     }
@@ -19,12 +26,14 @@ Grid::Grid() {
     this->tile_map = tile_map;
 }
 
-const std::vector<std::vector<TileType>> & Grid::getTileMap() const {
+const std::vector<std::vector<Tile>> & Grid::getTileMap() const {
     return tile_map;
 }
 
-TileType Grid::getTile(int x_position, int y_position) const {
-    if(x_position >= tile_map[0].size() || y_position >= tile_map.size())
-        return TileType::NonWalkable;
-    return tile_map[y_position][x_position];
+const Tile& Grid::getTile(int x, int y) const {
+    return tile_map[y][x];
+}
+
+int Grid::toTileCoordinate(float coordinate_position) {
+    return static_cast<int>(coordinate_position) / Constants::TILE_SIZE;
 }
