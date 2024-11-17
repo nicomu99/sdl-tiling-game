@@ -92,8 +92,6 @@ void Controller::handleInput() {
     }
 }
 
-void Controller::updateModel() const { }
-
 void Controller::renderScreen() const {
     view.render(model, coordinate_scaling);
 }

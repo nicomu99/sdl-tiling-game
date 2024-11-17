@@ -22,7 +22,6 @@ public:
     void handleDisplayEvent(const SDL_DisplayEvent & display);
 
     void handleInput();
-    void updateModel() const;
     void renderScreen() const;
 };
 
