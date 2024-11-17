@@ -5,11 +5,8 @@
 #ifndef MODEL_HPP
 #define MODEL_HPP
 
-#include <SDL_video.h>
-
 #include "Grid.hpp"
 #include "Player.hpp"
-#include "SDLManager.hpp"
 
 class Model {
     Grid grid;
@@ -17,8 +14,7 @@ class Model {
 public:
     Model();
 
-    const Grid& getGrid() const;
-
+    [[nodiscard]] const Grid& getGrid() const;
     [[nodiscard]] const Player& getPlayer() const;
 
     void movePlayer(float, float);

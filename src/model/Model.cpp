@@ -18,5 +18,5 @@ void Model::movePlayer(float coordinate_scaling, float dpi_scaling) {
 }
 
 void Model::rotatePlayer(Player::Rotation rotation) {
-    player.rotatePlayer(rotation);
+    player.rotatePlayer(rotation, grid);
 }

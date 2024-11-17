@@ -13,17 +13,18 @@
 class Player : public Rectangle {
 public:
     enum Rotation {
-        RIGHT,
-        LEFT,
-        NONE
+        RIGHT = 1,
+        LEFT = -1,
+        NONE = 0
     };
 
     Player();
 
-    std::pair<float, float> getDeltaPosition(float dpi) const;
+    [[nodiscard]] std::pair<float, float> getDeltaPosition(float dpi) const;
+    [[nodiscard]] bool checkGridCollision(const Grid &grid) const;
 
     void move(const Grid&, float, float);
-    void rotatePlayer(Rotation rotation);
+    void rotatePlayer(Rotation rotation, const Grid&);
 
     static std::string to_string(Rotation rotation);
 };

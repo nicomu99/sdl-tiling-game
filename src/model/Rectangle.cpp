@@ -66,8 +66,7 @@ const std::vector<int>& Rectangle::getYPoints() const {
 }
 
 bool Rectangle::isCollision(const Rectangle &r1, const Rectangle &r2) {
-    std::cout << r1.getLeft() << " " << r2.getRight() << std::endl;
-    return r1.getTop() > r2.getBottom() && r1.getBottom() < r2.getTop() && r1.getLeft() > r2.getRight() && r1.getRight() < r2.getLeft();
+    return r1.getTop() > r2.getBottom() || r1.getBottom() < r2.getTop() || r1.getLeft() < r2.getRight() || r1.getRight() > r2.getLeft();
 }
 
 const float &Rectangle::getX() const {
@@ -97,4 +96,11 @@ float Rectangle::getRight() const {
 
 const int& Rectangle::getRotation() const {
     return rotation;
+}
+
+void Rectangle::moveRectangle(float delta_x, float delta_y, float multiplier) {
+    x += multiplier * delta_x;
+    y += multiplier * delta_y;
+    x_points = calculateXPoints();
+    y_points = calculateYPoints();
 }

@@ -34,6 +34,8 @@ public:
     [[nodiscard]] float getLeft() const;
     [[nodiscard]] float getRight() const;
     [[nodiscard]] const int& getRotation() const;
+
+    void moveRectangle(float delta_x, float delta_y, float multiplier);
 };
 
 #endif //RECTANGLE_HPP
