@@ -69,7 +69,7 @@ void View::renderPlayer(const Player& player, float coordinate_scaling) const {
                 // Calculate the intersection point
                 // (y - y0) / cast(y1 - y0) -> calculate the relative position of y between y0 and y1 in percent
                 // Then by multiplying with x1 - x0 we check how far along we are on the vertical axis
-                double x = edge.x0 + (edge.x1 - edge.x0) * (y - y0) / static_cast<double>(y1 - y0);
+                double x = edge.x0 + (edge.x1 - edge.x0) * (static_cast<float>(y - y0)) / static_cast<double>(y1 - y0);
                 intersections.push_back(static_cast<int>(x));
             }
 
