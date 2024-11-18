@@ -25,7 +25,6 @@ void View::renderTileMap(const Grid& grid) const {
             } else {
                 SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
             }
-
             SDL_Rect render_rect = {static_cast<int>(tile.getLeft()), static_cast<int>(tile.getTop()), Constants::TILE_SIZE, Constants::TILE_SIZE};
             SDL_RenderFillRect(renderer, &render_rect);
         }
@@ -33,8 +32,7 @@ void View::renderTileMap(const Grid& grid) const {
 }
 
 void View::renderPlayer(const Player& player, float coordinate_scaling) const {
-    std::vector<int> x_points = player.getXPoints();
-    std::vector<int> y_points = player.getYPoints();
+    std::vector<Point> corner_points = player.getCornerPoints();
 
     // Find min and max Y to define the scanline range
     int min_y = static_cast<int>(player.getTop());
@@ -42,13 +40,13 @@ void View::renderPlayer(const Player& player, float coordinate_scaling) const {
 
     // List of edges pairs of indices in x_points and y_points
     struct Edge {
-        int x0, y0, x1, y1;
+        float x0, y0, x1, y1;
     };
     std::vector<Edge> edges = {
-        {x_points[0], y_points[0], x_points[1], y_points[1]},
-        {x_points[1], y_points[1], x_points[2], y_points[2]},
-        {x_points[2], y_points[2], x_points[3], y_points[3]},
-        {x_points[3], y_points[3], x_points[0], y_points[0]},
+        {corner_points[0].x, corner_points[0].y, corner_points[1].x, corner_points[1].y},
+        {corner_points[1].x, corner_points[1].y, corner_points[2].x, corner_points[2].y},
+        {corner_points[2].x, corner_points[2].y, corner_points[3].x, corner_points[3].y},
+        {corner_points[3].x, corner_points[3].y, corner_points[0].x, corner_points[0].y},
     };
 
     // Scanline fill algorithm
@@ -58,8 +56,8 @@ void View::renderPlayer(const Player& player, float coordinate_scaling) const {
 
         for (const auto& edge : edges) {
             // Iterate through all edges i.e. all lines between two corners
-            int y0 = edge.y0;
-            int y1 = edge.y1;
+            int y0 = static_cast<int>(edge.y0);
+            int y1 = static_cast<int>(edge.y1);
 
             // Skip horizontal edges
             if (y0 == y1)

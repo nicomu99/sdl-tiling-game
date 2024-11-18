@@ -5,7 +5,6 @@
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
 #include <string>
-#include <utility>
 
 #include "Grid.hpp"
 #include "Rectangle.hpp"
@@ -20,7 +19,7 @@ public:
 
     Player();
 
-    [[nodiscard]] std::pair<float, float> getDeltaPosition(float dpi) const;
+    [[nodiscard]] Point getDeltaPosition(float dpi) const;
     [[nodiscard]] bool checkGridCollision(const Grid &grid) const;
 
     void move(const Grid&, float, float);

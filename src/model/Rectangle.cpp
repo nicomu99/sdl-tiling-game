@@ -7,100 +7,82 @@
 #include <ios>
 #include <vector>
 #include <algorithm>
-#include <iostream>
 
 #include "Constants.hpp"
 
 constexpr float HALF_LENGTH = Constants::TILE_SIZE / 2.0f;
 
-
-Rectangle::Rectangle(float x, float y): x(x), y(y), rotation(0), x_points(calculateXPoints()), y_points(calculateYPoints()) {
+Rectangle::Rectangle(float x, float y): center(x, y), top(0.0f), bottom(0.0f),
+                                        left(0.0f), right(0.0f), rotation(0) {
+    initialize(center, rotation);
 }
 
-/// This function calculates the edge coordinates of the rectangle, if the rectangle has a rotation of 0.
-/// @param center One of the center coordinates of the rectangle
-/// @param multiplier Multiplier indicating which corner we are calculating -1 for left and top, 1 for bottom and right
-/// @return
-float Rectangle::computeCorners(float center, float multiplier) {
-    return center + multiplier * static_cast<float>(Constants::TILE_SIZE) / 2;
-}
+void Rectangle::initialize(Point center, int rotation) {
+    corner_points.clear();
 
-std::vector<int> Rectangle::calculateXPoints() const {
+    std::vector<Point> corners = {
+        {-HALF_LENGTH, -HALF_LENGTH},
+        {HALF_LENGTH, -HALF_LENGTH},
+        {HALF_LENGTH, HALF_LENGTH},
+        {-HALF_LENGTH, HALF_LENGTH}
+    };
+
     const double radians = rotation * M_PI / 180.0f;
     const auto cos_a = static_cast<float>(cos(radians));
     const auto sin_a = static_cast<float>(sin(radians));
 
-    const float x_offsets[4] = {-HALF_LENGTH, HALF_LENGTH, HALF_LENGTH, -HALF_LENGTH};
-    const float y_offsets[4] = {-HALF_LENGTH, -HALF_LENGTH, HALF_LENGTH, HALF_LENGTH};
+    bottom = 0;
+    top = Constants::SCREEN_HEIGHT;
+    left = Constants::SCREEN_WIDTH;
+    right = 0;
+    for (const auto& point : corners) {
+        float corner_x = center.x + point.x * cos_a - point.y * sin_a;
+        float corner_y = center.y + point.x * sin_a + point.y * cos_a;
 
-    std::vector<int> x_points(4);
-    for (int i = 0; i < 4; ++i) {
-        x_points[i] = static_cast<int>(x + x_offsets[i] * cos_a - y_offsets[i] * sin_a);
+        left = std::min(left, corner_x);
+        right = std::max(right, corner_y);
+        top = std::min(top, corner_y);
+        bottom = std::max(bottom, corner_y);
+
+        corner_points.emplace_back(corner_x, corner_y);
     }
-
-    return x_points;
-}
-
-std::vector<int> Rectangle::calculateYPoints() const {
-    const double radians = rotation * M_PI / 180.0f;
-    const auto cos_a = static_cast<float>(cos(radians));
-    const auto sin_a = static_cast<float>(sin(radians));
-
-    const float x_offsets[4] = {-HALF_LENGTH, HALF_LENGTH, HALF_LENGTH, -HALF_LENGTH};
-    const float y_offsets[4] = {-HALF_LENGTH, -HALF_LENGTH, HALF_LENGTH, HALF_LENGTH};
-
-    std::vector<int> y_points(4);
-    for (int i = 0; i < 4; ++i) {
-        y_points[i] = static_cast<int>(y + x_offsets[i] * sin_a + y_offsets[i] * cos_a);
-    }
-
-    return y_points;
-}
-
-const std::vector<int>& Rectangle::getXPoints() const {
-    return x_points;
-}
-
-const std::vector<int>& Rectangle::getYPoints() const {
-    return y_points;
 }
 
 bool Rectangle::isCollision(const Rectangle &r1, const Rectangle &r2) {
-    return r1.getTop() > r2.getBottom() || r1.getBottom() < r2.getTop() || r1.getLeft() < r2.getRight() || r1.getRight() > r2.getLeft();
+    return r1.getTop() > r2.getBottom() || r1.getBottom() < r2.getTop() || r1.getLeft() < r2.getRight() || r1.getRight()
+           > r2.getLeft();
 }
 
-const float &Rectangle::getX() const {
-    return x;
-}
-
-const float &Rectangle::getY() const {
-    return y;
+const Point& Rectangle::getCenter() const {
+    return center;
 }
 
 float Rectangle::getTop() const {
-    return static_cast<float>(*std::ranges::min_element(y_points));
+    return top;
 }
 
 float Rectangle::getBottom() const {
-    return static_cast<float>(*std::ranges::max_element(y_points));
+    return bottom;
 }
 
 
 float Rectangle::getLeft() const {
-    return static_cast<float>(*std::ranges::min_element(x_points));
+    return left;
 }
 
 float Rectangle::getRight() const {
-    return static_cast<float>(*std::ranges::max_element(x_points));
+    return right;
 }
 
-const int& Rectangle::getRotation() const {
+const int &Rectangle::getRotation() const {
     return rotation;
 }
 
-void Rectangle::moveRectangle(float delta_x, float delta_y, float multiplier) {
-    x += multiplier * delta_x;
-    y += multiplier * delta_y;
-    x_points = calculateXPoints();
-    y_points = calculateYPoints();
+const std::vector<Point> & Rectangle::getCornerPoints() const {
+    return corner_points;
+}
+
+void Rectangle::moveRectangle(Point delta_position, float multiplier) {
+    center += delta_position * multiplier;
+    initialize(center, rotation);
 }

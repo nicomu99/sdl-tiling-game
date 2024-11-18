@@ -6,36 +6,55 @@
 #define RECTANGLE_HPP
 #include <vector>
 
-class Rectangle {
-public:
+struct Point {
     float x;
     float y;
+
+    Point(float x, float y): x(x), y(y) { }
+
+    Point& operator+=(const Point& other) {
+        x += other.x;
+        y += other.y;
+        return *this;
+    }
+
+    Point operator+(const Point& other) const {
+        return {x + other.x, y + other.y};
+    }
+
+    Point& operator*(const float& multiplier) {
+        x *= multiplier;
+        y *= multiplier;
+        return *this;
+    }
+};
+
+class Rectangle {
+public:
+    Point center;
+    float top;
+    float bottom;
+    float left;
+    float right;
     int rotation;
-    std::vector<int> x_points;
-    std::vector<int> y_points;
+    std::vector<Point> corner_points;
+
 
     Rectangle(float x, float y);
 
-    static float computeCorners(float center, float x);
-
-    std::vector<int> calculateXPoints() const;
-
-    std::vector<int> calculateYPoints() const;
-
-    const std::vector<int> &getXPoints() const;
-    const std::vector<int> &getYPoints() const;
+    void initialize(Point, int);
 
     static bool isCollision(const Rectangle&, const Rectangle&);
 
-    [[nodiscard]] const float& getX() const;
-    [[nodiscard]] const float& getY() const;
+    [[nodiscard]] const Point& getCenter() const;
     [[nodiscard]] float getTop() const;
     [[nodiscard]] float getBottom() const;
     [[nodiscard]] float getLeft() const;
     [[nodiscard]] float getRight() const;
     [[nodiscard]] const int& getRotation() const;
+    [[nodiscard]] const std::vector<Point>& getCornerPoints() const;
 
-    void moveRectangle(float delta_x, float delta_y, float multiplier);
+    void moveRectangle(Point delta_position, float multiplier);
 };
 
 #endif //RECTANGLE_HPP

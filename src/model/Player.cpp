@@ -13,7 +13,7 @@ constexpr float STEP_SIZE = 1.0f / MAX_STEPS;
 
 Player::Player(): Rectangle(150.0f, 150.0f) { }
 
-std::pair<float, float> Player::getDeltaPosition(float dpi_scaling) const {
+Point Player::getDeltaPosition(float dpi_scaling) const {
     const float MOVE_INCREMENT = SPEED * dpi_scaling; // Pixels per input event
 
     const float radians = static_cast<float>(rotation * M_PI) / 180.0f;
@@ -44,11 +44,12 @@ void Player::move(const Grid &grid, float coordinate_scaling, float dpi_scaling)
 
     for(int step = MAX_STEPS; step > 0; step--) {
         const float t = static_cast<float>(step) * STEP_SIZE;
-        moveRectangle(t * delta_x, t * delta_y, 1);
+        Point delta_position(delta_x * t, delta_y * t);
+        moveRectangle(delta_position, 1);
 
         if(checkGridCollision(grid)) {
             // Reset the rectangle position if a collision was detected
-            moveRectangle(t * delta_x, t * delta_y, -1);
+            moveRectangle(delta_position, -1);
         } else {
             break;
         }
@@ -56,16 +57,14 @@ void Player::move(const Grid &grid, float coordinate_scaling, float dpi_scaling)
 }
 
 void Player::rotatePlayer(Rotation rotation_type, const Grid& grid) {
-    rotation += rotation_type * ROTATION_SPEED;
-    rotation = (rotation % 360 + 360) % 360;
-    x_points = calculateXPoints();
-    y_points = calculateYPoints();
+    int new_rotation = rotation + rotation_type * ROTATION_SPEED;
+    new_rotation = (new_rotation % 360 + 360) % 360;
+    initialize(center, new_rotation);
 
-    if(checkGridCollision(grid)) {
-        rotation -= rotation_type * ROTATION_SPEED;
-        rotation = (rotation % 360 + 360) % 360;
-        x_points = calculateXPoints();
-        y_points = calculateYPoints();
+    if(!checkGridCollision(grid)) {
+        rotation = new_rotation;
+    } else {
+        initialize(center, rotation);
     }
 }
 
