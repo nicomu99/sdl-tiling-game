@@ -40,7 +40,7 @@ void Rectangle::initialize(Position center, int rotation) {
         float corner_y = center.y + point.x * sin_a + point.y * cos_a;
 
         left = std::min(left, corner_x);
-        right = std::max(right, corner_y);
+        right = std::max(right, corner_x);
         top = std::min(top, corner_y);
         bottom = std::max(bottom, corner_y);
 
