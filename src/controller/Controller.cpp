@@ -34,6 +34,27 @@ struct pair_hash {
     }
 };
 
+// Custom hash function for diagonal_key_direction_map
+struct tuple_hash {
+    template<class T1, class T2, class T3>
+
+    std::size_t operator()(const std::tuple<T1, T2, T3> &p) const {
+        // Hash both elements of the pair
+        auto h1 = std::hash<T1>{}(std::get<0>(p));
+        auto h2 = std::hash<T2>{}(std::get<1>(p));
+        auto h3 = std::hash<T3>{}(std::get<2>(p));
+        // Combine the two hash values
+        return h1 ^ (h2 << 1) ^ h3; // Shift h2 to the left by 1 bit and perform XOR
+    }
+};
+
+std::unordered_map<std::tuple<SDL_Scancode, SDL_Scancode, SDL_Scancode>, Player::Rotation, tuple_hash> shoot_walk_rotate_direction_map = {
+    {{SDL_SCANCODE_W, SDL_SCANCODE_A, SDL_SCANCODE_SPACE}, Player::Rotation::LEFT},
+    {{SDL_SCANCODE_W, SDL_SCANCODE_D, SDL_SCANCODE_SPACE}, Player::Rotation::RIGHT},
+    {{SDL_SCANCODE_S, SDL_SCANCODE_A, SDL_SCANCODE_SPACE}, Player::Rotation::LEFT},
+    {{SDL_SCANCODE_S, SDL_SCANCODE_D, SDL_SCANCODE_SPACE}, Player::Rotation::RIGHT}
+};
+
 std::unordered_map<std::pair<SDL_Scancode, SDL_Scancode>, Player::Rotation, pair_hash> diagonal_key_direction_map = {
     {{SDL_SCANCODE_W, SDL_SCANCODE_A}, Player::Rotation::LEFT},
     {{SDL_SCANCODE_W, SDL_SCANCODE_D}, Player::Rotation::RIGHT},
@@ -68,6 +89,16 @@ void Controller::handleInput() {
 
     // Get the current state of the keyboard
     const Uint8 *keystates = SDL_GetKeyboardState(nullptr);
+    for (const auto &[key_tuple, direction]: shoot_walk_rotate_direction_map) {
+        if (keystates[std::get<0>(key_tuple)] && keystates[std::get<1>(key_tuple)] && std::get<2>(key_tuple)) {
+            model.movePlayer(coordinate_scaling, dpi_scaling);
+            model.rotatePlayer(direction);
+            model.fireWeapon();
+            return;
+        }
+    }
+
+
     for (const auto &[key_pair, direction]: diagonal_key_direction_map) {
         if (keystates[key_pair.first] && keystates[key_pair.second]) {
             model.movePlayer(coordinate_scaling, dpi_scaling);
@@ -92,7 +123,6 @@ void Controller::handleInput() {
 
     if(keystates[SDL_SCANCODE_SPACE]) {
         model.fireWeapon();
-        return;
     }
 }
 
