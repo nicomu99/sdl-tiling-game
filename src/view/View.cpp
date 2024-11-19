@@ -102,8 +102,8 @@ void View::renderProjectiles(const Weapon& weapon) const {
         Position position = projectile.getPosition();
         auto[x, y] = Position::to_integer(position);
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-        for(int i = x - 2; i <= x + 2; i++) {
-            for(int j = y - 2; j <= y + 2; j++) {
+        for(int i = x - 1; i <= x + 1; i++) {
+            for(int j = y - 1; j <= y + 1; j++) {
                 SDL_RenderDrawPoint(renderer, i, j);
             }
         }
