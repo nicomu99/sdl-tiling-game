@@ -87,12 +87,12 @@ void Controller::handleInput() {
     for (const auto &[key, direction]: rotation_map) {
         if (keystates[key]) {
             model.rotatePlayer(direction);
-            return;
         }
     }
 
     if(keystates[SDL_SCANCODE_SPACE]) {
         model.fireWeapon();
+        return;
     }
 }
 

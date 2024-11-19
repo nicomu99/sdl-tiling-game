@@ -80,12 +80,8 @@ void Player::fireWeapon() {
     weapon.fireWeapon(center, delta_position);
 }
 
-void Player::checkProjectileCollisions(const Grid &grid) {
-    weapon.checkProjectileCollisions(grid);
-}
-
-void Player::update() {
-    weapon.updateBullets();
+void Player::update(const Grid& grid) {
+    weapon.updateBullets(grid);
 }
 
 std::string Player::to_string(Rotation rotation) {

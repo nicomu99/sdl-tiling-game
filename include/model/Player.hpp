@@ -32,7 +32,7 @@ public:
 
     void checkProjectileCollisions(const Grid & grid);
 
-    void update();
+    void update(const Grid &grid);
 
     static std::string to_string(Rotation rotation);
 };

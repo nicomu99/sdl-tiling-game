@@ -3,9 +3,15 @@
 //
 #include "Weapon.hpp"
 
+#include <iostream>
+#include <SDL_stdinc.h>
+#include <SDL_timer.h>
+
 #include "CollisionManager.hpp"
 
-Weapon::Weapon(): firing_speed(1.0f), bullet_speed(1.0f), projectiles(std::vector<Projectile>()) {
+Uint32 last_time = SDL_GetTicks();
+
+Weapon::Weapon(): firing_speed(0.5f), bullet_speed(1.0f), projectiles(std::vector<Projectile>()) {
 }
 
 Weapon::Weapon(float firing_speed, float bullet_speed): firing_speed(firing_speed), bullet_speed(bullet_speed),
@@ -21,13 +27,19 @@ std::vector<Projectile>& Weapon::getProjectiles() {
 }
 
 void Weapon::fireWeapon(Position firing_position, Position delta_position) {
+    if((static_cast<float>(SDL_GetTicks()) - static_cast<float>(last_time)) / 1000.0f < firing_speed) {
+        return;
+    }
+    last_time = SDL_GetTicks();
     projectiles.emplace_back(firing_position, delta_position);
 }
 
-void Weapon::updateBullets() {
+void Weapon::updateBullets(const Grid& grid) {
     for (auto &projectile: projectiles) {
         projectile.moveProjectile();
     }
+
+    CollisionManager::checkProjectileCollision(projectiles, grid);
 
     std::erase_if(
         projectiles,
@@ -35,8 +47,4 @@ void Weapon::updateBullets() {
             return projectile.hasHitWall();
         }
     );
-}
-
-void Weapon::checkProjectileCollisions(const Grid &grid) {
-    CollisionManager::checkProjectileCollision(projectiles, grid);
 }

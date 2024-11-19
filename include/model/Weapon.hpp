@@ -23,7 +23,7 @@ public:
     [[nodiscard]] std::vector<Projectile>& getProjectiles();
 
     void fireWeapon(Position, Position);
-    void updateBullets();
+    void updateBullets(const Grid &grid);
 
     void checkProjectileCollisions(const Grid & grid);
 };
