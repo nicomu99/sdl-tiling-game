@@ -11,15 +11,13 @@ constexpr int ROTATION_SPEED = 5;
 constexpr int MAX_STEPS = 10;
 constexpr float STEP_SIZE = 1.0f / MAX_STEPS;
 
-Player::Player(): Rectangle(150.0f, 150.0f) { }
+Player::Player(): Rectangle(150.0f, 150.0f), weapon(Weapon()) { }
 
-Point Player::getDeltaPosition(float dpi_scaling) const {
-    const float MOVE_INCREMENT = SPEED * dpi_scaling; // Pixels per input event
-
+Position Player::getDeltaPosition(float multiplier) const {
     const float radians = static_cast<float>(rotation * M_PI) / 180.0f;
     return {
-        MOVE_INCREMENT * cos(radians),
-        MOVE_INCREMENT * sin(radians)
+        multiplier * cos(radians),
+        multiplier * sin(radians)
     };
 }
 
@@ -39,12 +37,17 @@ bool Player::checkGridCollision(const Grid& grid) const {
     return false;
 }
 
+Weapon& Player::getWeapon() {
+    return weapon;
+}
+
 void Player::move(const Grid &grid, float coordinate_scaling, float dpi_scaling) {
-    auto [delta_x, delta_y] = getDeltaPosition(dpi_scaling);
+    const float MOVE_INCREMENT = SPEED * dpi_scaling; // Pixels per input event
+    auto [delta_x, delta_y] = getDeltaPosition(MOVE_INCREMENT);
 
     for(int step = MAX_STEPS; step > 0; step--) {
         const float t = static_cast<float>(step) * STEP_SIZE;
-        Point delta_position(delta_x * t, delta_y * t);
+        Position delta_position(delta_x * t, delta_y * t);
         moveRectangle(delta_position, 1);
 
         if(checkGridCollision(grid)) {
@@ -66,6 +69,15 @@ void Player::rotatePlayer(Rotation rotation_type, const Grid& grid) {
     } else {
         initialize(center, rotation);
     }
+}
+
+void Player::fireWeapon() {
+    Position delta_position = getDeltaPosition(1);
+    weapon.fireWeapon(center, delta_position);
+}
+
+void Player::checkProjectileCollisions(const Grid &grid) {
+    weapon.checkProjectileCollisions(grid);
 }
 
 std::string Player::to_string(Rotation rotation) {

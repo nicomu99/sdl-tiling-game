@@ -8,8 +8,10 @@
 
 #include "Grid.hpp"
 #include "Rectangle.hpp"
+#include "Weapon.hpp"
 
 class Player : public Rectangle {
+    Weapon weapon;
 public:
     enum Rotation {
         RIGHT = 1,
@@ -19,11 +21,15 @@ public:
 
     Player();
 
-    [[nodiscard]] Point getDeltaPosition(float dpi) const;
+    [[nodiscard]] Position getDeltaPosition(float multiplier) const;
     [[nodiscard]] bool checkGridCollision(const Grid &grid) const;
+    [[nodiscard]] Weapon& getWeapon();
 
     void move(const Grid&, float, float);
     void rotatePlayer(Rotation rotation, const Grid&);
+    void fireWeapon();
+
+    void checkProjectileCollisions(const Grid & grid);
 
     static std::string to_string(Rotation rotation);
 };

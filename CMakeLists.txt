@@ -29,6 +29,13 @@ add_executable(tiling_game src/main.cpp
         src/model/Rectangle.cpp
         include/model/Tile.hpp
         src/model/Tile.cpp
-        )
+        include/model/Weapon.hpp
+        src/model/Weapon.cpp
+        include/model/Position.hpp
+        include/model/Projectile.hpp
+        src/model/Projectile.cpp
+        include/model/CollisionManager.hpp
+        src/model/CollisionManager.cpp
+)
 
 target_link_libraries(tiling_game SDL2::SDL2)

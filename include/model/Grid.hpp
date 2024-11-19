@@ -16,6 +16,9 @@ public:
 
     [[nodiscard]] const std::vector<std::vector<Tile>>& getTileMap() const;
     [[nodiscard]] const Tile& getTile(int x_position, int y_position) const;
+    [[nodiscard]] const Tile& getTile(Position) const;
+
+    [[nodiscard]] bool isWallAt(Position) const;
 
     static int toTileCoordinate(float coordinate_position);
 };

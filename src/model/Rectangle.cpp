@@ -17,10 +17,10 @@ Rectangle::Rectangle(float x, float y): center(x, y), top(0.0f), bottom(0.0f),
     initialize(center, rotation);
 }
 
-void Rectangle::initialize(Point center, int rotation) {
+void Rectangle::initialize(Position center, int rotation) {
     corner_points.clear();
 
-    std::vector<Point> corners = {
+    std::vector<Position> corners = {
         {-HALF_LENGTH, -HALF_LENGTH},
         {HALF_LENGTH, -HALF_LENGTH},
         {HALF_LENGTH, HALF_LENGTH},
@@ -53,7 +53,7 @@ bool Rectangle::isCollision(const Rectangle &r1, const Rectangle &r2) {
            > r2.getLeft();
 }
 
-const Point& Rectangle::getCenter() const {
+const Position& Rectangle::getCenter() const {
     return center;
 }
 
@@ -78,11 +78,11 @@ const int &Rectangle::getRotation() const {
     return rotation;
 }
 
-const std::vector<Point> & Rectangle::getCornerPoints() const {
+const std::vector<Position> & Rectangle::getCornerPoints() const {
     return corner_points;
 }
 
-void Rectangle::moveRectangle(Point delta_position, float multiplier) {
+void Rectangle::moveRectangle(Position delta_position, float multiplier) {
     center += delta_position * multiplier;
     initialize(center, rotation);
 }

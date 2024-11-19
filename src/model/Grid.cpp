@@ -34,6 +34,17 @@ const Tile& Grid::getTile(int x, int y) const {
     return tile_map[y][x];
 }
 
+const Tile& Grid::getTile(Position position) const {
+    int x = toTileCoordinate(position.x);
+    int y = toTileCoordinate(position.y);
+
+    return tile_map[y][x];
+}
+
+bool Grid::isWallAt(Position position) const {
+    return getTile(position).getTileType() == TileType::NonWalkable;
+}
+
 int Grid::toTileCoordinate(float coordinate_position) {
     return static_cast<int>(coordinate_position) / Constants::TILE_SIZE;
 }

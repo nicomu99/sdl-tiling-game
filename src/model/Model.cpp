@@ -20,3 +20,11 @@ void Model::movePlayer(float coordinate_scaling, float dpi_scaling) {
 void Model::rotatePlayer(Player::Rotation rotation) {
     player.rotatePlayer(rotation, grid);
 }
+
+void Model::fireWeapon() {
+    player.fireWeapon();
+}
+
+void Model::checkBulletCollisions() {
+    player.checkProjectileCollisions(grid);
+}

@@ -32,7 +32,7 @@ void View::renderTileMap(const Grid& grid) const {
 }
 
 void View::renderPlayer(const Player& player, float coordinate_scaling) const {
-    std::vector<Point> corner_points = player.getCornerPoints();
+    std::vector<Position> corner_points = player.getCornerPoints();
 
     // Find min and max Y to define the scanline range
     int min_y = static_cast<int>(player.getTop());
