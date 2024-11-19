@@ -24,5 +24,5 @@ void Projectile::setHasHitWall(bool has_hit_wall) {
 }
 
 void Projectile::moveProjectile() {
-    projectile_position += delta_position * BULLET_SPEED;
+    projectile_position += (BULLET_SPEED * delta_position);
 }

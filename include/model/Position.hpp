@@ -41,4 +41,8 @@ struct Position {
     }
 };
 
+inline Position operator*(float multiplier, const Position& obj) {
+    return Position{obj.x * multiplier, obj.y * multiplier};
+}
+
 #endif //POINT_HPP

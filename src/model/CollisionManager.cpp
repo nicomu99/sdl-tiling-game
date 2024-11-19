@@ -3,6 +3,8 @@
 //
 #include "CollisionManager.hpp"
 
+#include <iostream>
+
 void CollisionManager::checkProjectileCollision(std::vector<Projectile>& projectiles, const Grid& grid) {
     for(auto& projectile : projectiles) {
         if(grid.isWallAt(projectile.getPosition())) {

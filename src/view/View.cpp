@@ -100,7 +100,12 @@ void View::renderPlayer(const Player& player, float coordinate_scaling) const {
 void View::renderProjectiles(const Weapon& weapon) const {
     for(auto projectile: weapon.getProjectiles()) {
         Position position = projectile.getPosition();
+        auto[x, y] = Position::to_integer(position);
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-        SDL_RenderDrawPoint(renderer, static_cast<int>(position.x), static_cast<int>(position.y));
+        for(int i = x - 2; i <= x + 2; i++) {
+            for(int j = y - 2; j <= y + 2; j++) {
+                SDL_RenderDrawPoint(renderer, i, j);
+            }
+        }
     }
 }
