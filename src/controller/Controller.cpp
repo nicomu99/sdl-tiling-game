@@ -90,8 +90,16 @@ void Controller::handleInput() {
             return;
         }
     }
+
+    if(keystates[SDL_SCANCODE_SPACE]) {
+        model.fireWeapon();
+    }
 }
 
 void Controller::renderScreen() const {
     view.render(model, coordinate_scaling);
+}
+
+void Controller::updateModel() const {
+    model.updatePlayer();
 }

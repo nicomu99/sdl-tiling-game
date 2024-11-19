@@ -23,6 +23,7 @@ public:
 
     [[nodiscard]] Position getDeltaPosition(float multiplier) const;
     [[nodiscard]] bool checkGridCollision(const Grid &grid) const;
+    [[nodiscard]] const Weapon& getWeapon() const;
     [[nodiscard]] Weapon& getWeapon();
 
     void move(const Grid&, float, float);
@@ -30,6 +31,8 @@ public:
     void fireWeapon();
 
     void checkProjectileCollisions(const Grid & grid);
+
+    void update();
 
     static std::string to_string(Rotation rotation);
 };

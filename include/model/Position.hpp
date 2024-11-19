@@ -4,6 +4,7 @@
 
 #ifndef POINT_HPP
 #define POINT_HPP
+#include <string>
 
 struct Position {
     float x;
@@ -25,6 +26,10 @@ struct Position {
         x *= multiplier;
         y *= multiplier;
         return *this;
+    }
+
+    static std::string to_string(Position position) {
+        return std::to_string(position.x) + " " + std::to_string(position.y);
     }
 };
 

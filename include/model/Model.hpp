@@ -21,6 +21,7 @@ public:
     void rotatePlayer(Player::Rotation rotation);
     void fireWeapon();
     void checkBulletCollisions();
+    void updatePlayer();
 };
 
 #endif //MODEL_HPP

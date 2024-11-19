@@ -23,6 +23,8 @@ public:
 
     void handleInput();
     void renderScreen() const;
+
+    void updateModel() const;
 };
 
 #endif //CONTROLLER_HPP

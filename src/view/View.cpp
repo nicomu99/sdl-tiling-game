@@ -13,6 +13,7 @@ View::View(const SDLManager& sdl_manager): renderer(sdl_manager.getRenderer()) {
 void View::render(const Model& model, float coordinate_scaling) const {
     renderTileMap(model.getGrid());
     renderPlayer(model.getPlayer(), coordinate_scaling);
+    renderProjectiles(model.getPlayer().getWeapon());
     SDL_RenderPresent(renderer);
 }
 
@@ -93,5 +94,13 @@ void View::renderPlayer(const Player& player, float coordinate_scaling) const {
 
             SDL_RenderDrawLine(renderer, x_start, y, x_end, y);
         }
+    }
+}
+
+void View::renderProjectiles(const Weapon& weapon) const {
+    for(auto projectile: weapon.getProjectiles()) {
+        Position position = projectile.getPosition();
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        SDL_RenderDrawPoint(renderer, static_cast<int>(position.x), static_cast<int>(position.y));
     }
 }

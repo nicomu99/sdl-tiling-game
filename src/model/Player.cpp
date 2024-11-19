@@ -37,6 +37,10 @@ bool Player::checkGridCollision(const Grid& grid) const {
     return false;
 }
 
+const Weapon & Player::getWeapon() const {
+    return weapon;
+}
+
 Weapon& Player::getWeapon() {
     return weapon;
 }
@@ -78,6 +82,10 @@ void Player::fireWeapon() {
 
 void Player::checkProjectileCollisions(const Grid &grid) {
     weapon.checkProjectileCollisions(grid);
+}
+
+void Player::update() {
+    weapon.updateBullets();
 }
 
 std::string Player::to_string(Rotation rotation) {

@@ -28,3 +28,7 @@ void Model::fireWeapon() {
 void Model::checkBulletCollisions() {
     player.checkProjectileCollisions(grid);
 }
+
+void Model::updatePlayer() {
+    player.update();
+}
