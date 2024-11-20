@@ -12,28 +12,26 @@ int main() {
         bool running =  true;
         Model model;
         Controller controller(model, sdl_manager, running);
-        double delta_time;
+        float delta_time = 0.0f;
 
         while(running) {
             const Uint64 frame_start = SDL_GetPerformanceCounter();
-            // Uint32 frame_start = SDL_GetTicks();
 
             controller.handleInput(delta_time);
             controller.renderScreen();
             controller.updateModel();
 
-            delta_time = static_cast<double>((SDL_GetPerformanceCounter() - frame_start) * 1000) / static_cast<double>(SDL_GetPerformanceFrequency());
-            // int frame_time = SDL_GetTicks() - frame_start;
+            const Uint64 frame_end = SDL_GetPerformanceCounter();
+
+            delta_time = static_cast<float>(frame_end - frame_start) / static_cast<float>(SDL_GetPerformanceFrequency()) * 1000.0f;
+            // delta_time = std::min(delta_time, Constants::MAX_DELTA_TIME);
 
             if(Constants::FRAME_DELAY > delta_time) {
-                // SDL_Delay(Constants::FRAME_DELAY - frame_time);
-                SDL_Delay(static_cast<Uint32>(Constants::FRAME_DELAY - delta_time));
+                SDL_Delay(static_cast<Uint32>(floor(Constants::FRAME_DELAY - delta_time)));
             }
 
-            // Uint32 msec = SDL_GetPerformanceCounter() - frame_start;
-            // std::cout << "Current FPS: " << std::to_string(1000.0 / (double)msec) << std::endl;
-            double elapsed = static_cast<double>(SDL_GetPerformanceCounter() - frame_start) / static_cast<double>(SDL_GetPerformanceFrequency());
-            std::cout << "Current FPS: " << std::to_string(1.0 / elapsed) << std::endl;
+            // double elapsed = static_cast<double>(SDL_GetPerformanceCounter() - frame_start) / static_cast<double>(SDL_GetPerformanceFrequency());
+            // std::cout << "Current FPS: " << std::to_string(1.0 / elapsed) << std::endl;
         }
     } catch (std::runtime_error& e) {
         std::cerr << "Error: " << e.what() << std::endl;

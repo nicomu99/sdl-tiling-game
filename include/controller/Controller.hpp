@@ -21,7 +21,7 @@ public:
 
     void handleDisplayEvent(const SDL_DisplayEvent & display);
 
-    void handleInput(double delta_time);
+    void handleInput(float delta_time);
     void renderScreen() const;
 
     void updateModel() const;

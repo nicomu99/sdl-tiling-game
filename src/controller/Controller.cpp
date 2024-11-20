@@ -76,7 +76,7 @@ Controller::Controller(Model &model, SDLManager &sdl_manager,
     }
 }*/
 
-void Controller::handleInput(double delta_time) {
+void Controller::handleInput(float delta_time) {
     model.setDeltaTime(delta_time);
 
     SDL_Event event;

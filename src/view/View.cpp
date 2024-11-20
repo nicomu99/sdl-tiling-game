@@ -23,7 +23,7 @@ void View::renderTileMap(const Grid& grid) const {
     for(const auto & i : tile_map) {
         for(const auto& tile : i) {
             if(tile.getTileType() == TileType::Walkable) {
-                SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+                SDL_SetRenderDrawColor(renderer, 200, 200, 200, 255);
             } else {
                 SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
             }
@@ -34,6 +34,8 @@ void View::renderTileMap(const Grid& grid) const {
 }
 
 void View::renderPlayer(const Player& player, float coordinate_scaling) const {
+    SDL_SetRenderDrawColor(renderer, 100, 0, 255, 255);
+
     std::vector<Position> corner_points = player.getCornerPoints();
 
     // Find min and max Y to define the scanline range

@@ -3,7 +3,7 @@
 //
 #include "Model.hpp"
 
-Model::Model(): grid(Grid()), player(Player()), delta_time(0.0) {
+Model::Model(): grid(Grid()), player(Player()), delta_time(0.0f) {
 }
 
 const Grid& Model::getGrid() const {
@@ -30,6 +30,6 @@ void Model::updatePlayer() {
     player.update(grid);
 }
 
-void Model::setDeltaTime(double delta_time) {
+void Model::setDeltaTime(float delta_time) {
     this->delta_time = delta_time;
 }

@@ -6,10 +6,11 @@
 #include <iostream>
 #include <SDL_timer.h>
 
-constexpr float SPEED = 10.0f;
+constexpr float SPEED = 300.0f;
 constexpr int ROTATION_SPEED = 5;
 constexpr int MAX_STEPS = 10;
 constexpr float STEP_SIZE = 1.0f / MAX_STEPS;
+Uint32 last_update = SDL_GetTicks();
 
 Player::Player(): Rectangle(150.0f, 150.0f), weapon(Weapon()) { }
 
@@ -45,8 +46,10 @@ Weapon& Player::getWeapon() {
     return weapon;
 }
 
-void Player::move(const Grid &grid, double delta_time) {
-    const float MOVE_INCREMENT = SPEED * static_cast<float>(delta_time);
+void Player::move(const Grid &grid, float delta_time) {
+    Uint32 dt = SDL_GetTicks() - last_update;
+    const float MOVE_INCREMENT = SPEED * static_cast<float>(dt) / 1000.0f;
+    std::cout << MOVE_INCREMENT << std::endl;
     auto [delta_x, delta_y] = getDeltaPosition(MOVE_INCREMENT);
 
     for(int step = MAX_STEPS; step > 0; step--) {
@@ -81,6 +84,7 @@ void Player::fireWeapon() {
 }
 
 void Player::update(const Grid& grid) {
+    last_update = SDL_GetTicks();
     weapon.updateBullets(grid);
 }
 
