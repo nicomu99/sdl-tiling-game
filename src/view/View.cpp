@@ -11,6 +11,7 @@
 View::View(const SDLManager& sdl_manager): renderer(sdl_manager.getRenderer()) { }
 
 void View::render(const Model& model, float coordinate_scaling) const {
+    SDL_RenderClear(renderer);
     renderTileMap(model.getGrid());
     renderPlayer(model.getPlayer(), coordinate_scaling);
     renderProjectiles(model.getPlayer().getWeapon());

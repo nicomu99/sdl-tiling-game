@@ -14,6 +14,8 @@ namespace Constants {
     constexpr int VIRTUAL_WIDTH = 800;
     constexpr int VIRTUAL_HEIGHT = 600;
     constexpr float REFERENCE_DPI = 96.0f;
+    constexpr int FPS = 60;
+    constexpr double FRAME_DELAY = 1000.0 / FPS;
 }
 
 #endif //CONSTANTS_HPP

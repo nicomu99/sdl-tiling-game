@@ -18,7 +18,7 @@ SDLManager::SDLManager() {
         throw std::runtime_error("Failed to create SDL window: " + std::string(SDL_GetError()));
     }
 
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     if (!renderer) {
         SDL_DestroyWindow(window);
         SDL_Quit();
