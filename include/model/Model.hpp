@@ -17,7 +17,7 @@ public:
     [[nodiscard]] const Grid& getGrid() const;
     [[nodiscard]] const Player& getPlayer() const;
 
-    void movePlayer(float, float);
+    void movePlayer(float);
     void rotatePlayer(Player::Rotation rotation);
     void fireWeapon();
     void checkBulletCollisions();

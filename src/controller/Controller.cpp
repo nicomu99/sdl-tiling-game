@@ -68,30 +68,31 @@ Controller::Controller(Model &model, SDLManager &sdl_manager,
                                        coordinate_scaling(sdl_manager.getCoordinateScaling()),
                                        dpi_scaling(sdl_manager.getDpiScaling()) { }
 
-void Controller::handleDisplayEvent(const SDL_DisplayEvent &display) {
+/*void Controller::handleDisplayEvent(const SDL_DisplayEvent &display) {
     if (display.event == SDL_WINDOWEVENT_MOVED) {
         auto [width, height] = sdl_manager.getScreenDimensions();
         coordinate_scaling = sdl_manager.getCoordinateScaling();
         dpi_scaling = sdl_manager.getDpiScaling();
     }
-}
+}*/
 
 void Controller::handleInput() {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT) {
             running = false;
-        } else if (event.type == SDL_WINDOWEVENT) {
+        }
+        /*else if (event.type == SDL_WINDOWEVENT) {
             handleDisplayEvent(event.display);
             break;
-        }
+        }*/
     }
 
     // Get the current state of the keyboard
     const Uint8 *keystates = SDL_GetKeyboardState(nullptr);
     for (const auto &[key_tuple, direction]: shoot_walk_rotate_direction_map) {
         if (keystates[std::get<0>(key_tuple)] && keystates[std::get<1>(key_tuple)] && std::get<2>(key_tuple)) {
-            model.movePlayer(coordinate_scaling, dpi_scaling);
+            model.movePlayer(coordinate_scaling);
             model.rotatePlayer(direction);
             model.fireWeapon();
             return;
@@ -101,7 +102,7 @@ void Controller::handleInput() {
 
     for (const auto &[key_pair, direction]: diagonal_key_direction_map) {
         if (keystates[key_pair.first] && keystates[key_pair.second]) {
-            model.movePlayer(coordinate_scaling, dpi_scaling);
+            model.movePlayer(coordinate_scaling);
             model.rotatePlayer(direction);
             return;
         }
@@ -110,7 +111,7 @@ void Controller::handleInput() {
     // Move forward
     for (SDL_Scancode keys[] = {SDL_SCANCODE_W, SDL_SCANCODE_S}; const auto &key: keys) {
         if (keystates[key]) {
-            model.movePlayer(coordinate_scaling, dpi_scaling);
+            model.movePlayer(coordinate_scaling);
         }
     }
 

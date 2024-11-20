@@ -13,8 +13,8 @@ const Player& Model::getPlayer() const {
     return player;
 }
 
-void Model::movePlayer(float coordinate_scaling, float dpi_scaling) {
-    player.move(grid, coordinate_scaling, dpi_scaling);
+void Model::movePlayer(float coordinate_scaling) {
+    player.move(grid, coordinate_scaling);
 }
 
 void Model::rotatePlayer(Player::Rotation rotation) {

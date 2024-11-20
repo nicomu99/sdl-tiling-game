@@ -45,8 +45,8 @@ Weapon& Player::getWeapon() {
     return weapon;
 }
 
-void Player::move(const Grid &grid, float coordinate_scaling, float dpi_scaling) {
-    const float MOVE_INCREMENT = SPEED * dpi_scaling; // Pixels per input event
+void Player::move(const Grid &grid, float coordinate_scaling) {
+    const float MOVE_INCREMENT = SPEED;
     auto [delta_x, delta_y] = getDeltaPosition(MOVE_INCREMENT);
 
     for(int step = MAX_STEPS; step > 0; step--) {
