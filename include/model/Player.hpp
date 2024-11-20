@@ -26,7 +26,7 @@ public:
     [[nodiscard]] const Weapon& getWeapon() const;
     [[nodiscard]] Weapon& getWeapon();
 
-    void move(const Grid&, float);
+    void move(const Grid&, double);
     void rotatePlayer(Rotation rotation, const Grid&);
     void fireWeapon();
 

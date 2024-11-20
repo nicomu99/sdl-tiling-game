@@ -76,7 +76,9 @@ Controller::Controller(Model &model, SDLManager &sdl_manager,
     }
 }*/
 
-void Controller::handleInput() {
+void Controller::handleInput(double delta_time) {
+    model.setDeltaTime(delta_time);
+
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT) {
@@ -92,7 +94,7 @@ void Controller::handleInput() {
     const Uint8 *keystates = SDL_GetKeyboardState(nullptr);
     for (const auto &[key_tuple, direction]: shoot_walk_rotate_direction_map) {
         if (keystates[std::get<0>(key_tuple)] && keystates[std::get<1>(key_tuple)] && std::get<2>(key_tuple)) {
-            model.movePlayer(coordinate_scaling);
+            model.movePlayer();
             model.rotatePlayer(direction);
             model.fireWeapon();
             return;
@@ -102,7 +104,7 @@ void Controller::handleInput() {
 
     for (const auto &[key_pair, direction]: diagonal_key_direction_map) {
         if (keystates[key_pair.first] && keystates[key_pair.second]) {
-            model.movePlayer(coordinate_scaling);
+            model.movePlayer();
             model.rotatePlayer(direction);
             return;
         }
@@ -111,7 +113,7 @@ void Controller::handleInput() {
     // Move forward
     for (SDL_Scancode keys[] = {SDL_SCANCODE_W, SDL_SCANCODE_S}; const auto &key: keys) {
         if (keystates[key]) {
-            model.movePlayer(coordinate_scaling);
+            model.movePlayer();
         }
     }
 
