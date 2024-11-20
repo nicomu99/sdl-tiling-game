@@ -12,6 +12,7 @@
 
 class Player : public Rectangle {
     Weapon weapon;
+    Position move_velocity;
 public:
     enum Rotation {
         RIGHT = 1,
@@ -25,6 +26,8 @@ public:
     [[nodiscard]] bool checkGridCollision(const Grid &grid) const;
     [[nodiscard]] const Weapon& getWeapon() const;
     [[nodiscard]] Weapon& getWeapon();
+
+    void setVelocity(Position &move_velocity);
 
     void move(const Grid&, float);
     void rotatePlayer(Rotation rotation, const Grid&);

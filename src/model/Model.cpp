@@ -14,8 +14,8 @@ const Player& Model::getPlayer() const {
     return player;
 }
 
-void Model::movePlayer() {
-    player.move(grid, delta_time);
+void Model::movePlayer(Position position) {
+    player.setVelocity(position);
 }
 
 void Model::rotatePlayer(Player::Rotation rotation) {

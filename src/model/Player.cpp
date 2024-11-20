@@ -12,7 +12,7 @@ constexpr int MAX_STEPS = 10;
 constexpr float STEP_SIZE = 1.0f / MAX_STEPS;
 Uint32 last_update = SDL_GetTicks();
 
-Player::Player(): Rectangle(150.0f, 150.0f), weapon(Weapon()) { }
+Player::Player(): Rectangle(150.0f, 150.0f), weapon(Weapon()), move_velocity(0, 0) { }
 
 Position Player::getDeltaPosition(float multiplier) const {
     const float radians = static_cast<float>(rotation * M_PI) / 180.0f;
@@ -46,15 +46,18 @@ Weapon& Player::getWeapon() {
     return weapon;
 }
 
+void Player::setVelocity(Position& move_velocity) {
+    this->move_velocity = move_velocity;
+}
+
 void Player::move(const Grid &grid, float delta_time) {
     Uint32 dt = SDL_GetTicks() - last_update;
     const float MOVE_INCREMENT = SPEED * static_cast<float>(dt) / 1000.0f;
-    std::cout << MOVE_INCREMENT << std::endl;
     auto [delta_x, delta_y] = getDeltaPosition(MOVE_INCREMENT);
 
     for(int step = MAX_STEPS; step > 0; step--) {
         const float t = static_cast<float>(step) * STEP_SIZE;
-        Position delta_position(delta_x * t, delta_y * t);
+        Position delta_position(delta_x * t * move_velocity.x, delta_y * t * move_velocity.y);
         moveRectangle(delta_position, 1);
 
         if(checkGridCollision(grid)) {
@@ -64,6 +67,8 @@ void Player::move(const Grid &grid, float delta_time) {
             break;
         }
     }
+
+    last_update = SDL_GetTicks();
 }
 
 void Player::rotatePlayer(Rotation rotation_type, const Grid& grid) {
@@ -84,7 +89,7 @@ void Player::fireWeapon() {
 }
 
 void Player::update(const Grid& grid) {
-    last_update = SDL_GetTicks();
+    move(grid, 0.0f);
     weapon.updateBullets(grid);
 }
 
