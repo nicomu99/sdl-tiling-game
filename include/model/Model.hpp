@@ -11,7 +11,8 @@
 class Model {
     Grid grid;
     Player player;
-    float delta_time;
+    double delta_time;
+
 public:
     Model();
 
@@ -24,7 +25,7 @@ public:
     void checkBulletCollisions();
     void updatePlayer();
 
-    void setDeltaTime(float delta_time);
+    void setDeltaTime(double delta_time);
 };
 
 #endif //MODEL_HPP

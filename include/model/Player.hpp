@@ -22,20 +22,20 @@ public:
 
     Player();
 
-    [[nodiscard]] Position getDeltaPosition(float multiplier) const;
+    [[nodiscard]] Position getDeltaPosition(double multiplier) const;
     [[nodiscard]] bool checkGridCollision(const Grid &grid) const;
     [[nodiscard]] const Weapon& getWeapon() const;
     [[nodiscard]] Weapon& getWeapon();
 
     void setVelocity(Position &move_velocity);
 
-    void move(const Grid&, float);
-    void rotatePlayer(Rotation rotation, const Grid&);
+    void move(const Grid&, double);
+    void rotatePlayer(Rotation rotation, const Grid&, double);
     void fireWeapon();
 
     void checkProjectileCollisions(const Grid & grid);
 
-    void update(const Grid &grid);
+    void update(const Grid &grid, double delta_time);
 
     static std::string to_string(Rotation rotation);
 };

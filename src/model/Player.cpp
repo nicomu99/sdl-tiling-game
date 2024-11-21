@@ -6,16 +6,16 @@
 #include <iostream>
 #include <SDL_timer.h>
 
-constexpr float SPEED = 300.0f;
-constexpr int ROTATION_SPEED = 5;
+constexpr double SPEED = 300.0;
+constexpr int ROTATION_SPEED = 300;
 constexpr int MAX_STEPS = 10;
 constexpr float STEP_SIZE = 1.0f / MAX_STEPS;
 Uint32 last_update = SDL_GetTicks();
 
 Player::Player(): Rectangle(150.0f, 150.0f), weapon(Weapon()), move_velocity(0, 0) { }
 
-Position Player::getDeltaPosition(float multiplier) const {
-    const float radians = static_cast<float>(rotation * M_PI) / 180.0f;
+Position Player::getDeltaPosition(double multiplier) const {
+    const double radians = static_cast<double>(rotation) * M_PI / 180.0;
     return {
         multiplier * cos(radians),
         multiplier * sin(radians)
@@ -50,13 +50,14 @@ void Player::setVelocity(Position& move_velocity) {
     this->move_velocity = move_velocity;
 }
 
-void Player::move(const Grid &grid, float delta_time) {
-    Uint32 dt = SDL_GetTicks() - last_update;
-    const float MOVE_INCREMENT = SPEED * static_cast<float>(dt) / 1000.0f;
+void Player::move(const Grid &grid, double delta_time) {
+    auto dt = delta_time; // static_cast<double>(SDL_GetTicks() - last_update) / 1000.0;
+    // std::cout << dt << std::endl;
+    const double MOVE_INCREMENT = SPEED * dt;
     auto [delta_x, delta_y] = getDeltaPosition(MOVE_INCREMENT);
 
     for(int step = MAX_STEPS; step > 0; step--) {
-        const float t = static_cast<float>(step) * STEP_SIZE;
+        const double t = static_cast<double>(step) * STEP_SIZE;
         Position delta_position(delta_x * t * move_velocity.x, delta_y * t * move_velocity.y);
         moveRectangle(delta_position, 1);
 
@@ -71,8 +72,8 @@ void Player::move(const Grid &grid, float delta_time) {
     last_update = SDL_GetTicks();
 }
 
-void Player::rotatePlayer(Rotation rotation_type, const Grid& grid) {
-    int new_rotation = rotation + rotation_type * ROTATION_SPEED;
+void Player::rotatePlayer(Rotation rotation_type, const Grid& grid, double delta_time) {
+    int new_rotation = rotation + rotation_type * ROTATION_SPEED * delta_time;
     new_rotation = (new_rotation % 360 + 360) % 360;
     initialize(center, new_rotation);
 
@@ -88,8 +89,8 @@ void Player::fireWeapon() {
     weapon.fireWeapon(center, delta_position);
 }
 
-void Player::update(const Grid& grid) {
-    move(grid, 0.0f);
+void Player::update(const Grid& grid, double delta_time) {
+    move(grid, delta_time);
     weapon.updateBullets(grid);
 }
 

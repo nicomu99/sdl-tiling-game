@@ -76,8 +76,7 @@ Controller::Controller(Model &model, SDLManager &sdl_manager,
     }
 }*/
 
-void Controller::handleInput(float delta_time) {
-    model.setDeltaTime(delta_time);
+void Controller::handleInput() {
 
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
@@ -135,6 +134,7 @@ void Controller::renderScreen() const {
     view.render(model, coordinate_scaling);
 }
 
-void Controller::updateModel() const {
+void Controller::updateModel(double delta_time) const {
+    model.setDeltaTime(delta_time);
     model.updatePlayer();
 }

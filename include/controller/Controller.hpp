@@ -21,10 +21,10 @@ public:
 
     void handleDisplayEvent(const SDL_DisplayEvent & display);
 
-    void handleInput(float delta_time);
+    void handleInput();
     void renderScreen() const;
 
-    void updateModel() const;
+    void updateModel(double delta_time) const;
 };
 
 #endif //CONTROLLER_HPP

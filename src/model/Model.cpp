@@ -3,7 +3,7 @@
 //
 #include "Model.hpp"
 
-Model::Model(): grid(Grid()), player(Player()), delta_time(0.0f) {
+Model::Model(): grid(Grid()), player(Player()), delta_time(0.0) {
 }
 
 const Grid& Model::getGrid() const {
@@ -19,7 +19,7 @@ void Model::movePlayer(Position position) {
 }
 
 void Model::rotatePlayer(Player::Rotation rotation) {
-    player.rotatePlayer(rotation, grid);
+    player.rotatePlayer(rotation, grid, delta_time);
 }
 
 void Model::fireWeapon() {
@@ -27,9 +27,9 @@ void Model::fireWeapon() {
 }
 
 void Model::updatePlayer() {
-    player.update(grid);
+    player.update(grid, delta_time);
 }
 
-void Model::setDeltaTime(float delta_time) {
+void Model::setDeltaTime(double delta_time) {
     this->delta_time = delta_time;
 }
