@@ -7,10 +7,10 @@
 #include <string>
 
 struct Position {
-    float x;
-    float y;
+    double x;
+    double y;
 
-    Position(float x, float y): x(x), y(y) {
+    Position(double x, double y): x(x), y(y) {
     }
 
     Position &operator+=(const Position &other) {

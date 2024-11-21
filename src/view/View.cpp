@@ -44,7 +44,7 @@ void View::renderPlayer(const Player& player, float coordinate_scaling) const {
 
     // List of edges pairs of indices in x_points and y_points
     struct Edge {
-        float x0, y0, x1, y1;
+        double x0, y0, x1, y1;
     };
     std::vector<Edge> edges = {
         {corner_points[0].x, corner_points[0].y, corner_points[1].x, corner_points[1].y},
