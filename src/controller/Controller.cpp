@@ -68,14 +68,6 @@ Controller::Controller(Model &model, SDLManager &sdl_manager,
                                        coordinate_scaling(sdl_manager.getCoordinateScaling()),
                                        dpi_scaling(sdl_manager.getDpiScaling()) { }
 
-/*void Controller::handleDisplayEvent(const SDL_DisplayEvent &display) {
-    if (display.event == SDL_WINDOWEVENT_MOVED) {
-        auto [width, height] = sdl_manager.getScreenDimensions();
-        coordinate_scaling = sdl_manager.getCoordinateScaling();
-        dpi_scaling = sdl_manager.getDpiScaling();
-    }
-}*/
-
 void Controller::handleInput() {
 
     SDL_Event event;
@@ -83,13 +75,10 @@ void Controller::handleInput() {
         if (event.type == SDL_QUIT) {
             running = false;
         }
-        /*else if (event.type == SDL_WINDOWEVENT) {
-            handleDisplayEvent(event.display);
-            break;
-        }*/
     }
 
     model.movePlayer(Position(0, 0));
+    model.rotatePlayer(Player::Rotation::NONE);
 
     // Get the current state of the keyboard
     const Uint8 *keystates = SDL_GetKeyboardState(nullptr);

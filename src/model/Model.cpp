@@ -19,7 +19,7 @@ void Model::movePlayer(Position position) {
 }
 
 void Model::rotatePlayer(Player::Rotation rotation) {
-    player.rotatePlayer(rotation, grid, delta_time);
+    player.setRotation(rotation);
 }
 
 void Model::fireWeapon() {
@@ -28,6 +28,7 @@ void Model::fireWeapon() {
 
 void Model::updatePlayer() {
     player.update(grid, delta_time);
+    player.rotatePlayer(grid, delta_time);
 }
 
 void Model::setDeltaTime(double delta_time) {

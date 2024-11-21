@@ -13,6 +13,8 @@
 class Player : public Rectangle {
     Weapon weapon;
     Position move_velocity;
+    int rotation_speed;
+
 public:
     enum Rotation {
         RIGHT = 1,
@@ -28,14 +30,16 @@ public:
     [[nodiscard]] Weapon& getWeapon();
 
     void setVelocity(Position &move_velocity);
+    void setRotation(Rotation rotation);
 
     void move(const Grid&, double);
-    void rotatePlayer(Rotation rotation, const Grid&, double);
+    void rotatePlayer(const Grid &, double);
     void fireWeapon();
 
     void checkProjectileCollisions(const Grid & grid);
 
     void update(const Grid &grid, double delta_time);
+
 
     static std::string to_string(Rotation rotation);
 };

@@ -12,7 +12,7 @@ constexpr int MAX_STEPS = 10;
 constexpr float STEP_SIZE = 1.0f / MAX_STEPS;
 Uint32 last_update = SDL_GetTicks();
 
-Player::Player(): Rectangle(150.0f, 150.0f), weapon(Weapon()), move_velocity(0, 0) { }
+Player::Player(): Rectangle(150.0f, 150.0f), weapon(Weapon()), move_velocity(0, 0), rotation_speed(0) { }
 
 Position Player::getDeltaPosition(double multiplier) const {
     const double radians = static_cast<double>(rotation) * M_PI / 180.0;
@@ -50,6 +50,10 @@ void Player::setVelocity(Position& move_velocity) {
     this->move_velocity = move_velocity;
 }
 
+void Player::setRotation(Rotation rotation) {
+    this->rotation_speed = static_cast<int>(rotation);
+}
+
 void Player::move(const Grid &grid, double delta_time) {
     auto dt = delta_time; // static_cast<double>(SDL_GetTicks() - last_update) / 1000.0;
     // std::cout << dt << std::endl;
@@ -72,8 +76,8 @@ void Player::move(const Grid &grid, double delta_time) {
     last_update = SDL_GetTicks();
 }
 
-void Player::rotatePlayer(Rotation rotation_type, const Grid& grid, double delta_time) {
-    int new_rotation = rotation + rotation_type * ROTATION_SPEED * delta_time;
+void Player::rotatePlayer(const Grid& grid, double delta_time) {
+    int new_rotation = rotation + rotation_speed * ROTATION_SPEED * delta_time;
     new_rotation = (new_rotation % 360 + 360) % 360;
     initialize(center, new_rotation);
 

@@ -12,18 +12,24 @@ int main() {
         bool running =  true;
         Model model;
         Controller controller(model, sdl_manager, running);
-        double delta_time = 0.0;
-        Uint64 last_frame_start = 0.0;
+        constexpr double fixed_delta_time = 1.0 / 60.0;
+        double accumulator = 0.0;
+        Uint64 frame_start = SDL_GetPerformanceCounter();
 
-        while(running) {
-            Uint64 frame_start = SDL_GetPerformanceCounter();
-            delta_time = static_cast<double>(frame_start - last_frame_start) / static_cast<double>(SDL_GetPerformanceFrequency());
-            delta_time = std::min(delta_time, 0.05); // Clamp to a maximum value to prevent huge jumps
-            last_frame_start = frame_start;
-
+        while (running) {
+            Uint64 current_time = SDL_GetPerformanceCounter();
+            double delta_time = static_cast<double>(current_time - frame_start) / static_cast<double>(SDL_GetPerformanceFrequency());
+            delta_time = std::min(delta_time, 0.05); // Clamp delta_time
+            frame_start = current_time;
+            accumulator += delta_time;
 
             controller.handleInput();
-            controller.updateModel(delta_time);
+
+            while (accumulator >= fixed_delta_time) {
+                controller.updateModel(fixed_delta_time);
+                accumulator -= fixed_delta_time;
+            }
+
             controller.renderScreen();
 
             /*const Uint64 frame_end = SDL_GetPerformanceCounter();
@@ -36,7 +42,7 @@ int main() {
 
             double elapsed = static_cast<double>(SDL_GetPerformanceCounter() - frame_start) / static_cast<double>(SDL_GetPerformanceFrequency());
             double frame_rate = 1.0 / elapsed;
-            std::cout << "FPS: " << std::to_string(frame_rate) << std::endl;
+            // std::cout << "FPS: " << std::to_string(frame_rate) << std::endl;
         }
     } catch (std::runtime_error& e) {
         std::cerr << "Error: " << e.what() << std::endl;
