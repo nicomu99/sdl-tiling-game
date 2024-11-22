@@ -9,15 +9,15 @@
 class Projectile {
     Position projectile_position;
     Position delta_position;
-    bool has_hit_wall;
+    bool has_hit_object;
 public:
     Projectile();
     Projectile(Position, Position);
 
-    [[nodiscard]] const bool& hasHitWall() const;
+    [[nodiscard]] const bool& hasHitObject() const;
     [[nodiscard]] const Position& getPosition() const;
 
-    void setHasHitWall(bool);
+    void setHasHitObject(bool);
 
     void moveProjectile();
 };

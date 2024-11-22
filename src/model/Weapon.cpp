@@ -44,7 +44,7 @@ void Weapon::updateBullets(const Grid& grid) {
     std::erase_if(
         projectiles,
         [](const Projectile &projectile) {
-            return projectile.hasHitWall();
+            return projectile.hasHitObject();
         }
     );
 }

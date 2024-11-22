@@ -23,6 +23,7 @@ public:
     Position move_velocity;
     int rotation_speed;
     double health_points;
+    bool has_been_hit;
 
     virtual ~GameObject() = default;
 
@@ -32,9 +33,11 @@ public:
     [[nodiscard]] const Position& getCenter() const;
     [[nodiscard]] const int& getRotation() const;
     [[nodiscard]] const double& getHealthPoints() const;
+    [[nodiscard]] bool isDead() const;
 
     void setVelocity(Position &move_velocity);
     void setRotation(Rotation rotation);
+    void setHasBeenHit(bool);
 
     [[nodiscard]] Position calculateTrajectory(double multiplier) const;
 

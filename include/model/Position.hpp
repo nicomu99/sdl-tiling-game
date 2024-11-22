@@ -4,6 +4,7 @@
 
 #ifndef POINT_HPP
 #define POINT_HPP
+#include <cmath>
 #include <string>
 
 struct Position {
@@ -31,6 +32,10 @@ struct Position {
 
     Position operator*(const Position& other) const {
         return {x * other.x, y * other.y};
+    }
+
+    static double computeEuclidean(Position pos1, Position pos2) {
+        return std::sqrt(pow(pos1.x - pos2.x, 2) + pow(pos1.y - pos2.y, 2));
     }
 
     static std::string to_string(Position position) {

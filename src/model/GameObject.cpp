@@ -10,10 +10,10 @@ constexpr int ROTATION_SPEED = 200;
 constexpr int MAX_STEPS = 10;
 constexpr float STEP_SIZE = 1.0f / MAX_STEPS;
 
-GameObject::GameObject(): center(0, 0), rotation(0), move_velocity(0, 0), rotation_speed(0), health_points(100.0) {
+GameObject::GameObject(): center(0, 0), rotation(0), move_velocity(0, 0), rotation_speed(0), health_points(100.0), has_been_hit(false) {
 }
 
-GameObject::GameObject(double x, double y): center(x, y), rotation(0), move_velocity(0, 0), rotation_speed(0), health_points(100.0) { }
+GameObject::GameObject(double x, double y): center(x, y), rotation(0), move_velocity(0, 0), rotation_speed(0), health_points(100.0), has_been_hit(false) { }
 
 const Position& GameObject::getCenter() const {
     return center;
@@ -27,12 +27,21 @@ const double& GameObject::getHealthPoints() const {
     return health_points;
 }
 
+bool GameObject::isDead() const {
+    return health_points <= 0;
+}
+
 void GameObject::setVelocity(Position& move_velocity) {
     this->move_velocity = move_velocity;
 }
 
 void GameObject::setRotation(Rotation rotation) {
     this->rotation_speed = static_cast<int>(rotation);
+}
+
+void GameObject::setHasBeenHit(bool) {
+    this->has_been_hit = true;
+    health_points -= 10;
 }
 
 Position GameObject::calculateTrajectory(double multiplier) const {
