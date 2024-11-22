@@ -3,7 +3,6 @@
 //
 #include "Weapon.hpp"
 
-#include <iostream>
 #include <SDL_stdinc.h>
 #include <SDL_timer.h>
 
@@ -34,12 +33,12 @@ void Weapon::fireWeapon(Position firing_position, Position delta_position) {
     projectiles.emplace_back(firing_position, delta_position);
 }
 
-void Weapon::updateBullets(const Grid& grid) {
+void Weapon::updateBullets(const Grid& grid, std::vector<Zombie>& zombies) {
     for (auto &projectile: projectiles) {
         projectile.moveProjectile();
     }
 
-    CollisionManager::checkProjectileCollision(projectiles, grid);
+    CollisionManager::checkProjectileCollision(projectiles, grid, zombies);
 
     std::erase_if(
         projectiles,

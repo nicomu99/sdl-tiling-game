@@ -10,6 +10,8 @@
 #include "Position.hpp"
 #include "Projectile.hpp"
 
+class Zombie;
+
 class Weapon {
     float firing_speed;
     float bullet_speed;
@@ -23,7 +25,7 @@ public:
     [[nodiscard]] std::vector<Projectile>& getProjectiles();
 
     void fireWeapon(Position, Position);
-    void updateBullets(const Grid &grid);
+    void updateBullets(const Grid& grid, std::vector<Zombie>& zombies);
 
     void checkProjectileCollisions(const Grid & grid);
 };

@@ -12,7 +12,7 @@
 class Model {
     Grid grid;
     Player player;
-    Zombie zombie;
+    std::vector<Zombie> zombies;
     double delta_time;
 
 public:
@@ -20,13 +20,13 @@ public:
 
     [[nodiscard]] const Grid& getGrid() const;
     [[nodiscard]] const Player& getPlayer() const;
-    [[nodiscard]] const Zombie& getZombie() const;
+    [[nodiscard]] const std::vector<Zombie>& getZombies() const;
 
     void movePlayer(Position position);
     void rotatePlayer(Player::Rotation rotation);
     void fireWeapon();
     void checkBulletCollisions();
-    void updatePlayer();
+    void update();
 
     void setDeltaTime(double delta_time);
 

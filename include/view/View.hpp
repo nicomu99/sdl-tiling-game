@@ -23,7 +23,7 @@ public:
     void render(const Model&) const;
     void renderTileMap(const Grid &grid) const;
 
-    void drawHealthBar(int center_x, int center_y) const;
+    void drawHealthBar(int center_x, int center_y, double remaining_health, double initial_health) const;
 
     void renderPlayer(const Player &player) const;
 };

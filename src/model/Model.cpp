@@ -3,19 +3,20 @@
 //
 #include "Model.hpp"
 
-Model::Model(): grid(Grid()), player(Player()), zombie(Zombie()), delta_time(0.0) {
+Model::Model(): grid(Grid()), player(Player()), zombies(std::vector<Zombie>()), delta_time(0.0) {
+    zombies.emplace_back();
 }
 
-const Grid& Model::getGrid() const {
+const Grid &Model::getGrid() const {
     return grid;
 }
 
-const Player& Model::getPlayer() const {
+const Player &Model::getPlayer() const {
     return player;
 }
 
-const Zombie & Model::getZombie() const {
-    return zombie;
+const std::vector<Zombie> &Model::getZombies() const {
+    return zombies;
 }
 
 void Model::movePlayer(Position position) {
@@ -30,9 +31,16 @@ void Model::fireWeapon() {
     player.fireWeapon();
 }
 
-void Model::updatePlayer() {
-    player.update(grid, delta_time);
+void Model::update() {
+    player.update(grid, zombies, delta_time);
     player.rotateGameObject(grid, delta_time);
+
+    std::erase_if(
+        zombies,
+        [](const Zombie& zombie) {
+            return zombie.isDead();
+        }
+    );
 }
 
 void Model::setDeltaTime(double delta_time) {

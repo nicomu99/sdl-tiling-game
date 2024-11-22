@@ -8,6 +8,8 @@
 #include "Rectangle.hpp"
 #include "Weapon.hpp"
 
+class Zombie;
+
 class Player : public Rectangle {
     Weapon weapon;
 
@@ -18,6 +20,6 @@ public:
     [[nodiscard]] Weapon& getWeapon();
 
     void fireWeapon();
-    void update(const Grid &grid, double delta_time);
+    void update(const Grid &grid, std::vector<Zombie>& zombie, double delta_time);
 };
 #endif //PLAYER_HPP

@@ -18,7 +18,7 @@ void Player::fireWeapon() {
     weapon.fireWeapon(center, delta_position);
 }
 
-void Player::update(const Grid& grid, double delta_time) {
+void Player::update(const Grid& grid, std::vector<Zombie>& zombie, double delta_time) {
     move(grid, delta_time);
-    weapon.updateBullets(grid);
+    weapon.updateBullets(grid, zombie);
 }

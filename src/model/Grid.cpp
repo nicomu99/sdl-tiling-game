@@ -14,7 +14,7 @@ Grid::Grid() {
             const auto x = static_cast<float>(col) * cast_tile_size + cast_tile_size / 2.0f;
             const auto y = static_cast<float>(row) * cast_tile_size + cast_tile_size / 2.0f;
             if (row == 0 || col == 0 || row == Constants::ROW_COUNT - 1 || col == Constants::COL_COUNT - 1) {
-                tile_map[row][col] = Tile(x, y, TileType::NonWalkable);
+                tile_map[row][col] = Tile{x, y, TileType::NonWalkable};
             } else {
                 tile_map[row][col] = Tile(x, y, TileType::Walkable);
             }

@@ -4,16 +4,17 @@
 #include "GameObject.hpp"
 
 #include <cmath>
+#include <iostream>
 
 constexpr double SPEED = 300.0;
 constexpr int ROTATION_SPEED = 200;
 constexpr int MAX_STEPS = 10;
 constexpr float STEP_SIZE = 1.0f / MAX_STEPS;
 
-GameObject::GameObject(): center(0, 0), rotation(0), move_velocity(0, 0), rotation_speed(0), health_points(100.0), has_been_hit(false) {
+GameObject::GameObject(): center(0, 0), rotation(0), move_velocity(0, 0), rotation_speed(0), health_points(100.0), has_been_hit(false), maximum_health(100.0) {
 }
 
-GameObject::GameObject(double x, double y): center(x, y), rotation(0), move_velocity(0, 0), rotation_speed(0), health_points(100.0), has_been_hit(false) { }
+GameObject::GameObject(double x, double y): center(x, y), rotation(0), move_velocity(0, 0), rotation_speed(0), health_points(100.0), has_been_hit(false), maximum_health(100.0) { }
 
 const Position& GameObject::getCenter() const {
     return center;
@@ -25,6 +26,10 @@ const int& GameObject::getRotation() const {
 
 const double& GameObject::getHealthPoints() const {
     return health_points;
+}
+
+double GameObject::getMaximumHealth() const {
+    return maximum_health;
 }
 
 bool GameObject::isDead() const {
@@ -42,6 +47,7 @@ void GameObject::setRotation(Rotation rotation) {
 void GameObject::setHasBeenHit(bool) {
     this->has_been_hit = true;
     health_points -= 10;
+    std::cout << health_points << std::endl;
 }
 
 Position GameObject::calculateTrajectory(double multiplier) const {

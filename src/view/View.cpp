@@ -16,7 +16,9 @@ void View::render(const Model &model) const {
     renderTileMap(model.getGrid());
     renderPlayer(model.getPlayer());
     renderProjectiles(model.getPlayer().getWeapon());
-    renderCircle(model.getZombie());
+    for(const Zombie& zombie: model.getZombies()) {
+        renderCircle(zombie);
+    }
     SDL_RenderPresent(renderer);
 }
 
@@ -38,22 +40,29 @@ void View::renderTileMap(const Grid &grid) const {
     }
 }
 
-void View::drawHealthBar(int center_x, int center_y) const {
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+void View::drawHealthBar(int center_x, int center_y, double remaining_health, double initial_health) const {
+    int bar_x = center_x - Constants::TILE_SIZE;
+    int bar_y = center_y - Constants::TILE_SIZE - 5;
+    int bar_width = Constants::TILE_SIZE * 2;
+    int bar_height = 5;
 
-    int health_point_x = center_x - Constants::TILE_SIZE;
-    int health_point_y = center_y - Constants::TILE_SIZE - 5;
-
-    int width = Constants::TILE_SIZE * 2;
-    int height = 5;
-    SDL_Rect rect{health_point_x, health_point_y, width, height};
-
+    // Draw whole bar
+    SDL_SetRenderDrawColor(renderer, 120, 120, 120, 255);
+    SDL_Rect rect{bar_x, bar_y, bar_width, bar_height};
     SDL_RenderFillRect(renderer, &rect);
+
+    // Draw remaining health
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+    int remaining_width = static_cast<int>(bar_width * remaining_health / initial_health);
+
+    rect.w = remaining_width;
+    SDL_RenderFillRect(renderer, &rect);
+
 }
 
 void View::renderPlayer(const Player &player) const {
     auto [center_x, center_y] = player.getCenter();
-    drawHealthBar(static_cast<int>(center_x), static_cast<int>(center_y));
+    drawHealthBar(static_cast<int>(center_x), static_cast<int>(center_y), player.getHealthPoints(), player.getMaximumHealth());
 
     SDL_SetRenderDrawColor(renderer, 100, 0, 255, 255);
 
@@ -149,7 +158,7 @@ void View::renderCircle(const Circle &circle) const {
     int cast_x = static_cast<int>(center_x);
     int cast_y = static_cast<int>(center_y);
 
-    drawHealthBar(cast_x, cast_y);
+    drawHealthBar(cast_x, cast_y, circle.getHealthPoints(), circle.getMaximumHealth());
 
     SDL_SetRenderDrawColor(renderer, 100, 0, 255, 255);
     auto radius = circle.getRadius();

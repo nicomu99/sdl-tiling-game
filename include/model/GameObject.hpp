@@ -24,6 +24,7 @@ public:
     int rotation_speed;
     double health_points;
     bool has_been_hit;
+    double maximum_health;
 
     virtual ~GameObject() = default;
 
@@ -33,6 +34,7 @@ public:
     [[nodiscard]] const Position& getCenter() const;
     [[nodiscard]] const int& getRotation() const;
     [[nodiscard]] const double& getHealthPoints() const;
+    [[nodiscard]] double getMaximumHealth() const;
     [[nodiscard]] bool isDead() const;
 
     void setVelocity(Position &move_velocity);
