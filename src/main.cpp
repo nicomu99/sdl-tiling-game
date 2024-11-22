@@ -12,14 +12,15 @@ int main() {
         bool running =  true;
         Model model;
         Controller controller(model, sdl_manager, running);
-        constexpr double fixed_delta_time = 1.0 / 60.0;
+
+        constexpr double fixed_delta_time = 1.0 / Constants::DESIRED_FPS;  // in seconds
         double accumulator = 0.0;
         Uint64 frame_start = SDL_GetPerformanceCounter();
 
         while (running) {
             Uint64 current_time = SDL_GetPerformanceCounter();
             double delta_time = static_cast<double>(current_time - frame_start) / static_cast<double>(SDL_GetPerformanceFrequency());
-            delta_time = std::min(delta_time, 0.05); // Clamp delta_time
+            delta_time = std::min(delta_time, Constants::MAX_DELTA_TIME); // Clamp delta_time
             frame_start = current_time;
             accumulator += delta_time;
 

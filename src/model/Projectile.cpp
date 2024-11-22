@@ -5,7 +5,7 @@
 
 #include <iostream>
 
-constexpr float BULLET_SPEED = 10.0f;
+constexpr float BULLET_SPEED = 20.0f;
 
 Projectile::Projectile(): projectile_position(0, 0), delta_position(0, 0), has_hit_wall(false) { }
 
