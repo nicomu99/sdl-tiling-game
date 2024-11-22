@@ -16,9 +16,9 @@ public:
 
     void renderProjectiles(const Weapon&) const;
 
-    void render(const Model&, float) const;
+    void render(const Model&) const;
     void renderTileMap(const Grid &grid) const;
-    void renderPlayer(const Player &player, float) const;
+    void renderPlayer(const Player &player) const;
 };
 
 #endif //VIEW_HPP

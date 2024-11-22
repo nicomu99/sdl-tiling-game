@@ -45,10 +45,6 @@ float SDLManager::getCoordinateScaling() const {
                     static_cast<float>(getScreenHeight()) / Constants::VIRTUAL_HEIGHT);
 }
 
-float SDLManager::getDpiScaling() const {
-    return Constants::REFERENCE_DPI / getDpi();
-}
-
 std::pair<int, int> SDLManager::getScreenDimensions() const {
     int screen_width, screen_height;
     SDL_GetWindowSize(window, &screen_width, &screen_height);

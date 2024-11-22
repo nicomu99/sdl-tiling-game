@@ -10,10 +10,10 @@
 
 View::View(const SDLManager& sdl_manager): renderer(sdl_manager.getRenderer()) { }
 
-void View::render(const Model& model, float coordinate_scaling) const {
+void View::render(const Model& model) const {
     SDL_RenderClear(renderer);
     renderTileMap(model.getGrid());
-    renderPlayer(model.getPlayer(), coordinate_scaling);
+    renderPlayer(model.getPlayer());
     renderProjectiles(model.getPlayer().getWeapon());
     SDL_RenderPresent(renderer);
 }
@@ -33,7 +33,7 @@ void View::renderTileMap(const Grid& grid) const {
     }
 }
 
-void View::renderPlayer(const Player& player, float coordinate_scaling) const {
+void View::renderPlayer(const Player& player) const {
     SDL_SetRenderDrawColor(renderer, 100, 0, 255, 255);
 
     std::vector<Position> corner_points = player.getCornerPoints();

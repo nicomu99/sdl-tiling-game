@@ -13,15 +13,11 @@ class Controller {
     View view;
     bool& running;
     SDLManager& sdl_manager;
-    float coordinate_scaling;
-    float dpi_scaling;
 
 public:
     Controller(Model&, SDLManager&, bool&);
 
-    void handleDisplayEvent(const SDL_DisplayEvent & display);
-
-    void handleInput();
+    void handleInput() const;
     void renderScreen() const;
 
     void updateModel(double delta_time) const;
