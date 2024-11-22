@@ -20,7 +20,7 @@ public:
 
     [[nodiscard]] bool isWallAt(Position) const;
 
-    static int toTileCoordinate(float coordinate_position);
+    static int toTileCoordinate(double coordinate_position);
 };
 
 #endif //GRID_HPP

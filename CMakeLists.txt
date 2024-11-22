@@ -36,6 +36,10 @@ add_executable(tiling_game src/main.cpp
         src/model/Projectile.cpp
         include/model/CollisionManager.hpp
         src/model/CollisionManager.cpp
+        include/model/Circle.hpp
+        src/model/Circle.cpp
+        include/model/GameObject.hpp
+        src/model/GameObject.cpp
 )
 
 target_link_libraries(tiling_game SDL2::SDL2)

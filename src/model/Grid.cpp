@@ -3,8 +3,6 @@
 //
 #include "Grid.hpp"
 
-#include <iostream>
-
 #include "Constants.hpp"
 #include "Tile.hpp"
 
@@ -45,6 +43,6 @@ bool Grid::isWallAt(Position position) const {
     return getTile(position).getTileType() == TileType::NonWalkable;
 }
 
-int Grid::toTileCoordinate(float coordinate_position) {
+int Grid::toTileCoordinate(double coordinate_position) {
     return static_cast<int>(coordinate_position) / Constants::TILE_SIZE;
 }

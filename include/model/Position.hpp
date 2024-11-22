@@ -23,10 +23,14 @@ struct Position {
         return {x + other.x, y + other.y};
     }
 
-    Position &operator*(const float &multiplier) {
+    Position &operator*(const double &multiplier) {
         x *= multiplier;
         y *= multiplier;
         return *this;
+    }
+
+    Position operator*(const Position& other) const {
+        return {x * other.x, y * other.y};
     }
 
     static std::string to_string(Position position) {

@@ -5,8 +5,8 @@
 #ifndef MODEL_HPP
 #define MODEL_HPP
 
-#include "Grid.hpp"
 #include "Player.hpp"
+#include "Grid.hpp"
 
 class Model {
     Grid grid;

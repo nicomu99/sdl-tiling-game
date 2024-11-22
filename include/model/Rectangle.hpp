@@ -6,34 +6,31 @@
 #define RECTANGLE_HPP
 #include <vector>
 
+#include "GameObject.hpp"
 #include "Position.hpp"
 
-class Rectangle {
+class Tile;
+class Grid;
+
+class Rectangle : public GameObject {
 public:
-    Position center;
-    float top;
-    float bottom;
-    float left;
-    float right;
-    int rotation;
+    double top;
+    double bottom;
+    double left;
+    double right;
     std::vector<Position> corner_points;
 
+    Rectangle(double x, double y);
 
-    Rectangle(float x, float y);
-
-    void initialize(Position, int);
-
+    void initialize(Position, int) override;
     static bool isCollision(const Rectangle&, const Rectangle&);
+    [[nodiscard]] bool checkGridCollision(const Grid&) const override;
 
-    [[nodiscard]] const Position& getCenter() const;
-    [[nodiscard]] float getTop() const;
-    [[nodiscard]] float getBottom() const;
-    [[nodiscard]] float getLeft() const;
-    [[nodiscard]] float getRight() const;
-    [[nodiscard]] const int& getRotation() const;
+    [[nodiscard]] double getTop() const;
+    [[nodiscard]] double getBottom() const;
+    [[nodiscard]] double getLeft() const;
+    [[nodiscard]] double getRight() const;
     [[nodiscard]] const std::vector<Position>& getCornerPoints() const;
-
-    void moveRectangle(Position delta_position, float multiplier);
 };
 
 #endif //RECTANGLE_HPP
