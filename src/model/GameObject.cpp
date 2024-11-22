@@ -6,13 +6,14 @@
 #include <cmath>
 
 constexpr double SPEED = 300.0;
-constexpr int ROTATION_SPEED = 250;
+constexpr int ROTATION_SPEED = 200;
 constexpr int MAX_STEPS = 10;
 constexpr float STEP_SIZE = 1.0f / MAX_STEPS;
 
-GameObject::GameObject(): center(0, 0), rotation(0), move_velocity(0, 0), rotation_speed(0) { }
+GameObject::GameObject(): center(0, 0), rotation(0), move_velocity(0, 0), rotation_speed(0), health_points(100.0) {
+}
 
-GameObject::GameObject(double x, double y): center(x, y), rotation(0), move_velocity(0, 0), rotation_speed(0) { }
+GameObject::GameObject(double x, double y): center(x, y), rotation(0), move_velocity(0, 0), rotation_speed(0), health_points(100.0) { }
 
 const Position& GameObject::getCenter() const {
     return center;
@@ -20,6 +21,10 @@ const Position& GameObject::getCenter() const {
 
 const int& GameObject::getRotation() const {
     return rotation;
+}
+
+const double& GameObject::getHealthPoints() const {
+    return health_points;
 }
 
 void GameObject::setVelocity(Position& move_velocity) {

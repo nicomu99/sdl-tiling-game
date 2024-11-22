@@ -38,7 +38,23 @@ void View::renderTileMap(const Grid &grid) const {
     }
 }
 
+void View::drawHealthBar(int center_x, int center_y) const {
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+
+    int health_point_x = center_x - Constants::TILE_SIZE;
+    int health_point_y = center_y - Constants::TILE_SIZE - 5;
+
+    int width = Constants::TILE_SIZE * 2;
+    int height = 5;
+    SDL_Rect rect{health_point_x, health_point_y, width, height};
+
+    SDL_RenderFillRect(renderer, &rect);
+}
+
 void View::renderPlayer(const Player &player) const {
+    auto [center_x, center_y] = player.getCenter();
+    drawHealthBar(static_cast<int>(center_x), static_cast<int>(center_y));
+
     SDL_SetRenderDrawColor(renderer, 100, 0, 255, 255);
 
     std::vector<Position> corner_points = player.getCornerPoints();
@@ -57,6 +73,10 @@ void View::renderPlayer(const Player &player) const {
         {corner_points[2].x, corner_points[2].y, corner_points[3].x, corner_points[3].y},
         {corner_points[3].x, corner_points[3].y, corner_points[0].x, corner_points[0].y},
     };
+
+    for(const Edge& edge: edges) {
+        SDL_RenderDrawLine(renderer, static_cast<int>(edge.x0), static_cast<int>(edge.y0), static_cast<int>(edge.x1), static_cast<int>(edge.y1));
+    }
 
     // Scanline fill algorithm
     for (int y = min_y; y <= max_y; ++y) {
@@ -118,35 +138,38 @@ void View::renderProjectiles(const Weapon &weapon) const {
     }
 }
 
-void View::renderCircle(const Circle &circle) const {
-    SDL_SetRenderDrawColor(renderer, 100, 0, 255, 255);
+void drawHorizontalLine(SDL_Renderer* renderer, int x1, int x2, int y) {
+    for (int x = x1; x <= x2; ++x) {
+        SDL_RenderDrawPoint(renderer, x, y);
+    }
+}
 
+void View::renderCircle(const Circle &circle) const {
     auto [center_x, center_y] = circle.getCenter();
     int cast_x = static_cast<int>(center_x);
     int cast_y = static_cast<int>(center_y);
+
+    drawHealthBar(cast_x, cast_y);
+
+    SDL_SetRenderDrawColor(renderer, 100, 0, 255, 255);
     auto radius = circle.getRadius();
 
-    for (int i = radius; i > 0; i--) {
-        int x = 0;
-        int y = i;
-        int decision = 1 - radius;
-        while (y >= x) {
-            SDL_RenderDrawPoint(renderer, cast_x + x, cast_y + y);
-            SDL_RenderDrawPoint(renderer, cast_x - x, cast_y + y);
-            SDL_RenderDrawPoint(renderer, cast_x + x, cast_y - y);
-            SDL_RenderDrawPoint(renderer, cast_x - x, cast_y - y);
-            SDL_RenderDrawPoint(renderer, cast_x + y, cast_y + x);
-            SDL_RenderDrawPoint(renderer, cast_x - y, cast_y + x);
-            SDL_RenderDrawPoint(renderer, cast_x + y, cast_y - x);
-            SDL_RenderDrawPoint(renderer, cast_x - y, cast_y - x);
+    int x = 0;
+    int y = radius;
+    int decision = 1 - radius;
+    while (y >= x) {
+        // Draw horizontal lines between the points
+        drawHorizontalLine(renderer, cast_x - x, cast_x + x, cast_y + y);
+        drawHorizontalLine(renderer, cast_x - x, cast_x + x, cast_y - y);
+        drawHorizontalLine(renderer, cast_x - y, cast_x + y, cast_y + x);
+        drawHorizontalLine(renderer, cast_x - y, cast_x + y, cast_y - x);
 
-            x++;
-            if (decision <= 0) {
-                decision += 2 * x + 1;
-            } else {
-                y--;
-                decision += 2 * (x - y) + 1;
-            }
+        x++;
+        if (decision <= 0) {
+            decision += 2 * x + 1;
+        } else {
+            y--;
+            decision += 2 * (x - y) + 1;
         }
     }
 }
