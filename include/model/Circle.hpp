@@ -7,7 +7,7 @@
 #include "Player.hpp"
 #include "Position.hpp"
 
-class Circle : public GameObject{
+class Circle : public GameObject {
     int radius;
 
 public:

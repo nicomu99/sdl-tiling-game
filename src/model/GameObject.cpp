@@ -6,7 +6,7 @@
 #include <cmath>
 
 constexpr double SPEED = 300.0;
-constexpr int ROTATION_SPEED = 300;
+constexpr int ROTATION_SPEED = 250;
 constexpr int MAX_STEPS = 10;
 constexpr float STEP_SIZE = 1.0f / MAX_STEPS;
 

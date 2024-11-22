@@ -3,7 +3,7 @@
 //
 #include "Model.hpp"
 
-Model::Model(): grid(Grid()), player(Player()), delta_time(0.0) {
+Model::Model(): grid(Grid()), player(Player()), zombie(Zombie()), delta_time(0.0) {
 }
 
 const Grid& Model::getGrid() const {
@@ -12,6 +12,10 @@ const Grid& Model::getGrid() const {
 
 const Player& Model::getPlayer() const {
     return player;
+}
+
+const Zombie & Model::getZombie() const {
+    return zombie;
 }
 
 void Model::movePlayer(Position position) {

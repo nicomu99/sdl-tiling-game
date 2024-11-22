@@ -3,12 +3,9 @@
 //
 #include "Circle.hpp"
 
-constexpr int MAX_STEPS = 10;
-constexpr double STEP_SIZE = 1.0 / MAX_STEPS;
-
 Circle::Circle(): GameObject(0, 0), radius(0) { }
 
-Circle::Circle(double x, double y): GameObject(x, y), radius(10) { }
+Circle::Circle(double x, double y): GameObject(x, y), radius(15) { }
 
 bool Circle::checkGridCollision(const Grid& grid) const {
     int min_x = Grid::toTileCoordinate(center.x - radius);

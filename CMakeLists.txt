@@ -40,6 +40,8 @@ add_executable(tiling_game src/main.cpp
         src/model/Circle.cpp
         include/model/GameObject.hpp
         src/model/GameObject.cpp
+        include/model/Zombie.hpp
+        src/model/Zombie.cpp
 )
 
 target_link_libraries(tiling_game SDL2::SDL2)

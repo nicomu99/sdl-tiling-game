@@ -8,32 +8,37 @@
 
 #include "Constants.hpp"
 
-View::View(const SDLManager& sdl_manager): renderer(sdl_manager.getRenderer()) { }
+View::View(const SDLManager &sdl_manager): renderer(sdl_manager.getRenderer()) {
+}
 
-void View::render(const Model& model) const {
+void View::render(const Model &model) const {
     SDL_RenderClear(renderer);
     renderTileMap(model.getGrid());
     renderPlayer(model.getPlayer());
     renderProjectiles(model.getPlayer().getWeapon());
+    renderCircle(model.getZombie());
     SDL_RenderPresent(renderer);
 }
 
-void View::renderTileMap(const Grid& grid) const {
-    const std::vector<std::vector<Tile>>& tile_map = grid.getTileMap();
-    for(const auto & i : tile_map) {
-        for(const auto& tile : i) {
-            if(tile.getTileType() == TileType::Walkable) {
+void View::renderTileMap(const Grid &grid) const {
+    const std::vector<std::vector<Tile> > &tile_map = grid.getTileMap();
+    for (const auto &i: tile_map) {
+        for (const auto &tile: i) {
+            if (tile.getTileType() == TileType::Walkable) {
                 SDL_SetRenderDrawColor(renderer, 200, 200, 200, 255);
             } else {
                 SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
             }
-            SDL_Rect render_rect = {static_cast<int>(tile.getLeft()), static_cast<int>(tile.getTop()), Constants::TILE_SIZE, Constants::TILE_SIZE};
+            SDL_Rect render_rect = {
+                static_cast<int>(tile.getLeft()), static_cast<int>(tile.getTop()), Constants::TILE_SIZE,
+                Constants::TILE_SIZE
+            };
             SDL_RenderFillRect(renderer, &render_rect);
         }
     }
 }
 
-void View::renderPlayer(const Player& player) const {
+void View::renderPlayer(const Player &player) const {
     SDL_SetRenderDrawColor(renderer, 100, 0, 255, 255);
 
     std::vector<Position> corner_points = player.getCornerPoints();
@@ -58,7 +63,7 @@ void View::renderPlayer(const Player& player) const {
         // Iterate from top to bottom (y goes from top to bottom)
         std::vector<int> intersections;
 
-        for (const auto& edge : edges) {
+        for (const auto &edge: edges) {
             // Iterate through all edges i.e. all lines between two corners
             int y0 = static_cast<int>(edge.y0);
             int y1 = static_cast<int>(edge.y1);
@@ -100,14 +105,47 @@ void View::renderPlayer(const Player& player) const {
     }
 }
 
-void View::renderProjectiles(const Weapon& weapon) const {
-    for(auto projectile: weapon.getProjectiles()) {
+void View::renderProjectiles(const Weapon &weapon) const {
+    for (auto projectile: weapon.getProjectiles()) {
         Position position = projectile.getPosition();
-        auto[x, y] = Position::to_integer(position);
+        auto [x, y] = Position::to_integer(position);
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-        for(int i = x - 1; i <= x + 1; i++) {
-            for(int j = y - 1; j <= y + 1; j++) {
+        for (int i = x - 1; i <= x + 1; i++) {
+            for (int j = y - 1; j <= y + 1; j++) {
                 SDL_RenderDrawPoint(renderer, i, j);
+            }
+        }
+    }
+}
+
+void View::renderCircle(const Circle &circle) const {
+    SDL_SetRenderDrawColor(renderer, 100, 0, 255, 255);
+
+    auto [center_x, center_y] = circle.getCenter();
+    int cast_x = static_cast<int>(center_x);
+    int cast_y = static_cast<int>(center_y);
+    auto radius = circle.getRadius();
+
+    for (int i = radius; i > 0; i--) {
+        int x = 0;
+        int y = i;
+        int decision = 1 - radius;
+        while (y >= x) {
+            SDL_RenderDrawPoint(renderer, cast_x + x, cast_y + y);
+            SDL_RenderDrawPoint(renderer, cast_x - x, cast_y + y);
+            SDL_RenderDrawPoint(renderer, cast_x + x, cast_y - y);
+            SDL_RenderDrawPoint(renderer, cast_x - x, cast_y - y);
+            SDL_RenderDrawPoint(renderer, cast_x + y, cast_y + x);
+            SDL_RenderDrawPoint(renderer, cast_x - y, cast_y + x);
+            SDL_RenderDrawPoint(renderer, cast_x + y, cast_y - x);
+            SDL_RenderDrawPoint(renderer, cast_x - y, cast_y - x);
+
+            x++;
+            if (decision <= 0) {
+                decision += 2 * x + 1;
+            } else {
+                y--;
+                decision += 2 * (x - y) + 1;
             }
         }
     }

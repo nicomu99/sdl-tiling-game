@@ -11,7 +11,6 @@
 class Player : public Rectangle {
     Weapon weapon;
 
-
 public:
     Player();
 
