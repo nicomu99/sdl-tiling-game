@@ -11,14 +11,14 @@
 
 bool isProjectileCircleCollision(Circle& circle, Projectile& projectile) {
     Position circle_center = circle.getCenter();
-    Position projectile_center = projectile.getPosition();
+    Position projectile_center = projectile.getCenter();
 
     return Position::computeEuclidean(circle_center, projectile_center) <= circle.getRadius();
 }
 
 void CollisionManager::checkProjectileCollision(std::vector<Projectile>& projectiles, const Grid& grid, std::vector<Zombie>& zombies) {
     for(auto& projectile : projectiles) {
-        if(grid.isWallAt(projectile.getPosition())) {
+        if(grid.isWallAt(projectile.getCenter())) {
             projectile.setHasHitObject(true);
         }
 

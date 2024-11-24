@@ -17,7 +17,7 @@ void View::render(const Model &model) const {
     renderPlayer(model.getPlayer());
     renderProjectiles(model.getPlayer().getWeapon());
     for(const Zombie& zombie: model.getZombies()) {
-        renderCircle(zombie);
+        renderLivingCircle(zombie);
     }
     SDL_RenderPresent(renderer);
 }
@@ -135,15 +135,17 @@ void View::renderPlayer(const Player &player) const {
 }
 
 void View::renderProjectiles(const Weapon &weapon) const {
-    for (auto projectile: weapon.getProjectiles()) {
-        Position position = projectile.getPosition();
-        auto [x, y] = Position::to_integer(position);
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-        for (int i = x - 1; i <= x + 1; i++) {
-            for (int j = y - 1; j <= y + 1; j++) {
-                SDL_RenderDrawPoint(renderer, i, j);
-            }
-        }
+    SDL_SetRenderDrawColor(renderer, 100, 255, 255, 255);
+    for (const auto& projectile: weapon.getProjectiles()) {
+        renderCircle(projectile);
+        // Position position = projectile.getPosition();
+        // auto [x, y] = Position::to_integer(position);
+        // SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        // for (int i = x - 1; i <= x + 1; i++) {
+        //     for (int j = y - 1; j <= y + 1; j++) {
+        //         SDL_RenderDrawPoint(renderer, i, j);
+        //     }
+        // }
     }
 }
 
@@ -158,9 +160,6 @@ void View::renderCircle(const Circle &circle) const {
     int cast_x = static_cast<int>(center_x);
     int cast_y = static_cast<int>(center_y);
 
-    drawHealthBar(cast_x, cast_y, circle.getHealthPoints(), circle.getMaximumHealth());
-
-    SDL_SetRenderDrawColor(renderer, 100, 0, 255, 255);
     auto radius = circle.getRadius();
 
     int x = 0;
@@ -181,4 +180,13 @@ void View::renderCircle(const Circle &circle) const {
             decision += 2 * (x - y) + 1;
         }
     }
+}
+
+void View::renderLivingCircle(const Circle &circle) const {
+    SDL_SetRenderDrawColor(renderer, 100, 0, 255, 255);
+    auto [center_x, center_y] = circle.getCenter();
+    int cast_x = static_cast<int>(center_x);
+    int cast_y = static_cast<int>(center_y);
+    drawHealthBar(cast_x, cast_y, circle.getHealthPoints(), circle.getMaximumHealth());
+    renderCircle(circle);
 }

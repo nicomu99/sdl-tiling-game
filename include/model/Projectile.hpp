@@ -4,10 +4,10 @@
 #ifndef PROJECTILE_HPP
 #define PROJECTILE_HPP
 
+#include "Circle.hpp"
 #include "Position.hpp"
 
-class Projectile {
-    Position projectile_position;
+class Projectile : public Circle {
     Position delta_position;
     bool has_hit_object;
 
@@ -16,7 +16,6 @@ public:
     Projectile(Position, Position);
 
     [[nodiscard]] const bool& hasHitObject() const;
-    [[nodiscard]] const Position& getPosition() const;
 
     void setHasHitObject(bool);
 

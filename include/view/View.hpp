@@ -16,9 +16,8 @@ public:
 
     void renderProjectiles(const Weapon&) const;
 
-    void renderCircle() const;
-
     void renderCircle(const Circle& circle) const;
+    void renderLivingCircle(const Circle& circle) const;
 
     void render(const Model&) const;
     void renderTileMap(const Grid &grid) const;

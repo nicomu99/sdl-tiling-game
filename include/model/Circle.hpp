@@ -14,7 +14,7 @@ class Circle : public GameObject {
 public:
     Circle();
     Circle(double x, double y);
-
+    Circle(double x, double y, double speed, int radius);
     Circle(double x, double y, Position move_velocity);
 
     [[nodiscard]] bool checkGridCollision(const Grid&) const override;
