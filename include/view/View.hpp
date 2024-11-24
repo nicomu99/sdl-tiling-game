@@ -11,6 +11,8 @@
 
 class View {
     SDL_Renderer* renderer;
+    SDL_Texture* grass_texture;
+
 public:
     View(const SDLManager&);
 

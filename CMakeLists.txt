@@ -44,4 +44,4 @@ add_executable(tiling_game src/main.cpp
         src/model/Zombie.cpp
 )
 
-target_link_libraries(tiling_game SDL2::SDL2)
+target_link_libraries(tiling_game SDL2::SDL2 SDL2_image)

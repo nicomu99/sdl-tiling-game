@@ -9,6 +9,7 @@
 class SDLManager {
     SDL_Window* window = nullptr;
     SDL_Renderer* renderer = nullptr;
+    SDL_Texture* grass_texture = nullptr;
 public:
     SDLManager();
     ~SDLManager();
@@ -16,8 +17,8 @@ public:
     [[nodiscard]] SDL_Renderer* getRenderer() const;
     [[nodiscard]] SDL_Window *getWindow() const;
 
+    [[nodiscard]] SDL_Texture* getGrassTexture() const;
     [[nodiscard]] float getCoordinateScaling() const;
-    [[nodiscard]] float getDpiScaling() const;
 
     [[nodiscard]] std::pair<int, int> getScreenDimensions() const;
     [[nodiscard]] int getScreenWidth() const;

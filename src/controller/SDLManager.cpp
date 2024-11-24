@@ -5,6 +5,7 @@
 #include "Constants.hpp"
 
 #include <stdexcept>
+#include <SDL_image.h>
 
 SDLManager::SDLManager() {
     if (SDL_InitSubSystem(SDL_INIT_VIDEO) < 0) {
@@ -24,6 +25,15 @@ SDLManager::SDLManager() {
         SDL_Quit();
         throw std::runtime_error("Failed to create SDL renderer: " + std::string(SDL_GetError()));
     }
+
+    // Load textures
+    SDL_Surface *grass_surface = IMG_Load("res/textures/grass_texture.png");
+    if (!grass_surface) {
+        throw std::runtime_error("Grass image could not be loaded: " + std::string(SDL_GetError()));
+    }
+
+    grass_texture = SDL_CreateTextureFromSurface(renderer, grass_surface);
+    SDL_FreeSurface(grass_surface);
 }
 
 SDLManager::~SDLManager() {
@@ -38,6 +48,10 @@ SDL_Renderer *SDLManager::getRenderer() const {
 
 SDL_Window *SDLManager::getWindow() const {
     return window;
+}
+
+SDL_Texture *SDLManager::getGrassTexture() const {
+    return grass_texture;
 }
 
 float SDLManager::getCoordinateScaling() const {

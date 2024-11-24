@@ -8,7 +8,7 @@
 
 #include "Constants.hpp"
 
-View::View(const SDLManager &sdl_manager): renderer(sdl_manager.getRenderer()) {
+View::View(const SDLManager &sdl_manager): renderer(sdl_manager.getRenderer()), grass_texture(sdl_manager.getGrassTexture()) {
 }
 
 void View::render(const Model &model) const {
@@ -26,16 +26,17 @@ void View::renderTileMap(const Grid &grid) const {
     const std::vector<std::vector<Tile> > &tile_map = grid.getTileMap();
     for (const auto &i: tile_map) {
         for (const auto &tile: i) {
-            if (tile.getTileType() == TileType::Walkable) {
-                SDL_SetRenderDrawColor(renderer, 200, 200, 200, 255);
-            } else {
-                SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-            }
             SDL_Rect render_rect = {
                 static_cast<int>(tile.getLeft()), static_cast<int>(tile.getTop()), Constants::TILE_SIZE,
                 Constants::TILE_SIZE
             };
-            SDL_RenderFillRect(renderer, &render_rect);
+            if (tile.getTileType() == TileType::Walkable) {
+                SDL_RenderCopy(renderer, grass_texture, nullptr, &render_rect);
+            } else {
+                SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+                SDL_RenderFillRect(renderer, &render_rect);
+            }
+
         }
     }
 }
