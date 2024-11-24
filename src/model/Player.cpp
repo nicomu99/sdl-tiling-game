@@ -2,6 +2,7 @@
 // Created by nico on 11/9/24.
 //
 #include "Player.hpp"
+#include "Grid.hpp"
 
 Player::Player(): Rectangle(150.0, 150.0), weapon(Weapon()) { }
 
@@ -14,7 +15,7 @@ Weapon& Player::getWeapon() {
 }
 
 void Player::fireWeapon() {
-    Position delta_position = calculateTrajectory(1);
+    Position delta_position = calculateTrajectory();
     weapon.fireWeapon(center, delta_position);
 }
 

@@ -6,11 +6,11 @@
 #define WEAPON_HPP
 #include <vector>
 
-#include "Grid.hpp"
 #include "Position.hpp"
 #include "Projectile.hpp"
 
 class Zombie;
+class Grid;
 
 class Weapon {
     float firing_speed;

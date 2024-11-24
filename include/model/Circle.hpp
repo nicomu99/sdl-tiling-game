@@ -4,8 +4,9 @@
 
 #ifndef CIRCLE_HPP
 #define CIRCLE_HPP
-#include "Player.hpp"
-#include "Position.hpp"
+
+#include "GameObject.hpp"
+class Grid;
 
 class Circle : public GameObject {
     int radius;

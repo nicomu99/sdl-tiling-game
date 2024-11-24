@@ -6,10 +6,9 @@
 #define RECTANGLE_HPP
 #include <vector>
 
-#include "GameObject.hpp"
 #include "Position.hpp"
+#include "GameObject.hpp"
 
-class Tile;
 class Grid;
 
 class Rectangle : public GameObject {

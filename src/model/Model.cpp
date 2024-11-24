@@ -35,6 +35,10 @@ void Model::update() {
     player.update(grid, zombies, delta_time);
     player.rotateGameObject(grid, delta_time);
 
+    for(Zombie& zombie: zombies) {
+        zombie.update(grid, player, delta_time);
+    }
+
     std::erase_if(
         zombies,
         [](const Zombie& zombie) {

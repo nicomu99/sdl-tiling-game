@@ -6,7 +6,6 @@
 #define GAMEOBJECT_HPP
 
 #include "Position.hpp"
-// #include "Grid.hpp"
 
 class Grid;
 
@@ -41,9 +40,9 @@ public:
     void setRotation(Rotation rotation);
     void setHasBeenHit(bool);
 
-    [[nodiscard]] Position calculateTrajectory(double multiplier) const;
+    [[nodiscard]] Position calculateTrajectory() const;
 
-    void performMove(Position position, double i);
+    void performMove(Position position, double i, double multiplier);
     void move(const Grid&, double delta_time);
 
     void rotateGameObject(const Grid &grid, double delta_time);

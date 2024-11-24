@@ -8,6 +8,7 @@
 #include "Rectangle.hpp"
 #include "Weapon.hpp"
 
+class Grid;
 class Zombie;
 
 class Player : public Rectangle {

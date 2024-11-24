@@ -3,7 +3,11 @@
 //
 #include "CollisionManager.hpp"
 
-#include <iostream>
+
+#include "Circle.hpp"
+#include "Projectile.hpp"
+#include "Grid.hpp"
+#include "Zombie.hpp"
 
 bool isProjectileCircleCollision(Circle& circle, Projectile& projectile) {
     Position circle_center = circle.getCenter();

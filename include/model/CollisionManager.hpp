@@ -6,9 +6,9 @@
 #define COLLISIONMANAGER_HPP
 #include <vector>
 
-#include "Grid.hpp"
-#include "Projectile.hpp"
-#include "Zombie.hpp"
+class Grid;
+class Projectile;
+class Zombie;
 
 class CollisionManager {
 public:

@@ -2,9 +2,7 @@
 // Created by nico on 11/9/24.
 //
 #include "Grid.hpp"
-
 #include "Constants.hpp"
-#include "Tile.hpp"
 
 Grid::Grid() {
     constexpr auto cast_tile_size = static_cast<float>(Constants::TILE_SIZE);

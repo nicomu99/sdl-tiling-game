@@ -50,30 +50,30 @@ void GameObject::setHasBeenHit(bool) {
     std::cout << health_points << std::endl;
 }
 
-Position GameObject::calculateTrajectory(double multiplier) const {
+Position GameObject::calculateTrajectory() const {
     const double radians = static_cast<double>(rotation) * M_PI / 180.0;
     return {
-        multiplier * cos(radians),
-        multiplier * sin(radians)
+        cos(radians),
+        sin(radians)
     };
 }
 
-void GameObject::performMove(Position position, double i) {
-    center += position * i;
+void GameObject::performMove(Position position, double delta_time, double multiplier) {
+    const double MOVE_INCREMENT = SPEED * delta_time;
+    center += position * MOVE_INCREMENT * move_velocity * multiplier;
 }
 
 void GameObject::move(const Grid &grid, double delta_time) {
-    const double MOVE_INCREMENT = SPEED * delta_time;
-    auto [delta_x, delta_y] = calculateTrajectory(MOVE_INCREMENT);
+    auto [delta_x, delta_y] = calculateTrajectory();
 
     for(int step = MAX_STEPS; step > 0; step--) {
         const double t = static_cast<double>(step) * STEP_SIZE;
-        Position delta_position(delta_x * t * move_velocity.x, delta_y * t * move_velocity.y);
-        performMove(delta_position, 1);
+        Position delta_position(delta_x * t, delta_y * t);
+        performMove(delta_position, delta_time, 1);
 
         if(checkGridCollision(grid)) {
             // Reset the rectangle position if a collision was detected
-            performMove(delta_position, -1);
+            performMove(delta_position, -1, -1);
         } else {
             break;
         }

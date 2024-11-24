@@ -1,7 +1,6 @@
 //
 // Created by nico on 11/9/24.
 //
-
 #ifndef GRID_HPP
 #define GRID_HPP
 #include <vector>

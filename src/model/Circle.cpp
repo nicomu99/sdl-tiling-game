@@ -3,6 +3,9 @@
 //
 #include "Circle.hpp"
 
+#include "Grid.hpp"
+#include "Tile.hpp"
+
 Circle::Circle(): GameObject(0, 0), radius(0) { }
 
 Circle::Circle(double x, double y): GameObject(x, y), radius(15) { }
