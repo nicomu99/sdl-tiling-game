@@ -4,7 +4,6 @@
 #include "GameObject.hpp"
 
 #include <cmath>
-#include <iostream>
 
 constexpr int ROTATION_SPEED = 300;
 constexpr int MAX_STEPS = 10;
