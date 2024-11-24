@@ -135,7 +135,7 @@ void View::renderPlayer(const Player &player) const {
 }
 
 void View::renderProjectiles(const Weapon &weapon) const {
-    SDL_SetRenderDrawColor(renderer, 100, 255, 255, 255);
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     for (const auto& projectile: weapon.getProjectiles()) {
         renderCircle(projectile);
         // Position position = projectile.getPosition();
