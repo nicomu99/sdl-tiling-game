@@ -24,11 +24,14 @@ public:
     double health_points;
     bool has_been_hit;
     double maximum_health;
+    double speed;
 
-    virtual ~GameObject() = default;
 
     GameObject();
     GameObject(double x, double y);
+    GameObject(double x, double y, Position move_velocity, double speed);
+    virtual ~GameObject() = default;
+
 
     [[nodiscard]] const Position& getCenter() const;
     [[nodiscard]] const int& getRotation() const;

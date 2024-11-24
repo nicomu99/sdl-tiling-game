@@ -10,6 +10,8 @@ Circle::Circle(): GameObject(0, 0), radius(0) { }
 
 Circle::Circle(double x, double y): GameObject(x, y), radius(15) { }
 
+Circle::Circle(double x, double y, Position move_velocity): GameObject(x, y, move_velocity, 100.0), radius(15) { }
+
 bool Circle::checkGridCollision(const Grid& grid) const {
     int min_x = Grid::toTileCoordinate(center.x - radius);
     int min_y = Grid::toTileCoordinate(center.y - radius);

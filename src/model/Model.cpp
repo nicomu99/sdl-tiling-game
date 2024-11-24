@@ -4,7 +4,7 @@
 #include "Model.hpp"
 
 Model::Model(): grid(Grid()), player(Player()), zombies(std::vector<Zombie>()), delta_time(0.0) {
-    zombies.emplace_back();
+    zombies.emplace_back(400.0, 400.0);
 }
 
 const Grid &Model::getGrid() const {

@@ -11,7 +11,7 @@ class Player;
 class Zombie : public Circle {
 public:
     Zombie();
-    Zombie(float, float);
+    Zombie(double, double);
 
     void calculateTargetTrajectory(const Player& player);
     void update(const Grid& grid, const Player& player, double);
