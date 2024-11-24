@@ -55,6 +55,16 @@ void GameObject::setHasBeenHit(bool) {
     health_points -= 10;
 }
 
+void GameObject::calculateRotationWithTarget(Position target_position) {
+    Position relative_position = target_position - this->center;
+    double theta = atan2(relative_position.y, relative_position.x);
+    double rotation_radians = rotation * M_PI / 180;
+    double phi = theta - rotation_radians;
+
+    rotation += static_cast<int>(phi * 180 / M_PI);
+    rotation = (rotation + 360) % 360;
+}
+
 Position GameObject::calculateTrajectory() const {
     const double radians = static_cast<double>(rotation) * M_PI / 180.0;
     return {

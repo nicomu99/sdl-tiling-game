@@ -19,12 +19,13 @@ const std::vector<Zombie> &Model::getZombies() const {
     return zombies;
 }
 
-void Model::movePlayer(Position position) {
+void Model::updateMovementState(Position position, Position rotation_target) {
     player.setVelocity(position);
+    player.calculateRotationWithTarget(rotation_target);
 }
 
 void Model::rotatePlayer(Player::Rotation rotation) {
-    player.setRotation(rotation);
+    // player.setRotation(rotation);
 }
 
 void Model::fireWeapon() {

@@ -13,7 +13,6 @@ public:
     Zombie();
     Zombie(double, double);
 
-    void calculateTargetTrajectory(const Player& player);
     void update(const Grid& grid, const Player& player, double);
 };
 

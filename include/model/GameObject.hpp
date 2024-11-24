@@ -44,6 +44,7 @@ public:
     void setHasBeenHit(bool);
 
     [[nodiscard]] Position calculateTrajectory() const;
+    void calculateRotationWithTarget(Position target_position);
 
     void performMove(Position position, double i, double multiplier);
     void move(const Grid&, double delta_time);

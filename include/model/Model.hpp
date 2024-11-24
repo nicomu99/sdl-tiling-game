@@ -22,7 +22,7 @@ public:
     [[nodiscard]] const Player& getPlayer() const;
     [[nodiscard]] const std::vector<Zombie>& getZombies() const;
 
-    void movePlayer(Position position);
+    void updateMovementState(Position position, Position rotation_target);
     void rotatePlayer(Player::Rotation rotation);
     void fireWeapon();
     void checkBulletCollisions();

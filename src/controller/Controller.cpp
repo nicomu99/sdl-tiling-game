@@ -75,14 +75,16 @@ void Controller::handleInput() const {
         }
     }
 
-    model.movePlayer(Position(0, 0));
+    int x, y;
+    SDL_GetMouseState(&x, &y);
+    model.updateMovementState(Position(0, 0), Position(x, y));
     model.rotatePlayer(Player::Rotation::NONE);
 
     // Get the current state of the keyboard
     const Uint8 *keystates = SDL_GetKeyboardState(nullptr);
     for (const auto &[key_tuple, direction]: shoot_walk_rotate_direction_map) {
         if (keystates[std::get<0>(key_tuple)] && keystates[std::get<1>(key_tuple)] && keystates[std::get<2>(key_tuple)]) {
-            model.movePlayer(Position(1, 1));
+            model.updateMovementState(Position(1, 1), Position(x, y));
             model.rotatePlayer(direction);
             model.fireWeapon();
             return;
@@ -92,7 +94,7 @@ void Controller::handleInput() const {
 
     for (const auto &[key_pair, direction]: diagonal_key_direction_map) {
         if (keystates[key_pair.first] && keystates[key_pair.second]) {
-            model.movePlayer(Position(1, 1));
+            model.updateMovementState(Position(1, 1), Position(x, y));
             model.rotatePlayer(direction);
             return;
         }
@@ -101,7 +103,7 @@ void Controller::handleInput() const {
     // Move forward
     for (SDL_Scancode keys[] = {SDL_SCANCODE_W, SDL_SCANCODE_S}; const auto &key: keys) {
         if (keystates[key]) {
-            model.movePlayer(Position(1, 1));
+            model.updateMovementState(Position(1, 1), Position(x, y));
         }
     }
 
