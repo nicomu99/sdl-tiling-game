@@ -10,7 +10,7 @@
 
 Uint32 last_time = SDL_GetTicks();
 
-Weapon::Weapon(): firing_speed(0.5f), bullet_speed(1.0f), projectiles(std::vector<Projectile>()) {
+Weapon::Weapon(): firing_speed(0.02f), bullet_speed(1.0f), projectiles(std::vector<Projectile>()) {
 }
 
 Weapon::Weapon(float firing_speed, float bullet_speed): firing_speed(firing_speed), bullet_speed(bullet_speed),
@@ -33,9 +33,9 @@ void Weapon::fireWeapon(Position firing_position, Position delta_position) {
     projectiles.emplace_back(firing_position, delta_position);
 }
 
-void Weapon::updateBullets(const Grid& grid, std::vector<Zombie>& zombies) {
+void Weapon::updateBullets(const Grid &grid, std::vector<Zombie>& zombies, double delta_time) {
     for (auto &projectile: projectiles) {
-        projectile.moveProjectile();
+        projectile.moveProjectile(delta_time);
     }
 
     CollisionManager::checkProjectileCollision(projectiles, grid, zombies);

@@ -18,10 +18,14 @@ GameObject::GameObject(double x, double y): center(x, y), rotation(0), move_velo
                                             health_points(100.0), has_been_hit(false), maximum_health(100.0), speed(300.0) {
 }
 
+GameObject::GameObject(double x, double y, double speed): center(x, y), rotation(0), move_velocity(0, 0), rotation_speed(0),
+                                            health_points(100.0), has_been_hit(false), maximum_health(100.0), speed(speed) {
+}
+
 GameObject::GameObject(double x, double y,
                        Position move_velocity, double speed): center(x, y), rotation(0),
-                                                move_velocity(move_velocity), rotation_speed(0),
-                                                health_points(100.0), has_been_hit(false), maximum_health(100.0), speed(speed) { }
+                                                              move_velocity(move_velocity), rotation_speed(0),
+                                                              health_points(100.0), has_been_hit(false), maximum_health(100.0), speed(speed) { }
 const Position &GameObject::getCenter() const {
     return center;
 }

@@ -21,6 +21,6 @@ void Player::fireWeapon() {
 
 void Player::update(const Grid& grid, std::vector<Zombie>& zombie, double delta_time) {
     move(grid, delta_time);
-    weapon.updateBullets(grid, zombie);
+    weapon.updateBullets(grid, zombie, delta_time);
     initialize(center, rotation);
 }

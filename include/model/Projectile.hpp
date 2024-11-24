@@ -20,7 +20,7 @@ public:
 
     void setHasHitObject(bool);
 
-    void moveProjectile();
+    void moveProjectile(double delta_time);
 };
 
 #endif //PROJECTILE_HPP

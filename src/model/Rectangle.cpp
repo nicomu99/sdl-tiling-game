@@ -13,7 +13,7 @@
 
 constexpr float HALF_LENGTH = Constants::TILE_SIZE / 2.0f;
 
-Rectangle::Rectangle(double x, double y): GameObject(x, y), top(0.0f), bottom(0.0f),
+Rectangle::Rectangle(double x, double y): GameObject(x, y, 400.0), top(0.0f), bottom(0.0f),
                                         left(0.0f), right(0.0f) {
     Rectangle::initialize(center, rotation);
 }

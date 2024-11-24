@@ -29,6 +29,7 @@ public:
 
     GameObject();
     GameObject(double x, double y);
+    GameObject(double x, double y, double speed);
     GameObject(double x, double y, Position move_velocity, double speed);
     virtual ~GameObject() = default;
 

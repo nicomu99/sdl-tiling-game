@@ -3,7 +3,7 @@
 //
 #include "Projectile.hpp"
 
-constexpr float BULLET_SPEED = 20.0f;
+constexpr double BULLET_SPEED = 400.0;
 
 Projectile::Projectile(): projectile_position(0, 0), delta_position(0, 0), has_hit_object(false) { }
 
@@ -21,6 +21,6 @@ void Projectile::setHasHitObject(bool has_hit_wall) {
     this->has_hit_object = has_hit_wall;
 }
 
-void Projectile::moveProjectile() {
-    projectile_position += (BULLET_SPEED * delta_position);
+void Projectile::moveProjectile(double delta_time) {
+    projectile_position += BULLET_SPEED * delta_position * delta_time;
 }
