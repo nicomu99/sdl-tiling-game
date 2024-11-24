@@ -38,6 +38,11 @@ struct Position {
         return {x - other.x, y - other.y};
     }
 
+    void setPosition(double x, double y) {
+        this->x = x;
+        this->y = y;
+    }
+
     static double computeEuclidean(Position pos1, Position pos2) {
         return std::sqrt(pow(pos1.x - pos2.x, 2) + pow(pos1.y - pos2.y, 2));
     }
