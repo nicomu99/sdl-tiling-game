@@ -49,8 +49,6 @@ public:
     void performMove(Position position, double i, double multiplier);
     void move(const Grid&, double delta_time);
 
-    void rotateGameObject(const Grid &grid, double delta_time);
-
     [[nodiscard]] virtual bool checkGridCollision(const Grid&) const = 0;
     virtual void initialize(Position, int) = 0;
 

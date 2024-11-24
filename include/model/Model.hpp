@@ -23,9 +23,7 @@ public:
     [[nodiscard]] const std::vector<Zombie>& getZombies() const;
 
     void updateMovementState(Position position, Position rotation_target);
-    void rotatePlayer(Player::Rotation rotation);
     void fireWeapon();
-    void checkBulletCollisions();
     void update();
 
     void setDeltaTime(double delta_time);

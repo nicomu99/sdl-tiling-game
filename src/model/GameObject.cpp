@@ -95,18 +95,6 @@ void GameObject::move(const Grid &grid, double delta_time) {
     }
 }
 
-void GameObject::rotateGameObject(const Grid &grid, double delta_time) {
-    int new_rotation = rotation + rotation_speed * ROTATION_SPEED * delta_time;
-    new_rotation = (new_rotation % 360 + 360) % 360;
-    initialize(center, new_rotation);
-
-    if (!checkGridCollision(grid)) {
-        rotation = new_rotation;
-    } else {
-        initialize(center, rotation);
-    }
-}
-
 std::string GameObject::to_string(Rotation rotation) {
     switch (rotation) {
         case RIGHT: return "Right";

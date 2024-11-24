@@ -24,17 +24,12 @@ void Model::updateMovementState(Position position, Position rotation_target) {
     player.calculateRotationWithTarget(rotation_target);
 }
 
-void Model::rotatePlayer(Player::Rotation rotation) {
-    // player.setRotation(rotation);
-}
-
 void Model::fireWeapon() {
     player.fireWeapon();
 }
 
 void Model::update() {
     player.update(grid, zombies, delta_time);
-    player.rotateGameObject(grid, delta_time);
 
     for(Zombie& zombie: zombies) {
         zombie.update(grid, player, delta_time);
