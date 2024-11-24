@@ -13,25 +13,24 @@ Controller::Controller(Model &model, SDLManager &sdl_manager,
 void Controller::handleInput() const {
 
     SDL_Event event;
+    int x, y;
+    const Uint8 *keystates = SDL_GetKeyboardState(nullptr);
+    Uint32 mouse_state = SDL_GetMouseState(&x, &y);
+    model.updateMovementState(Position(0, 0), Position(x, y));
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT) {
             running = false;
         }
     }
 
-    int x, y;
-    SDL_GetMouseState(&x, &y);
-    model.updateMovementState(Position(0, 0), Position(x, y));
-
     // Get the current state of the keyboard
-    const Uint8 *keystates = SDL_GetKeyboardState(nullptr);
     for (SDL_Scancode keys[] = {SDL_SCANCODE_W, SDL_SCANCODE_S}; const auto &key: keys) {
         if (keystates[key]) {
             model.updateMovementState(Position(1, 1), Position(x, y));
         }
     }
 
-    if(keystates[SDL_SCANCODE_SPACE]) {
+    if(keystates[SDL_SCANCODE_SPACE] || mouse_state & SDL_BUTTON(SDL_BUTTON_LEFT)) {
         model.fireWeapon();
     }
 }
