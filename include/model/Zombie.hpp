@@ -6,9 +6,15 @@
 #define ZOMBIE_HPP
 #include "Circle.hpp"
 
+class Player;
+
 class Zombie : public Circle {
 public:
     Zombie();
+    Zombie(float, float);
+
+    void calculateTargetTrajectory(const Player& player);
+    void update(const Grid& grid, const Player& player, double);
 };
 
 #endif //ZOMBIE_HPP
