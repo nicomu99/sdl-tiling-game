@@ -27,13 +27,8 @@ SDLManager::SDLManager() {
     }
 
     // Load textures
-    SDL_Surface *grass_surface = IMG_Load("res/textures/grass_texture.png");
-    if (!grass_surface) {
-        throw std::runtime_error("Grass image could not be loaded: " + std::string(SDL_GetError()));
-    }
-
-    grass_texture = SDL_CreateTextureFromSurface(renderer, grass_surface);
-    SDL_FreeSurface(grass_surface);
+    loadTexture(grass_texture, "res/textures/grass_texture.png");
+    loadTexture(wall_texture, "res/textures/wall_texture.png");
 }
 
 SDLManager::~SDLManager() {
@@ -42,16 +37,30 @@ SDLManager::~SDLManager() {
     SDL_Quit();
 }
 
-SDL_Renderer *SDLManager::getRenderer() const {
+void SDLManager::loadTexture(SDL_Texture*& texture, const std::string& file_name) const {
+    SDL_Surface *surface = IMG_Load(file_name.c_str());
+    if (!surface) {
+        throw std::runtime_error("Image could not be loaded: " + std::string(SDL_GetError()));
+    }
+
+    texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_FreeSurface(surface);
+}
+
+SDL_Renderer* SDLManager::getRenderer() const {
     return renderer;
 }
 
-SDL_Window *SDLManager::getWindow() const {
+SDL_Window* SDLManager::getWindow() const {
     return window;
 }
 
-SDL_Texture *SDLManager::getGrassTexture() const {
+SDL_Texture* SDLManager::getGrassTexture() const {
     return grass_texture;
+}
+
+SDL_Texture* SDLManager::getWallTexture() const {
+    return wall_texture;
 }
 
 float SDLManager::getCoordinateScaling() const {

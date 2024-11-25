@@ -8,7 +8,7 @@
 
 #include "Constants.hpp"
 
-View::View(const SDLManager &sdl_manager): renderer(sdl_manager.getRenderer()), grass_texture(sdl_manager.getGrassTexture()) {
+View::View(const SDLManager &sdl_manager): renderer(sdl_manager.getRenderer()), grass_texture(sdl_manager.getGrassTexture()), wall_texture(sdl_manager.getWallTexture()) {
 }
 
 void View::render(const Model &model) const {
@@ -33,8 +33,7 @@ void View::renderTileMap(const Grid &grid) const {
             if (tile.getTileType() == TileType::Walkable) {
                 SDL_RenderCopy(renderer, grass_texture, nullptr, &render_rect);
             } else {
-                SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-                SDL_RenderFillRect(renderer, &render_rect);
+                SDL_RenderCopy(renderer, wall_texture, nullptr, &render_rect);
             }
 
         }
