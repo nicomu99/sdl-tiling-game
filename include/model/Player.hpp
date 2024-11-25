@@ -13,14 +13,17 @@ class Zombie;
 
 class Player : public Rectangle {
     Weapon weapon;
+    int score;
 
 public:
     Player();
 
     [[nodiscard]] const Weapon& getWeapon() const;
     [[nodiscard]] Weapon& getWeapon();
+    [[nodiscard]] const int& getScore() const;
 
-    void fireWeapon();
     void update(const Grid &grid, std::vector<Zombie>& zombie, double delta_time);
+    void fireWeapon();
+    void incrementScoreBy(size_t size);
 };
 #endif //PLAYER_HPP

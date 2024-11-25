@@ -45,12 +45,15 @@ void Model::update() {
         zombie.update(grid, player, delta_time);
     }
 
+    size_t zombie_count_before_erase = zombies.size();
     std::erase_if(
         zombies,
         [](const Zombie& zombie) {
             return zombie.isDead();
         }
     );
+    size_t zombie_count_after_erase = zombies.size();
+    player.incrementScoreBy(zombie_count_before_erase - zombie_count_after_erase);
 
     // Spawn new zombie
     Uint32 now = SDL_GetTicks();

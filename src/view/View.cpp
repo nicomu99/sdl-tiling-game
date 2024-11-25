@@ -4,28 +4,33 @@
 #include "View.hpp"
 
 #include <algorithm>
+#include <charconv>
 #include <iostream>
 
 #include "Constants.hpp"
 
-View::View(const SDLManager &sdl_manager): renderer(sdl_manager.getRenderer()), grass_texture(sdl_manager.getGrassTexture()), wall_texture(sdl_manager.getWallTexture()) {
+View::View(const SDLManager& sdl_manager): renderer(sdl_manager.getRenderer()),
+                                           grass_texture(sdl_manager.getGrassTexture()),
+                                           wall_texture(sdl_manager.getWallTexture()),
+                                           font(sdl_manager.getFont()) {
 }
 
-void View::render(const Model &model) const {
+void View::render(const Model& model) const {
     SDL_RenderClear(renderer);
     renderTileMap(model.getGrid());
     renderPlayer(model.getPlayer());
     renderProjectiles(model.getPlayer().getWeapon());
-    for(const Zombie& zombie: model.getZombies()) {
+    for (const Zombie& zombie: model.getZombies()) {
         renderLivingCircle(zombie);
     }
+    renderScore(model.getPlayer().getScore());
     SDL_RenderPresent(renderer);
 }
 
-void View::renderTileMap(const Grid &grid) const {
-    const std::vector<std::vector<Tile> > &tile_map = grid.getTileMap();
-    for (const auto &i: tile_map) {
-        for (const auto &tile: i) {
+void View::renderTileMap(const Grid& grid) const {
+    const std::vector<std::vector<Tile> >& tile_map = grid.getTileMap();
+    for (const auto& i: tile_map) {
+        for (const auto& tile: i) {
             SDL_Rect render_rect = {
                 static_cast<int>(tile.getLeft()), static_cast<int>(tile.getTop()), Constants::TILE_SIZE,
                 Constants::TILE_SIZE
@@ -35,12 +40,26 @@ void View::renderTileMap(const Grid &grid) const {
             } else {
                 SDL_RenderCopy(renderer, wall_texture, nullptr, &render_rect);
             }
-
         }
     }
 }
 
-void View::drawHealthBar(int center_x, int center_y, double remaining_health, double initial_health) const {
+void View::renderScore(int score) const {
+    // Create surface and texture
+    const char* text = std::to_string(score).c_str();
+    SDL_Color render_color = {255, 255, 255};
+    SDL_Surface* surface_message = TTF_RenderText_Solid(font, text, render_color);
+    SDL_Texture* message = SDL_CreateTextureFromSurface(renderer, surface_message);
+
+    int w, h;
+    TTF_SizeText(font, text, &w, &h);
+    SDL_Rect message_rect = {1100, 50, w, h};
+    SDL_RenderCopy(renderer, message, nullptr, &message_rect);
+    SDL_FreeSurface(surface_message);
+    SDL_DestroyTexture(message);
+}
+
+void View::renderHealthBar(int center_x, int center_y, double remaining_health, double initial_health) const {
     int bar_x = center_x - Constants::TILE_SIZE;
     int bar_y = center_y - Constants::TILE_SIZE - 5;
     int bar_width = Constants::TILE_SIZE * 2;
@@ -57,12 +76,12 @@ void View::drawHealthBar(int center_x, int center_y, double remaining_health, do
 
     rect.w = remaining_width;
     SDL_RenderFillRect(renderer, &rect);
-
 }
 
-void View::renderPlayer(const Player &player) const {
+void View::renderPlayer(const Player& player) const {
     auto [center_x, center_y] = player.getCenter();
-    drawHealthBar(static_cast<int>(center_x), static_cast<int>(center_y), player.getHealthPoints(), player.getMaximumHealth());
+    renderHealthBar(static_cast<int>(center_x), static_cast<int>(center_y), player.getHealthPoints(),
+                  player.getMaximumHealth());
 
     SDL_SetRenderDrawColor(renderer, 100, 0, 255, 255);
 
@@ -83,8 +102,9 @@ void View::renderPlayer(const Player &player) const {
         {corner_points[3].x, corner_points[3].y, corner_points[0].x, corner_points[0].y},
     };
 
-    for(const Edge& edge: edges) {
-        SDL_RenderDrawLine(renderer, static_cast<int>(edge.x0), static_cast<int>(edge.y0), static_cast<int>(edge.x1), static_cast<int>(edge.y1));
+    for (const Edge& edge: edges) {
+        SDL_RenderDrawLine(renderer, static_cast<int>(edge.x0), static_cast<int>(edge.y0), static_cast<int>(edge.x1),
+                           static_cast<int>(edge.y1));
     }
 
     // Scanline fill algorithm
@@ -92,7 +112,7 @@ void View::renderPlayer(const Player &player) const {
         // Iterate from top to bottom (y goes from top to bottom)
         std::vector<int> intersections;
 
-        for (const auto &edge: edges) {
+        for (const auto& edge: edges) {
             // Iterate through all edges i.e. all lines between two corners
             int y0 = static_cast<int>(edge.y0);
             int y1 = static_cast<int>(edge.y1);
@@ -134,7 +154,7 @@ void View::renderPlayer(const Player &player) const {
     }
 }
 
-void View::renderProjectiles(const Weapon &weapon) const {
+void View::renderProjectiles(const Weapon& weapon) const {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     for (const auto& projectile: weapon.getProjectiles()) {
         renderCircle(projectile);
@@ -155,7 +175,7 @@ void drawHorizontalLine(SDL_Renderer* renderer, int x1, int x2, int y) {
     }
 }
 
-void View::renderCircle(const Circle &circle) const {
+void View::renderCircle(const Circle& circle) const {
     auto [center_x, center_y] = circle.getCenter();
     int cast_x = static_cast<int>(center_x);
     int cast_y = static_cast<int>(center_y);
@@ -182,11 +202,11 @@ void View::renderCircle(const Circle &circle) const {
     }
 }
 
-void View::renderLivingCircle(const Circle &circle) const {
+void View::renderLivingCircle(const Circle& circle) const {
     SDL_SetRenderDrawColor(renderer, 100, 0, 255, 255);
     auto [center_x, center_y] = circle.getCenter();
     int cast_x = static_cast<int>(center_x);
     int cast_y = static_cast<int>(center_y);
-    drawHealthBar(cast_x, cast_y, circle.getHealthPoints(), circle.getMaximumHealth());
+    renderHealthBar(cast_x, cast_y, circle.getHealthPoints(), circle.getMaximumHealth());
     renderCircle(circle);
 }

@@ -6,6 +6,7 @@
 
 #include <stdexcept>
 #include <SDL_image.h>
+#include <SDL_ttf.h>
 
 SDLManager::SDLManager() {
     if (SDL_InitSubSystem(SDL_INIT_VIDEO) < 0) {
@@ -29,6 +30,18 @@ SDLManager::SDLManager() {
     // Load textures
     loadTexture(grass_texture, "res/textures/grass_texture.png");
     loadTexture(wall_texture, "res/textures/wall_texture.png");
+
+    if (TTF_Init() == -1) {
+        throw std::runtime_error("Failed to initialize font library: " + std::string(TTF_GetError()));
+    }
+
+
+    font = TTF_OpenFont("res/fonts/OpenSans-Regular.ttf", 50);
+    if(!font) {
+        SDL_DestroyWindow(window);
+        SDL_Quit();
+        throw std::runtime_error("Failed to load font: " + std::string(TTF_GetError()));
+    }
 }
 
 SDLManager::~SDLManager() {
@@ -61,6 +74,10 @@ SDL_Texture* SDLManager::getGrassTexture() const {
 
 SDL_Texture* SDLManager::getWallTexture() const {
     return wall_texture;
+}
+
+TTF_Font* SDLManager::getFont() const {
+    return font;
 }
 
 float SDLManager::getCoordinateScaling() const {
