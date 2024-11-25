@@ -91,7 +91,7 @@ void GameObject::move(const Grid &grid, double delta_time) {
 
         if (checkGridCollision(grid)) {
             // Reset the rectangle position if a collision was detected
-            performMove(delta_position, -1, -1);
+            performMove(delta_position, delta_time, -1);
         } else {
             break;
         }
