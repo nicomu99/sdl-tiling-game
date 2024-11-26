@@ -41,5 +41,5 @@ void Controller::renderScreen() const {
 
 void Controller::updateModel(double delta_time) const {
     model.setDeltaTime(delta_time);
-    model.update();
+    model.update(running);
 }

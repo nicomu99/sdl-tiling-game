@@ -56,6 +56,7 @@ void GameObject::setRotation(Rotation rotation) {
 void GameObject::setHasBeenHit(bool) {
     this->has_been_hit = true;
     health_points -= 10;
+    this->has_been_hit = false;
 }
 
 void GameObject::calculateRotationWithTarget(Position target_position) {

@@ -7,6 +7,7 @@
 #include <SDL_timer.h>
 #include <random>
 
+#include "CollisionManager.hpp"
 #include "FileHandler.hpp"
 
 constexpr Uint32 SPAWN_TIMER = 2000.0;
@@ -44,7 +45,7 @@ void Model::fireWeapon() {
     player.fireWeapon();
 }
 
-void Model::update() {
+void Model::update(bool& running) {
     player.update(grid, zombies, delta_time);
 
     for(Zombie& zombie: zombies) {
@@ -58,6 +59,10 @@ void Model::update() {
         }
     );
     player.incrementScoreBy(erased_objects);
+    CollisionManager::checkRectangleCircleCollision(player, zombies);
+    if(player.isDead()) {
+        running = false;
+    }
 
     // Spawn new zombie
     Uint32 now = SDL_GetTicks();

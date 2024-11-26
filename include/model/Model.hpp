@@ -26,7 +26,7 @@ public:
 
     void updateMovementState(Position position, Position rotation_target);
     void fireWeapon();
-    void update();
+    void update(bool& running);
 
     void setDeltaTime(double delta_time);
 
