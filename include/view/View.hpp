@@ -24,7 +24,7 @@ public:
     void renderCircle(const Circle& circle) const;
     void renderLivingCircle(const Circle& circle) const;
     void renderTileMap(const Grid &grid) const;
-    void renderScore(int score) const;
+    void renderScore(int score, const std::string& score_text, int text_y) const;
 
     void renderHealthBar(int center_x, int center_y, double remaining_health, double initial_health) const;
 

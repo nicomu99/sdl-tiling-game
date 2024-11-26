@@ -36,7 +36,7 @@ SDLManager::SDLManager() {
     }
 
 
-    font = TTF_OpenFont("res/fonts/OpenSans-Regular.ttf", 50);
+    font = TTF_OpenFont("res/fonts/OpenSans-Regular.ttf", 25);
     if(!font) {
         SDL_DestroyWindow(window);
         SDL_Quit();

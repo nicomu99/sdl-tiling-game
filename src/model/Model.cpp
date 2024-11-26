@@ -7,14 +7,20 @@
 #include <SDL_timer.h>
 #include <random>
 
+#include "FileHandler.hpp"
+
 constexpr Uint32 SPAWN_TIMER = 2000.0;
 Uint32 last_spawn = 0;
 std::random_device rd;
 std::mt19937 generator(rd());
 std::uniform_real_distribution dist(100.0,800.0);
 
-Model::Model(): grid(Grid()), player(Player()), zombies(std::vector<Zombie>()), delta_time(0.0) {
+Model::Model(int high_score): grid(Grid()), player(Player()), zombies(std::vector<Zombie>()), delta_time(0.0), high_score(high_score) {
     zombies.emplace_back(400.0, 400.0);
+}
+
+const int& Model::getHighScore() const {
+    return high_score;
 }
 
 const Grid &Model::getGrid() const {
@@ -68,6 +74,8 @@ void Model::update() {
         zombies.emplace_back(random_x, random_y);
         last_spawn = now;
     }
+
+    high_score = std::max(high_score, player.getScore());
 }
 
 void Model::setDeltaTime(double delta_time) {

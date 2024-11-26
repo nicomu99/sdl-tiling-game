@@ -14,10 +14,12 @@ class Model {
     Player player;
     std::vector<Zombie> zombies;
     double delta_time;
+    int high_score;
 
 public:
-    Model();
+    Model(int high_score);
 
+    [[nodiscard]] const int& getHighScore() const;
     [[nodiscard]] const Grid& getGrid() const;
     [[nodiscard]] const Player& getPlayer() const;
     [[nodiscard]] const std::vector<Zombie>& getZombies() const;

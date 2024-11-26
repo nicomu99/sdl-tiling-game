@@ -17,6 +17,7 @@ namespace Constants {
     constexpr double DESIRED_FPS = 60.0;
     constexpr double FRAME_DELAY = 1000.0 / DESIRED_FPS;
     constexpr double MAX_DELTA_TIME = 0.05;
+    const std::string SCORE_FILE_NAME = "score.txt";
 }
 
 #endif //CONSTANTS_HPP

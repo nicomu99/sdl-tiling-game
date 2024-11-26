@@ -2,6 +2,7 @@
 
 #include "Constants.hpp"
 #include "Controller.hpp"
+#include "FileHandler.hpp"
 #include "Model.hpp"
 #include "SDLManager.hpp"
 
@@ -10,7 +11,8 @@ int main() {
     try {
         SDLManager sdl_manager;
         bool running =  true;
-        Model model;
+        int high_score = FileHandler::loadGameState();
+        Model model(high_score);
         Controller controller(model, sdl_manager, running);
 
         constexpr double fixed_delta_time = 1.0 / Constants::DESIRED_FPS;  // in seconds
@@ -45,6 +47,8 @@ int main() {
             double frame_rate = 1.0 / elapsed;
             // std::cout << "FPS: " << std::to_string(frame_rate) << std::endl;
         }
+
+        FileHandler::saveGameState(model.getHighScore());
     } catch (std::runtime_error& e) {
         std::cerr << "Error: " << e.what() << std::endl;
     }

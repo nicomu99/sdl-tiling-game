@@ -23,7 +23,8 @@ void View::render(const Model& model) const {
     for (const Zombie& zombie: model.getZombies()) {
         renderLivingCircle(zombie);
     }
-    renderScore(model.getPlayer().getScore());
+    renderScore(model.getHighScore(), "High score: ", 50);
+    renderScore(model.getPlayer().getScore(), "Current score: ", 100);
     SDL_RenderPresent(renderer);
 }
 
@@ -44,16 +45,17 @@ void View::renderTileMap(const Grid& grid) const {
     }
 }
 
-void View::renderScore(int score) const {
+void View::renderScore(int score, const std::string& score_text, int text_y) const {
     // Create surface and texture
-    const char* text = std::to_string(score).c_str();
+    std::string full_text = score_text + std::to_string(score);
+    const char* text = (full_text).c_str();
     SDL_Color render_color = {255, 255, 255};
     SDL_Surface* surface_message = TTF_RenderText_Solid(font, text, render_color);
     SDL_Texture* message = SDL_CreateTextureFromSurface(renderer, surface_message);
 
     int w, h;
     TTF_SizeText(font, text, &w, &h);
-    SDL_Rect message_rect = {1100, 50, w, h};
+    SDL_Rect message_rect = {100, text_y, w, h};
     SDL_RenderCopy(renderer, message, nullptr, &message_rect);
     SDL_FreeSurface(surface_message);
     SDL_DestroyTexture(message);
