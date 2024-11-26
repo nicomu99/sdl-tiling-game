@@ -18,13 +18,15 @@ class CollisionManager {
     std::vector<Projectile>& projectiles;
     std::vector<Zombie>& zombies;
     Grid& grid;
+    Player& player;
 public:
-    CollisionManager(std::vector<Projectile>& projectiles, std::vector<Zombie>& zombies, Grid& grid);
+    CollisionManager(std::vector<Projectile>& projectiles, std::vector<Zombie>& zombies, Grid& grid, Player& player);
 
     static bool isProjectileCircleCollision(Circle& circle, Projectile& projectile);
-    void checkProjectileCollision() const;
     static bool isRectangleCircleCollision(Rectangle& rectangle, const Circle& circle);
-    static void checkRectangleCircleCollision(Rectangle& rectangle, const std::vector<Zombie>& circles);
+
+    void checkProjectileCollisions() const;
+    void checkPlayerCollisions() const;
 };
 
 #endif //COLLISIONMANAGER_HPP

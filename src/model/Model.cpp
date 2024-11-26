@@ -18,7 +18,7 @@ std::uniform_real_distribution dist(100.0, 800.0);
 
 Model::Model(int high_score)
     : grid(Grid()), player(Player()), zombies(std::vector<Zombie>()), delta_time(0.0),
-      high_score(high_score), collision_manager(player.getWeapon().getProjectiles(), zombies, grid) {
+      high_score(high_score), collision_manager(player.getWeapon().getProjectiles(), zombies, grid, player) {
     zombies.emplace_back(400.0, 400.0);
 }
 
@@ -49,22 +49,8 @@ void Model::fireWeapon() {
 
 void Model::update(bool& running) {
     player.update(grid, delta_time);
-    collision_manager.checkProjectileCollision();
-
     for (Zombie& zombie: zombies) {
         zombie.update(grid, player, delta_time);
-    }
-
-    size_t erased_objects = std::erase_if(
-        zombies,
-        [](const Zombie& zombie) {
-            return zombie.isDead();
-        }
-    );
-    player.incrementScoreBy(erased_objects);
-    CollisionManager::checkRectangleCircleCollision(player, zombies);
-    if (player.isDead()) {
-        running = false;
     }
 
     // Spawn new zombie
@@ -84,6 +70,11 @@ void Model::update(bool& running) {
     }
 
     high_score = std::max(high_score, player.getScore());
+    collision_manager.checkProjectileCollisions();
+    collision_manager.checkPlayerCollisions();
+    if (player.isDead()) {
+        running = false;
+    }
 }
 
 void Model::setDeltaTime(double delta_time) {

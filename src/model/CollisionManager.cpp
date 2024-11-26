@@ -8,11 +8,12 @@
 #include "Constants.hpp"
 #include "Projectile.hpp"
 #include "Grid.hpp"
+#include "Player.hpp"
 #include "Zombie.hpp"
 
 CollisionManager::CollisionManager(std::vector<Projectile>& projectiles,
-                                   std::vector<Zombie>& zombies, Grid& grid)
-    : projectiles(projectiles), zombies(zombies), grid(grid) {
+                                   std::vector<Zombie>& zombies, Grid& grid, Player& player)
+    : projectiles(projectiles), zombies(zombies), grid(grid), player(player) {
 }
 
 bool CollisionManager::isProjectileCircleCollision(Circle& circle, Projectile& projectile) {
@@ -22,7 +23,7 @@ bool CollisionManager::isProjectileCircleCollision(Circle& circle, Projectile& p
     return Position::computeEuclidean(circle_center, projectile_center) <= circle.getRadius();
 }
 
-void CollisionManager::checkProjectileCollision() const {
+void CollisionManager::checkProjectileCollisions() const {
     for (auto& projectile: this->projectiles) {
         if (grid.isWallAt(projectile.getCenter())) {
             projectile.setHasHitObject(true);
@@ -36,12 +37,21 @@ void CollisionManager::checkProjectileCollision() const {
         }
     }
 
+    // Delete projectiles upon collision
     std::erase_if(
         projectiles,
         [](const Projectile& projectile) {
             return projectile.hasHitObject();
         }
     );
+
+    size_t erased_objects = std::erase_if(
+        zombies,
+        [](const Zombie& zombie) {
+            return zombie.isDead();
+        }
+    );
+    player.incrementScoreBy(erased_objects);
 }
 
 bool CollisionManager::isRectangleCircleCollision(Rectangle& rectangle, const Circle& circle) {
@@ -60,10 +70,10 @@ bool CollisionManager::isRectangleCircleCollision(Rectangle& rectangle, const Ci
     return pow(closest_x - rotated_circle_x, 2) + pow(closest_y - rotated_circle_y, 2) <= circle_radius;
 }
 
-void CollisionManager::checkRectangleCircleCollision(Rectangle& rectangle, const std::vector<Zombie>& circles) {
-    for (const Circle& circle: circles) {
-        if (isRectangleCircleCollision(rectangle, circle)) {
-            rectangle.setHasBeenHit(true);
+void CollisionManager::checkPlayerCollisions() const {
+    for (const Circle& circle: zombies) {
+        if (isRectangleCircleCollision(player, circle)) {
+            player.setHasBeenHit(true);
         }
     }
 }
