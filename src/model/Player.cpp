@@ -19,9 +19,9 @@ const int& Player::getScore() const {
     return score;
 }
 
-void Player::update(const Grid& grid, std::vector<Zombie>& zombie, double delta_time) {
+void Player::update(const Grid& grid, double delta_time) {
     move(grid, delta_time);
-    weapon.updateBullets(grid, zombie, delta_time);
+    weapon.updateBullets(delta_time);
     initialize(center, rotation);
 }
 

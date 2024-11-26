@@ -22,7 +22,7 @@ public:
     [[nodiscard]] Weapon& getWeapon();
     [[nodiscard]] const int& getScore() const;
 
-    void update(const Grid &grid, std::vector<Zombie>& zombie, double delta_time);
+    void update(const Grid &grid, double delta_time);
     void fireWeapon();
     void incrementScoreBy(size_t size);
 };

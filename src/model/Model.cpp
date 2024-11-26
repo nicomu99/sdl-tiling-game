@@ -14,9 +14,11 @@ constexpr Uint32 SPAWN_TIMER = 2000.0;
 Uint32 last_spawn = 0;
 std::random_device rd;
 std::mt19937 generator(rd());
-std::uniform_real_distribution dist(100.0,800.0);
+std::uniform_real_distribution dist(100.0, 800.0);
 
-Model::Model(int high_score): grid(Grid()), player(Player()), zombies(std::vector<Zombie>()), delta_time(0.0), high_score(high_score) {
+Model::Model(int high_score)
+    : grid(Grid()), player(Player()), zombies(std::vector<Zombie>()), delta_time(0.0),
+      high_score(high_score), collision_manager(player.getWeapon().getProjectiles(), zombies, grid) {
     zombies.emplace_back(400.0, 400.0);
 }
 
@@ -24,15 +26,15 @@ const int& Model::getHighScore() const {
     return high_score;
 }
 
-const Grid &Model::getGrid() const {
+const Grid& Model::getGrid() const {
     return grid;
 }
 
-const Player &Model::getPlayer() const {
+const Player& Model::getPlayer() const {
     return player;
 }
 
-const std::vector<Zombie> &Model::getZombies() const {
+const std::vector<Zombie>& Model::getZombies() const {
     return zombies;
 }
 
@@ -46,9 +48,10 @@ void Model::fireWeapon() {
 }
 
 void Model::update(bool& running) {
-    player.update(grid, zombies, delta_time);
+    player.update(grid, delta_time);
+    collision_manager.checkProjectileCollision();
 
-    for(Zombie& zombie: zombies) {
+    for (Zombie& zombie: zombies) {
         zombie.update(grid, player, delta_time);
     }
 
@@ -60,17 +63,17 @@ void Model::update(bool& running) {
     );
     player.incrementScoreBy(erased_objects);
     CollisionManager::checkRectangleCircleCollision(player, zombies);
-    if(player.isDead()) {
+    if (player.isDead()) {
         running = false;
     }
 
     // Spawn new zombie
     Uint32 now = SDL_GetTicks();
-    if(last_spawn + SPAWN_TIMER < now) {
+    if (last_spawn + SPAWN_TIMER < now) {
         double random_x = dist(generator);
         double random_y = dist(generator);
         Position random_pos = Position(random_x, random_y);
-        while(Position::computeEuclidean(player.getCenter(), random_pos) < 100) {
+        while (Position::computeEuclidean(player.getCenter(), random_pos) < 100) {
             random_x = dist(generator);
             random_y = dist(generator);
             random_pos.setPosition(random_x, random_y);

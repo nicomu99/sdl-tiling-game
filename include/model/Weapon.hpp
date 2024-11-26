@@ -25,10 +25,7 @@ public:
     [[nodiscard]] std::vector<Projectile>& getProjectiles();
 
     void fireWeapon(Position, Position);
-    void updateBullets(const Grid& grid, std::vector<Zombie>& vector, double delta_time);
-
-    void checkProjectileCollisions(const Grid & grid);
-
+    void updateBullets(double delta_time);
 };
 
 #endif //WEAPON_HPP

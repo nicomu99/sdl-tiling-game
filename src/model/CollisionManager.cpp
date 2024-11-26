@@ -10,6 +10,11 @@
 #include "Grid.hpp"
 #include "Zombie.hpp"
 
+CollisionManager::CollisionManager(std::vector<Projectile>& projectiles,
+                                   std::vector<Zombie>& zombies, Grid& grid)
+    : projectiles(projectiles), zombies(zombies), grid(grid) {
+}
+
 bool CollisionManager::isProjectileCircleCollision(Circle& circle, Projectile& projectile) {
     Position circle_center = circle.getCenter();
     Position projectile_center = projectile.getCenter();
@@ -17,19 +22,26 @@ bool CollisionManager::isProjectileCircleCollision(Circle& circle, Projectile& p
     return Position::computeEuclidean(circle_center, projectile_center) <= circle.getRadius();
 }
 
-void CollisionManager::checkProjectileCollision(std::vector<Projectile>& projectiles, const Grid& grid, std::vector<Zombie>& zombies) {
-    for(auto& projectile : projectiles) {
-        if(grid.isWallAt(projectile.getCenter())) {
+void CollisionManager::checkProjectileCollision() const {
+    for (auto& projectile: this->projectiles) {
+        if (grid.isWallAt(projectile.getCenter())) {
             projectile.setHasHitObject(true);
         }
 
-        for(Zombie& zombie: zombies) {
-            if(isProjectileCircleCollision(zombie, projectile)) {
+        for (Zombie& zombie: this->zombies) {
+            if (isProjectileCircleCollision(zombie, projectile)) {
                 zombie.setHasBeenHit(true);
                 projectile.setHasHitObject(true);
             }
         }
     }
+
+    std::erase_if(
+        projectiles,
+        [](const Projectile& projectile) {
+            return projectile.hasHitObject();
+        }
+    );
 }
 
 bool CollisionManager::isRectangleCircleCollision(Rectangle& rectangle, const Circle& circle) {
@@ -42,15 +54,15 @@ bool CollisionManager::isRectangleCircleCollision(Rectangle& rectangle, const Ci
     double rotated_circle_x = cos(-rotation) * (circle_x - rect_x) - sin(-rotation) * (circle_y - rect_y) + rect_x;
     double rotated_circle_y = sin(-rotation) * (circle_x - rect_x) + cos(-rotation) * (circle_y - rect_y) + rect_x;
 
-    double closest_x = std::max(rect_x - rect_size / 2, std::min(rotated_circle_x, rect_x + rect_size/2));
-    double closest_y = std::max(rect_y - rect_size / 2, std::min(rotated_circle_y, rect_y + rect_size/2));
+    double closest_x = std::max(rect_x - rect_size / 2, std::min(rotated_circle_x, rect_x + rect_size / 2));
+    double closest_y = std::max(rect_y - rect_size / 2, std::min(rotated_circle_y, rect_y + rect_size / 2));
 
     return pow(closest_x - rotated_circle_x, 2) + pow(closest_y - rotated_circle_y, 2) <= circle_radius;
 }
 
 void CollisionManager::checkRectangleCircleCollision(Rectangle& rectangle, const std::vector<Zombie>& circles) {
-    for(const Circle& circle: circles) {
-        if(isRectangleCircleCollision(rectangle, circle)) {
+    for (const Circle& circle: circles) {
+        if (isRectangleCircleCollision(rectangle, circle)) {
             rectangle.setHasBeenHit(true);
         }
     }

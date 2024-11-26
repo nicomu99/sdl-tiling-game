@@ -15,9 +15,14 @@ class Zombie;
 class Player;
 
 class CollisionManager {
+    std::vector<Projectile>& projectiles;
+    std::vector<Zombie>& zombies;
+    Grid& grid;
 public:
+    CollisionManager(std::vector<Projectile>& projectiles, std::vector<Zombie>& zombies, Grid& grid);
+
     static bool isProjectileCircleCollision(Circle& circle, Projectile& projectile);
-    static void checkProjectileCollision(std::vector<Projectile>&, const Grid&, std::vector<Zombie>&);
+    void checkProjectileCollision() const;
     static bool isRectangleCircleCollision(Rectangle& rectangle, const Circle& circle);
     static void checkRectangleCircleCollision(Rectangle& rectangle, const std::vector<Zombie>& circles);
 };

@@ -33,17 +33,8 @@ void Weapon::fireWeapon(Position firing_position, Position delta_position) {
     projectiles.emplace_back(firing_position, delta_position);
 }
 
-void Weapon::updateBullets(const Grid &grid, std::vector<Zombie>& zombies, double delta_time) {
+void Weapon::updateBullets(double delta_time) {
     for (auto &projectile: projectiles) {
         projectile.moveProjectile(delta_time);
     }
-
-    CollisionManager::checkProjectileCollision(projectiles, grid, zombies);
-
-    std::erase_if(
-        projectiles,
-        [](const Projectile &projectile) {
-            return projectile.hasHitObject();
-        }
-    );
 }

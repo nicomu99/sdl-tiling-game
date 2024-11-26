@@ -5,6 +5,7 @@
 #ifndef MODEL_HPP
 #define MODEL_HPP
 
+#include "CollisionManager.hpp"
 #include "Player.hpp"
 #include "Grid.hpp"
 #include "Zombie.hpp"
@@ -15,6 +16,7 @@ class Model {
     std::vector<Zombie> zombies;
     double delta_time;
     int high_score;
+    CollisionManager collision_manager;
 
 public:
     Model(int high_score);
