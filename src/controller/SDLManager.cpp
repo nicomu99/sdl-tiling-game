@@ -47,6 +47,8 @@ SDLManager::SDLManager() {
 SDLManager::~SDLManager() {
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
+    SDL_DestroyTexture(grass_texture);
+    SDL_DestroyTexture(wall_texture);
     SDL_Quit();
 }
 
