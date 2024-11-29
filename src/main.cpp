@@ -35,14 +35,6 @@ int main() {
 
             controller.renderScreen();
 
-            /*const Uint64 frame_end = SDL_GetPerformanceCounter();
-            double frame_processing_time = static_cast<double>(frame_end - frame_start) / static_cast<double>(SDL_GetPerformanceFrequency()) * 1000.0f;
-            // delta_time = std::min(delta_time, Constants::MAX_DELTA_TIME);
-            double delay = Constants::FRAME_DELAY - frame_processing_time;
-            if(delay > 0) {
-                SDL_Delay(static_cast<Uint32>(delay));
-            }*/
-
             double elapsed = static_cast<double>(SDL_GetPerformanceCounter() - frame_start) / static_cast<double>(SDL_GetPerformanceFrequency());
             double frame_rate = 1.0 / elapsed;
             // std::cout << "FPS: " << std::to_string(frame_rate) << std::endl;
