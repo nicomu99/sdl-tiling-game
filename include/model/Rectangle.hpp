@@ -12,18 +12,16 @@
 class Grid;
 
 class Rectangle : public GameObject {
-public:
     double top;
     double bottom;
     double left;
     double right;
     std::vector<Position> corner_points;
 
-    Rectangle(double x, double y);
+public:
+    Rectangle(double x, double y, double speed);
 
     void initialize(Position, int) override;
-    static bool isCollision(const Rectangle&, const Rectangle&);
-    [[nodiscard]] bool checkGridCollision(const Grid&) const override;
 
     [[nodiscard]] double getTop() const;
     [[nodiscard]] double getBottom() const;

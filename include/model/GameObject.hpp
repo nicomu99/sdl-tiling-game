@@ -5,18 +5,13 @@
 #ifndef GAMEOBJECT_HPP
 #define GAMEOBJECT_HPP
 
+#include "Constants.hpp"
 #include "Position.hpp"
 
 class Grid;
 
 class GameObject {
 public:
-    enum Rotation {
-        RIGHT = 1,
-        LEFT = -1,
-        NONE = 0
-    };
-
     Position center;
     int rotation;
     Position move_velocity;
@@ -25,7 +20,7 @@ public:
     bool has_been_hit;
     double maximum_health;
     double speed;
-
+    int recoil_counter = Constants::RECOIL_COUNT;
 
     GameObject();
     GameObject(double x, double y);
@@ -40,20 +35,18 @@ public:
     [[nodiscard]] double getMaximumHealth() const;
     [[nodiscard]] bool isDead() const;
 
-    void setVelocity(Position &move_velocity);
-    void setRotation(Rotation rotation);
-    void setHasBeenHit(bool);
+    void setVelocity(Position& move_velocity);
+    virtual void onCollision(Position opposite_position) = 0;
+    virtual void afterCollision() = 0;
 
     [[nodiscard]] Position calculateTrajectory() const;
     void calculateRotationWithTarget(Position target_position);
 
-    void performMove(Position position, double i, double multiplier);
-    void move(const Grid&, double delta_time);
+    Position calculateDeltaPosition();
+    void performMove(Position position, double delta_time);
+    void move(double delta_time, double multiplier = 1);
 
-    [[nodiscard]] virtual bool checkGridCollision(const Grid&) const = 0;
     virtual void initialize(Position, int) = 0;
-
-    static std::string to_string(Rotation rotation);
 };
 
 #endif //GAMEOBJECT_HPP

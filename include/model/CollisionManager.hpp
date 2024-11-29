@@ -23,7 +23,7 @@ public:
     CollisionManager(std::vector<Projectile>& projectiles, std::vector<Zombie>& zombies, Grid& grid, Player& player);
 
     static bool isProjectileCircleCollision(Circle& circle, Projectile& projectile);
-    static bool isRectangleCircleCollision(Rectangle& rectangle, const Circle& circle);
+    static bool isRectangleCircleCollision(Rectangle& rectangle, const Circle& circle, Position& opposite_position);
 
     void checkProjectileCollisions() const;
     void checkPlayerCollisions() const;

@@ -4,9 +4,9 @@
 
 #include "Tile.hpp"
 
-Tile::Tile(): Rectangle(0, 0), tile_type(TileType::NonWalkable) { }
+Tile::Tile(): Rectangle(0, 0, 0), tile_type(TileType::NonWalkable) { }
 
-Tile::Tile(float x, float y, TileType tile_type): Rectangle(x, y), tile_type(tile_type) { }
+Tile::Tile(double x, double y, TileType tile_type): Rectangle(x, y, 0), tile_type(tile_type) { }
 
 const TileType &Tile::getTileType() const {
     return tile_type;
@@ -26,3 +26,7 @@ std::string Tile::to_string(TileType tile_type) {
             return "None";
     }
 }
+
+void Tile::onCollision(Position opposite_position) { }
+
+void Tile::afterCollision() { }

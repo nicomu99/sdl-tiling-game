@@ -8,9 +8,6 @@
 #include "Rectangle.hpp"
 #include "Weapon.hpp"
 
-class Grid;
-class Zombie;
-
 class Player : public Rectangle {
     Weapon weapon;
     int score;
@@ -22,8 +19,11 @@ public:
     [[nodiscard]] Weapon& getWeapon();
     [[nodiscard]] const int& getScore() const;
 
-    void update(const Grid &grid, double delta_time);
-    void fireWeapon();
     void incrementScoreBy(size_t size);
+
+    void onCollision(Position position) override;
+    void afterCollision() override;
+    void fireWeapon();
+    void update(double delta_time);
 };
 #endif //PLAYER_HPP

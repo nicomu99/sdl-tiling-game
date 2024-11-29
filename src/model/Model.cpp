@@ -48,13 +48,13 @@ void Model::fireWeapon() {
 }
 
 void Model::update(bool& running) {
-    player.update(grid, delta_time);
+    player.update(delta_time);
     for (Zombie& zombie: zombies) {
-        zombie.update(grid, player, delta_time);
+        zombie.update(player, delta_time);
     }
 
     // Spawn new zombie
-    Uint32 now = SDL_GetTicks();
+    /*Uint32 now = SDL_GetTicks();
     if (last_spawn + SPAWN_TIMER < now) {
         double random_x = dist(generator);
         double random_y = dist(generator);
@@ -67,7 +67,7 @@ void Model::update(bool& running) {
 
         zombies.emplace_back(random_x, random_y);
         last_spawn = now;
-    }
+    }*/
 
     high_score = std::max(high_score, player.getScore());
     collision_manager.checkProjectileCollisions();

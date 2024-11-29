@@ -12,23 +12,7 @@ Circle::Circle(double x, double y): GameObject(x, y), radius(15) { }
 
 Circle::Circle(double x, double y, double speed, int radius): GameObject(x, y, Position(1, 1), speed), radius(radius)  { }
 
-Circle::Circle(double x, double y, Position move_velocity): GameObject(x, y, move_velocity, 100.0), radius(15) { }
-
-bool Circle::checkGridCollision(const Grid& grid) const {
-    int min_x = Grid::toTileCoordinate(center.x - radius);
-    int min_y = Grid::toTileCoordinate(center.y - radius);
-    int max_x = Grid::toTileCoordinate(center.x + radius);
-    int max_y = Grid::toTileCoordinate(center.y + radius);
-    for(int i = min_x; i <= max_x; i++) {
-        for(int j = min_y; j <= max_y; j++) {
-            const Tile& target_tile = grid.getTile(i, j);
-            if(target_tile.isNonWalkable()) {
-                return true;
-            }
-        }
-    }
-    return false;
-}
+Circle::Circle(double x, double y, Position move_velocity, double speed): GameObject(x, y, move_velocity, speed), radius(15) { }
 
 void Circle::initialize(Position, int) { }
 

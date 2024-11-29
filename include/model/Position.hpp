@@ -38,6 +38,10 @@ struct Position {
         return {x - other.x, y - other.y};
     }
 
+    Position operator-() const {
+        return {-x, -y};
+    }
+
     void setPosition(double x, double y) {
         this->x = x;
         this->y = y;

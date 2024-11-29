@@ -16,8 +16,8 @@ public:
     Projectile(Position, Position);
 
     [[nodiscard]] const bool& hasHitObject() const;
-
-    void setHasHitObject(bool);
+    void onCollision(Position opposite_position) override;
+    void afterCollision() override;
 
     void moveProjectile(double delta_time);
 };

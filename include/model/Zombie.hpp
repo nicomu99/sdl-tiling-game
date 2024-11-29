@@ -13,7 +13,10 @@ public:
     Zombie();
     Zombie(double, double);
 
-    void update(const Grid& grid, const Player& player, double);
+    void onCollision(Position opposite_position) override;
+    void afterCollision() override;
+
+    void update(const Player& player, double delta_time);
 };
 
 #endif //ZOMBIE_HPP

@@ -14,14 +14,16 @@ Projectile::Projectile(Position projectile_position, Position delta_position): C
                                                                                has_hit_object(false) {
 }
 
-const bool &Projectile::hasHitObject() const {
+const bool& Projectile::hasHitObject() const {
     return has_hit_object;
 }
 
-void Projectile::setHasHitObject(bool has_hit_wall) {
-    this->has_hit_object = has_hit_wall;
+void Projectile::moveProjectile(double delta_time) {
+    performMove(delta_position, delta_time);
 }
 
-void Projectile::moveProjectile(double delta_time) {
-    performMove(delta_position, delta_time, 1);
+void Projectile::onCollision(Position opposite_position) {
+    this->has_hit_object = true;
 }
+
+void Projectile::afterCollision() { }

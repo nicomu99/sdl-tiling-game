@@ -18,11 +18,13 @@ class Tile : public Rectangle {
 
 public:
     Tile();
-    Tile(float, float, TileType);
+    Tile(double, double, TileType);
 
     [[nodiscard]] const TileType& getTileType() const;
     [[nodiscard]] bool isNonWalkable() const;
     static std::string to_string(TileType rotation);
+    void onCollision(Position opposite_position) override;
+    void afterCollision() override;
 };
 
 #endif //TILE_HPP
