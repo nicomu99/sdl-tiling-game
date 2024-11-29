@@ -24,6 +24,7 @@ public:
 
     static bool isProjectileCircleCollision(Circle& circle, Projectile& projectile);
     static bool isRectangleCircleCollision(Rectangle& rectangle, const Circle& circle, Position& opposite_position);
+    bool checkPlayerWallCollision() const;
 
     void checkProjectileCollisions() const;
     void checkPlayerCollisions() const;

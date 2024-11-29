@@ -108,6 +108,21 @@ bool CollisionManager::isRectangleCircleCollision(Rectangle& rectangle, const Ci
     return collision;
 }
 
+bool CollisionManager::checkPlayerWallCollision() const {
+    int min_x = static_cast<int>(player.getLeft());
+    int max_x = static_cast<int>(player.getRight());
+    int min_y = static_cast<int>(player.getTop());
+    int max_y = static_cast<int>(player.getBottom());
+    for(int i = min_x; i <= max_x; i++) {
+        for(int j = min_y; j <= max_y; j++) {
+            if(grid.isWallAt(Position(i, j))) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 void CollisionManager::checkPlayerCollisions() const {
     for (Circle& circle: zombies) {
         Position opposite_position{0, 0};
@@ -115,5 +130,9 @@ void CollisionManager::checkPlayerCollisions() const {
             player.onCollision(opposite_position);
             circle.onCollision(-opposite_position);
         }
+    }
+
+    if(checkPlayerWallCollision()) {
+        player.onCollision(-player.calculateTrajectory());
     }
 }
