@@ -17,9 +17,8 @@ std::mt19937 generator(rd());
 std::uniform_real_distribution dist(100.0, 800.0);
 
 Model::Model(int high_score)
-    : grid(Grid()), player(Player()), zombies(std::vector<Zombie>()), delta_time(0.0),
+    : game_state(PAUSING), grid(Grid()), player(Player()), zombies(std::vector<Zombie>()), delta_time(0.0),
       high_score(high_score), collision_manager(player.getWeapon().getProjectiles(), zombies, grid, player) {
-    zombies.emplace_back(400.0, 400.0);
 }
 
 const int& Model::getHighScore() const {
@@ -38,6 +37,10 @@ const std::vector<Zombie>& Model::getZombies() const {
     return zombies;
 }
 
+const GameState& Model::getGameState() const {
+    return game_state;
+}
+
 void Model::updateMovementState(Position position, Position rotation_target) {
     player.setVelocity(position);
     player.calculateRotationWithTarget(rotation_target);
@@ -48,35 +51,44 @@ void Model::fireWeapon() {
 }
 
 void Model::update(bool& running) {
-    player.update(delta_time);
-    for (Zombie& zombie: zombies) {
-        zombie.update(player, delta_time);
-    }
-
-    // Spawn new zombie
-    Uint32 now = SDL_GetTicks();
-    if (last_spawn + SPAWN_TIMER < now) {
-        double random_x = dist(generator);
-        double random_y = dist(generator);
-        Position random_pos = Position(random_x, random_y);
-        while (Position::computeEuclidean(player.getCenter(), random_pos) < 100) {
-            random_x = dist(generator);
-            random_y = dist(generator);
-            random_pos.setPosition(random_x, random_y);
+    if(game_state == RUNNING) {
+        player.update(delta_time);
+        for (Zombie& zombie: zombies) {
+            zombie.update(player, delta_time);
         }
 
-        zombies.emplace_back(random_x, random_y);
-        last_spawn = now;
-    }
+        // Spawn new zombie
+        Uint32 now = SDL_GetTicks();
+        if (last_spawn + SPAWN_TIMER < now) {
+            double random_x = dist(generator);
+            double random_y = dist(generator);
+            Position random_pos = Position(random_x, random_y);
+            while (Position::computeEuclidean(player.getCenter(), random_pos) < 100) {
+                random_x = dist(generator);
+                random_y = dist(generator);
+                random_pos.setPosition(random_x, random_y);
+            }
 
-    high_score = std::max(high_score, player.getScore());
-    collision_manager.checkProjectileCollisions();
-    collision_manager.checkPlayerCollisions();
-    if (player.isDead()) {
-        running = false;
+            zombies.emplace_back(random_x, random_y);
+            last_spawn = now;
+        }
+
+        high_score = std::max(high_score, player.getScore());
+        collision_manager.checkProjectileCollisions();
+        collision_manager.checkPlayerCollisions();
+        if (player.isDead()) {
+            game_state = LOST;
+        }
     }
 }
 
 void Model::setDeltaTime(double delta_time) {
     this->delta_time = delta_time;
+}
+
+void Model::startGame() {
+    game_state = RUNNING;
+    player = Player();
+    zombies.clear();
+    last_spawn = 0;
 }

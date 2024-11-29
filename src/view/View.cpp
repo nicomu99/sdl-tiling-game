@@ -7,24 +7,33 @@
 #include <charconv>
 #include <iostream>
 
+#include "Button.hpp"
 #include "Constants.hpp"
 
-View::View(const SDLManager& sdl_manager): renderer(sdl_manager.getRenderer()),
-                                           grass_texture(sdl_manager.getGrassTexture()),
-                                           wall_texture(sdl_manager.getWallTexture()),
-                                           font(sdl_manager.getFont()) {
+View::View(const SDLManager& sdl_manager, Button& start_button, Button& leave_button)
+    : renderer(sdl_manager.getRenderer()),
+      grass_texture(sdl_manager.getGrassTexture()),
+      wall_texture(sdl_manager.getWallTexture()),
+      font(sdl_manager.getFont()),
+      start_button(start_button), leave_button(leave_button) {
 }
 
 void View::render(const Model& model) const {
     SDL_RenderClear(renderer);
     renderTileMap(model.getGrid());
-    renderPlayer(model.getPlayer());
-    renderProjectiles(model.getPlayer().getWeapon());
-    for (const Zombie& zombie: model.getZombies()) {
-        renderLivingCircle(zombie);
+
+    if (model.getGameState() == RUNNING) {
+        renderPlayer(model.getPlayer());
+        renderProjectiles(model.getPlayer().getWeapon());
+        for (const Zombie& zombie: model.getZombies()) {
+            renderLivingCircle(zombie);
+        }
+        renderScore(model.getHighScore(), "High score: ", 50);
+        renderScore(model.getPlayer().getScore(), "Current score: ", 100);
+    } else {
+        renderPauseScreen(model.getHighScore());
     }
-    renderScore(model.getHighScore(), "High score: ", 50);
-    renderScore(model.getPlayer().getScore(), "Current score: ", 100);
+
     SDL_RenderPresent(renderer);
 }
 
@@ -45,20 +54,28 @@ void View::renderTileMap(const Grid& grid) const {
     }
 }
 
+void View::renderText(const char* render_text, int text_x, int text_y, SDL_Color render_color, bool center) const {
+    SDL_Surface* surface_message = TTF_RenderText_Solid(font, render_text, render_color);
+    SDL_Texture* message = SDL_CreateTextureFromSurface(renderer, surface_message);
+
+    int w, h;
+    TTF_SizeText(font, render_text, &w, &h);
+    if (center) {
+        text_x = Constants::SCREEN_WIDTH / 2 - w / 2;
+    }
+    SDL_Rect message_rect = {text_x, text_y, w, h};
+
+    SDL_RenderCopy(renderer, message, nullptr, &message_rect);
+    SDL_FreeSurface(surface_message);
+    SDL_DestroyTexture(message);
+}
+
 void View::renderScore(int score, const std::string& score_text, int text_y) const {
     // Create surface and texture
     std::string full_text = score_text + std::to_string(score);
     const char* text = (full_text).c_str();
     SDL_Color render_color = {255, 255, 255};
-    SDL_Surface* surface_message = TTF_RenderText_Solid(font, text, render_color);
-    SDL_Texture* message = SDL_CreateTextureFromSurface(renderer, surface_message);
-
-    int w, h;
-    TTF_SizeText(font, text, &w, &h);
-    SDL_Rect message_rect = {100, text_y, w, h};
-    SDL_RenderCopy(renderer, message, nullptr, &message_rect);
-    SDL_FreeSurface(surface_message);
-    SDL_DestroyTexture(message);
+    renderText(text, 100, text_y, render_color, false);
 }
 
 void View::renderHealthBar(int center_x, int center_y, double remaining_health, double initial_health) const {
@@ -83,7 +100,7 @@ void View::renderHealthBar(int center_x, int center_y, double remaining_health, 
 void View::renderPlayer(const Player& player) const {
     auto [center_x, center_y] = player.getCenter();
     renderHealthBar(static_cast<int>(center_x), static_cast<int>(center_y), player.getHealthPoints(),
-                  player.getMaximumHealth());
+                    player.getMaximumHealth());
 
     SDL_SetRenderDrawColor(renderer, 100, 0, 255, 255);
 
@@ -154,6 +171,29 @@ void View::renderPlayer(const Player& player) const {
             SDL_RenderDrawLine(renderer, x_start, y, x_end, y);
         }
     }
+}
+
+void View::renderButton(Button& button) const {
+    int x = button.x, y = button.y;
+    int height = button.height, width = button.width;
+    SDL_Color color = button.color;
+
+    SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+    SDL_Rect rect{x, y, width, height};
+    SDL_RenderFillRect(renderer, &rect);
+
+    SDL_Color text_render_color = {255, 255, 255};
+    renderText((button.text).c_str(), x, y, text_render_color, true);
+}
+
+void View::renderPauseScreen(int score) const {
+    std::string high_score_text = "Current High score: " + std::to_string(score);
+    const char* text = (high_score_text).c_str();
+    SDL_Color render_color = {255, 255, 255};
+    renderText(text, 400, 100, render_color, true);
+
+    renderButton(start_button);
+    renderButton(leave_button);
 }
 
 void View::renderProjectiles(const Weapon& weapon) const {

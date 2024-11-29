@@ -10,7 +10,12 @@
 #include "Grid.hpp"
 #include "Zombie.hpp"
 
+enum GameState {
+    RUNNING, PAUSING, LOST
+};
+
 class Model {
+    GameState game_state;
     Grid grid;
     Player player;
     std::vector<Zombie> zombies;
@@ -25,13 +30,14 @@ public:
     [[nodiscard]] const Grid& getGrid() const;
     [[nodiscard]] const Player& getPlayer() const;
     [[nodiscard]] const std::vector<Zombie>& getZombies() const;
+    [[nodiscard]] const GameState& getGameState() const;
 
     void updateMovementState(Position position, Position rotation_target);
     void fireWeapon();
     void update(bool& running);
 
     void setDeltaTime(double delta_time);
-
+    void startGame();
 };
 
 #endif //MODEL_HPP

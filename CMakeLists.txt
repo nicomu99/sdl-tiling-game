@@ -44,6 +44,7 @@ add_executable(tiling_game src/main.cpp
         src/model/Zombie.cpp
         include/model/FileHandler.hpp
         src/model/FileHandler.cpp
+        include/controller/Button.hpp
 )
 
 target_link_libraries(tiling_game SDL2::SDL2 SDL2_image SDL2_ttf)
