@@ -34,7 +34,7 @@ public:
 
     void updateMovementState(Position position, Position rotation_target);
     void fireWeapon();
-    void update(bool& running);
+    void update();
 
     void setDeltaTime(double delta_time);
     void startGame();

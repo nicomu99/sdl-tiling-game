@@ -67,6 +67,6 @@ void Controller::renderScreen() const {
 void Controller::updateModel(double delta_time) const {
     if (model.getGameState() == RUNNING) {
         model.setDeltaTime(delta_time);
-        model.update(running);
+        model.update();
     }
 }

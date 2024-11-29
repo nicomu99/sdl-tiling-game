@@ -50,7 +50,7 @@ void Model::fireWeapon() {
     player.fireWeapon();
 }
 
-void Model::update(bool& running) {
+void Model::update() {
     if(game_state == RUNNING) {
         player.update(delta_time);
         for (Zombie& zombie: zombies) {
