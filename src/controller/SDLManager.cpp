@@ -28,8 +28,8 @@ SDLManager::SDLManager() {
     }
 
     // Load textures
-    loadTexture(grass_texture, "res/textures/grass_texture.png");
-    loadTexture(wall_texture, "res/textures/wall_texture.png");
+    loadTexture(grass_texture, "res/textures/grass_texture1.png");
+    loadTexture(wall_texture, "res/textures/stone_texture2.png");
 
     if (TTF_Init() == -1) {
         throw std::runtime_error("Failed to initialize font library: " + std::string(TTF_GetError()));

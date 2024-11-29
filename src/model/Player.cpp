@@ -25,6 +25,7 @@ void Player::incrementScoreBy(size_t size) {
 }
 
 void Player::onCollision(Position opposite_position) {
+    health_points -= 10;
     move_velocity = opposite_position;
     has_been_hit = true;
     speed = Constants::RECOIL_SPEED;

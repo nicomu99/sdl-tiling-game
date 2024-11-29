@@ -14,6 +14,7 @@ Zombie::Zombie(double x, double y): Circle(x, y, Position(1, 1), Constants::ZOMB
 }
 
 void Zombie::onCollision(Position opposite_position) {
+    health_points -= 10;
     move_velocity = opposite_position;
     speed = Constants::RECOIL_SPEED;
     has_been_hit = true;

@@ -54,7 +54,7 @@ void Model::update(bool& running) {
     }
 
     // Spawn new zombie
-    /*Uint32 now = SDL_GetTicks();
+    Uint32 now = SDL_GetTicks();
     if (last_spawn + SPAWN_TIMER < now) {
         double random_x = dist(generator);
         double random_y = dist(generator);
@@ -67,7 +67,7 @@ void Model::update(bool& running) {
 
         zombies.emplace_back(random_x, random_y);
         last_spawn = now;
-    }*/
+    }
 
     high_score = std::max(high_score, player.getScore());
     collision_manager.checkProjectileCollisions();
