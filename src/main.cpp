@@ -39,7 +39,6 @@ int main() {
             double frame_rate = 1.0 / elapsed;
             // std::cout << "FPS: " << std::to_string(frame_rate) << std::endl;
         }
-
         FileHandler::saveGameState(model.getHighScore());
     } catch (std::runtime_error& e) {
         std::cerr << "Error: " << e.what() << std::endl;
